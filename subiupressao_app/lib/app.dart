@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../tabItem.dart';
-import 'bottomNavigation.dart';
+import 'tabItem.dart';
+import 'app_usuarios_moradores/bottomNavigation.dart';
 import 'package:subiupressao_app/app_usuarios_moradores/CentralPage.dart';
 import 'package:subiupressao_app/app_usuarios_moradores/agenda_morador.dart';
 import 'package:subiupressao_app/app_usuarios_moradores/minhaConta_morador.dart';
-
+import 'package:subiupressao_app/app_usuarios_moradores/Lembretes.dart';
 class App extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => AppState();
@@ -13,26 +13,28 @@ class App extends StatefulWidget {
 class AppState extends State<App> {
   // this is static property so other widget throughout the app
   // can access it simply by AppState.currentTab
-  static int currentTab = 0;
+  static int currentTab = 1;
 
   // list tabs here
   final List<TabItem> tabs = [
+
+
+    TabItem(
+      tabName: "Perfil",
+      icon: Icons.person,
+      page: minhaConta_morador(),
+    ),
     TabItem(
       tabName: "Início",
       icon: Icons.home,
       page: CentralPage(),
     ),
     TabItem(
-      tabName: "Minha Agenda",
-      icon: Icons.calendar_today,
+      tabName: "Lembretes",
+      icon: Icons.menu_book_rounded ,
       page: //TestWrite(),
       //writeJsonfile(),
-      agenda_morador(),
-    ),
-    TabItem(
-      tabName: "Minha Conta",
-      icon: Icons.person,
-      page: minhaConta_morador(),
+      Lembretes(),
     ),
   ];
 

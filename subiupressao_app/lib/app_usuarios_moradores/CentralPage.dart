@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:subiupressao_app/classes_definicao/ColetaAgendada.dart';
 import 'package:subiupressao_app/app_usuarios_moradores/display_agendamentos.dart';
 import 'package:subiupressao_app/app_usuarios_moradores/PageView_dicas.dart';
+import 'package:subiupressao_app/app_usuarios_moradores/PageView_Dados.dart';
+import 'package:subiupressao_app/app_usuarios_moradores/PageView_Remedios.dart';
 import 'package:subiupressao_app/app_usuarios_moradores/AgendarColeta_Pag1.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
@@ -117,10 +119,19 @@ Widget build(BuildContext context) {
         runSpacing: 6.0,
         direction: Axis.horizontal,
         children: [
-          SizedBox(height: 10.0),
-          PageView_dicas(),
-          SizedBox(height: 20.0),
           Container(
+            alignment: Alignment(0.0, 0.6),
+            child: Text('Bem vindo, Astolfo ',
+              style: TextStyle(
+                  fontSize: 30.0,
+                  color: Color(0xff16613D)
+              ),
+            ),
+          ),
+          SizedBox(height: 10.0),
+          PageView_Dados(),
+          SizedBox(height: 20.0),
+          /*Container(
               child: Align(
                 alignment: Alignment.center,
                 child: Material(
@@ -148,17 +159,23 @@ Widget build(BuildContext context) {
                 ),
 
               )
-          ),
+          ),*/
           Container(
             alignment: Alignment(-0.5, 0.6),
-            child: Text('Meus Agendamentos ',
+            child: Text('Horários de Remedio ',
               style: TextStyle(
                   fontSize: 30.0,
                   color: Color(0xff16613D)
               ),
             ),
           ),
-          Container(
+          PageView_Remedios(),
+          /*Container(
+            child: new Center(
+              child: Text('Oi'),
+            ),
+          )*/
+          /*Container(
             child: new Center(
               child: new FutureBuilder(
                   future: //loadAgendamento(),
@@ -171,7 +188,7 @@ Widget build(BuildContext context) {
                     return AgendamentoLista(agenda: data);
                   }),
             ),
-          )
+          )*/
         ],
       ),
 

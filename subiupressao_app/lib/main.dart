@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:subiupressao_app/app_usuarios_moradores/app.dart';
+import 'package:subiupressao_app/app.dart';
 //Here the initialization starts and a bottom navigationbar is set
 // The first screen open for the Resident and the Scavegner is in the
 // files CentralPage.dart (for Resident) and CentralPage_catadores.dart (Scavegner)

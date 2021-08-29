@@ -1,4 +1,4 @@
-import 'app.dart';
+import '../app.dart';
 import 'package:flutter/material.dart';
 import '../tabItem.dart';
 

@@ -31,7 +31,7 @@ class minhaConta_morador extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(100.0),
                           child: Image.asset(
-                          'imagens/foto_pessoa.jpg',
+                          'imagens/fotoperfil.png',
                           fit: BoxFit.cover,
                           height: 200, // set your height
                           width: 200,// and width here
@@ -51,7 +51,7 @@ class minhaConta_morador extends StatelessWidget {
                             ),
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          child:Text('Carolina Silva' ,
+                          child:Text('Astolfo' ,
                             textAlign: TextAlign.start,
                           style: TextStyle(fontSize: 30.0, color: Colors.black),)
                       ),
@@ -72,37 +72,37 @@ class minhaConta_morador extends StatelessWidget {
                           width: 500.0,
                           height: 250.0,
                           child:  ListView(
+
                               physics: const AlwaysScrollableScrollPhysics(),
                                 children: const <Widget>[
+                                  Card(
+                                    child:  ListTile(
+                                      title: Text('Meus Dados',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(fontSize: 20.0, color: Colors.black)),
+                                      //trailing: Icon(Icons.arrow_forward),
+                                      //onTap: (){},
 
-                                  ListTile(
-                                    title: Text('Meus Endereços',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(fontSize: 20.0, color: Colors.black)),
-                                    //trailing: Icon(Icons.arrow_forward),
-                                    //onTap: (){},
+                                    ),
+                                  ),
+                                  Card(
+                                    child: ListTile(
+                                      title: Text('Configurações',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(fontSize: 20.0, color: Colors.black)),
+                                    ),
+                                  ),
+                                  Card(
+                                    child: ListTile(
+                                      title: Text('Sair',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(fontSize: 20.0, color: Colors.black)),
+                                    ),
+                                  ),
 
-                                  ),
-                                  ListTile(
-                                    title: Text('Meu Histórico de Coleta',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(fontSize: 20.0, color: Colors.black)),
-                                  ),
-                                  ListTile(
-                                    title: Text('Estatísticas',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(fontSize: 20.0, color: Colors.black)),
-                                  ),
-                                  ListTile(
-                                    title: Text('Configurações',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(fontSize: 20.0, color: Colors.black)),
-                                  ),
-                                  ListTile(
-                                    title: Text('Sair',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(fontSize: 20.0, color: Colors.black)),
-                                  ),
+
+
+
 
 
                                 ]
