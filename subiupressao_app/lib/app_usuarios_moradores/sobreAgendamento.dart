@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:recat/app_usuarios_moradores/CentralPage.dart';
+import 'package:subiupressao_app/app_usuarios_moradores/CentralPage.dart';
 import 'dart:convert';
 
-import 'package:recat/classes_definicao/ColetaAgendada.dart';
+import 'package:subiupressao_app/classes_definicao/ColetaAgendada.dart';
 
 // This screen shows the information on a specific waste collection appoitment
 

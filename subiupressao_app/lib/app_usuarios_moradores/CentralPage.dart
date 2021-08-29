@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:recat/classes_definicao/ColetaAgendada.dart';
-import 'package:recat/app_usuarios_moradores/display_agendamentos.dart';
-import 'package:recat/app_usuarios_moradores/PageView_dicas.dart';
-import 'package:recat/app_usuarios_moradores/AgendarColeta_Pag1.dart';
-import 'package:recat/CatadorouMorador.dart';
+import 'package:subiupressao_app/classes_definicao/ColetaAgendada.dart';
+import 'package:subiupressao_app/app_usuarios_moradores/display_agendamentos.dart';
+import 'package:subiupressao_app/app_usuarios_moradores/PageView_dicas.dart';
+import 'package:subiupressao_app/app_usuarios_moradores/AgendarColeta_Pag1.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:async';
@@ -83,7 +82,7 @@ final drawer = Drawer(
         title: Text("Sair"),
         trailing: Icon(Icons.arrow_forward),
         onTap: (){
-          builder: (_) => CatadorOuMorador();
+         // builder: (_) =>;
         },
       ),
     ],

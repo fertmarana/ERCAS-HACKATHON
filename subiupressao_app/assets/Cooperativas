@@ -1,0 +1,25 @@
+[
+  {
+     "cooperativa": [
+       {
+       "id": "9239292",
+        "name": "Cooperativa Recicla",
+        "Descrição": "Coleta reciclável no município de Bauru",
+        "telefone": "(14) 32347687",
+        "foto": "imagelink",
+        "cidade": "Bauru",
+       "Tipo de Lixo que Coleta": ["Plástico","Papel","Eletrônicos"],
+      },
+       {
+         "id": "000000",
+         "name": "Cooperativa Flor",
+         "Descrição": "Coleta reciclável no município de Itapevi",
+         "telefone": "(14) 3230000",
+         "foto": "imagelink",
+         "cidade": "Itapevi",
+         "Tipo de Lixo que Coleta": ["Plástico","Eletrônicos"],
+       }
+     ]
+    }
+
+]

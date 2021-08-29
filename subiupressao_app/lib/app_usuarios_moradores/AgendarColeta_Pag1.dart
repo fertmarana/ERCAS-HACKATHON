@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:recat/classes_definicao/ColetaAgendada.dart';
+import 'package:subiupressao_app/classes_definicao/ColetaAgendada.dart';
 import 'dart:convert';
-import 'package:recat/app_usuarios_moradores/AgendarColeta_Pag2.dart';
+import 'package:subiupressao_app/app_usuarios_moradores/AgendarColeta_Pag2.dart';
 import 'package:multi_select_item/multi_select_item.dart';
 
 

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import '../tabItem.dart';
 import 'bottomNavigation.dart';
-import 'package:recat/app_usuarios_moradores/CentralPage.dart';
-import 'package:recat/app_usuarios_moradores/agenda_morador.dart';
-import 'package:recat/app_usuarios_moradores/minhaConta_morador.dart';
+import 'package:subiupressao_app/app_usuarios_moradores/CentralPage.dart';
+import 'package:subiupressao_app/app_usuarios_moradores/agenda_morador.dart';
+import 'package:subiupressao_app/app_usuarios_moradores/minhaConta_morador.dart';
 
 class App extends StatefulWidget {
   @override

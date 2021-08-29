@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:recat/classes_definicao/ColetaAgendada.dart';
-import 'package:recat/app_usuarios_moradores/sobreAgendamento.dart';
+import 'package:subiupressao_app/classes_definicao/ColetaAgendada.dart';
+import 'package:subiupressao_app/app_usuarios_moradores/sobreAgendamento.dart';
 
 class AgendamentoLista extends StatelessWidget {
   final Coletas agenda;
