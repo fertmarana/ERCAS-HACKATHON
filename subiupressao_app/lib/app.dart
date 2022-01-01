@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'tabItem.dart';
-import 'app_usuarios_moradores/bottomNavigation.dart';
-import 'package:subiupressao_app/app_usuarios_moradores/CentralPage.dart';
-import 'package:subiupressao_app/app_usuarios_moradores/agenda_morador.dart';
-import 'package:subiupressao_app/app_usuarios_moradores/minhaConta_morador.dart';
-import 'package:subiupressao_app/app_usuarios_moradores/Lembretes.dart';
+import 'app_celular/bottomNavigation.dart';
+import 'package:subiupressao_app/app_celular/CentralPage.dart';
+import 'package:subiupressao_app/app_celular/minhaConta.dart';
+import 'package:subiupressao_app/app_celular/Lembretes.dart';
 class App extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => AppState();
@@ -18,7 +17,7 @@ class AppState extends State<App> {
   // list tabs here
   final List<TabItem> tabs = [
 
-
+// telas no Navigation Bar
     TabItem(
       tabName: "Perfil",
       icon: Icons.person,
@@ -39,15 +38,15 @@ class AppState extends State<App> {
   ];
 
   AppState() {
-    // indexing is necessary for proper funcationality
-    // of determining which tab is active
+    // indexação é necessária para funcionar bem
+    // em determinar qual tab no Navigation Bar está ativo
     tabs.asMap().forEach((index, details) {
       details.setIndex(index);
     });
   }
 
-  // sets current tab index
-  // and update state
+  // setando o index tab atual
+  // e atualizando o estado
   void _selectTab(int index) {
     if (index == currentTab) {
       // pop to first route

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:subiupressao_app/app.dart';
-//Here the initialization starts and a bottom navigationbar is set
-// The first screen open for the Resident and the Scavegner is in the
-// files CentralPage.dart (for Resident) and CentralPage_catadores.dart (Scavegner)
+
+// Aqui a inicializacao começa e o NavigationBar é setado
+// A primeira tela é a tela central e está no arquivo CentralPage.dart
 void main() {
   initializeDateFormatting().then((_) => runApp(MyApp()));
 }

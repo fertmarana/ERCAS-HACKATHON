@@ -17,9 +17,6 @@ class TabItem {
     _page = page;
   }
 
-  // I was getting a weird warning when using getters and setters for _index
-  // so I converted them to functions
-
   // used to set the index of this tab
   // which will be used in identifying if this tab is active
   void setIndex(int i) {

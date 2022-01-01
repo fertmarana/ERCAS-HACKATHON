@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:subiupressao_app/classes_definicao/ColetaAgendada.dart';
-import 'package:subiupressao_app/app_usuarios_moradores/display_agendamentos.dart';
-import 'package:subiupressao_app/app_usuarios_moradores/PageView_dicas.dart';
-import 'package:subiupressao_app/app_usuarios_moradores/PageView_Dados.dart';
-import 'package:subiupressao_app/app_usuarios_moradores/PageView_Remedios.dart';
-import 'package:subiupressao_app/app_usuarios_moradores/AgendarColeta_Pag1.dart';
+import 'package:subiupressao_app/app_celular/PageView_Dados.dart';
+import 'package:subiupressao_app/app_celular/PageView_Remedios.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:async';
-// Home Page for the Residents App
-// The first part they can see a few Tips to recycle
-// With the green button they can schedule a waste collection
-// The screens under the button show the schedules already done by the user
+// Home Page for the Phone App
+// A primeira parte contem os dados de pressão do paciente ao longo do tempo
+// é tambem possivel ver em grafico ou em lista os dados dessa pressao
+// Embaixo dos graficos, temos um app de lembrete para tomar os remedios de pressao
 
 class CentralPage extends StatefulWidget {
 _CentralPage createState() => _CentralPage();
@@ -25,14 +22,21 @@ class _CentralPage extends State<CentralPage>{
 
     super.initState();
   }
-
+// esse page controler é pra primeira parte do grafico.
+// começa na minitela 0 e esse viewportFraction faz com que eu veja 100% dessa tela
+// se eu colocar um valor entre 0 e 1, conseguirei ver parte das outras telas.
 var controller = PageController(
   viewportFraction: 1 ,
   initialPage: 0,
 );
-//CentralPage({Key key}) : super(key: key);
 
-final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+// #####################################################
+// Isso é do codigo antigo, mas achei legal deixar só para caso usemos no futuro
+// o que ele faz é ler um arquivo .json e decodificá-lo
+// enquanto não temos um sql para os dados podemos tentar usar esse json para ler dados
+// uma coisa que descobri é q esse json só consegue ler do arquivo e não escrever nele
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   Coletas parseJosn(String response) {
     if(response==null){
@@ -44,6 +48,8 @@ final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
     return temp;
 
   }
+// #####################################################
+
 
 // In the app there is ⚙️ icon that opens a drawer with the following buttons:
 // notifications, privacy, about the app, help and exit the app (they are not function).
@@ -129,9 +135,16 @@ Widget build(BuildContext context) {
             ),
           ),
           SizedBox(height: 10.0),
+          // Nesse PageView_Dados está em outra tela para deixar o codigo
+          // um pouco mais organizado
           PageView_Dados(),
           SizedBox(height: 20.0),
-          /*Container(
+          /*
+          Outra parte do codigo antigo que eu só quis deixar para mostrar
+          como podemos chamar uma outra pagina de outro arquivo
+
+          Codigo deletado:
+          Container(
               child: Align(
                 alignment: Alignment.center,
                 child: Material(
@@ -170,7 +183,11 @@ Widget build(BuildContext context) {
             ),
           ),
           PageView_Remedios(),
-          /*Container(
+          /*
+          Outra parte do codigo deletada, mas que quis deixar para mostrar como
+          podemos ler um codigo json que criarmos
+
+          Container(
             child: new Center(
               child: Text('Oi'),
             ),
