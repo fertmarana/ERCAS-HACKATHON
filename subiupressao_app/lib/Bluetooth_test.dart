@@ -14,12 +14,6 @@ class _Bluetooth_testing extends State<Bluetooth_testing> {
   StreamSubscription<BluetoothState> scanSubscription;
   FlutterBlue flutterBlue = FlutterBlue.instance;
 
-  int _currentPage = 0;
-  var controller = PageController(
-    viewportFraction: 1 ,
-    initialPage: 0,
-  );
-
   @override
   void initState() {
     super.initState();
@@ -34,10 +28,26 @@ class _Bluetooth_testing extends State<Bluetooth_testing> {
       }
     });
   }
+/*
+  void scanForDevices() async {
+    flutterBlue.startScan(timeout: Duration(seconds: 30));
+    var subscription = flutterBlue.scanResults.listen((results) {
+      // do something with scan results
+      for (ScanResult r in results) {
+        print('${r.device.name} found! rssi: ${r.rssi}');
+      }
+    });
+
+  // Stop scanning
+  flutterBlue.stopScan();
+
+  }
+  */
+
 
   ///// **** Scan and Stop Bluetooth Methods  ***** /////
   void scanForDevices() async {
-    flutterBlue.startScan(timeout: Duration(seconds: 4));
+    flutterBlue.startScan(timeout: Duration(seconds: 30));
     var subscription = flutterBlue.scan().listen((scanResult) async {
       if (scanResult.device.name == "Amazfit Band 5") {
         print("found device");
@@ -45,25 +55,16 @@ class _Bluetooth_testing extends State<Bluetooth_testing> {
         device = scanResult.device;
 //After that we stop the scanning for device
       }
-
-
-    //
-    /*
-    // Listen to scan results
-    var subscription = flutterBlue.scanResults.listen((results) {
-      // do something with scan results
-      for (ScanResult r in results) {
-        print('${r.device.name} found! rssi: ${r.rssi}');
-      }
-    });
-  */
-
-      });
+     });
       // Stop scanning
-        flutterBlue.stopScan();
-
-
-
+    flutterBlue.stopScan();
+    await device.connect();
+    List<BluetoothService> services = await device.discoverServices();
+   // services.forEach((service) {
+      for (var service in services) {
+      // do something with service
+      print('${device.name} has service of: ${service.characteristics}');
+    }
 
   }
 
@@ -74,9 +75,44 @@ class _Bluetooth_testing extends State<Bluetooth_testing> {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Padding(
+      padding: EdgeInsets.fromLTRB(10, 70, 10, 10),
+      child: Wrap(
+        runSpacing: 6.0,
+        direction: Axis.horizontal,
+        children: [
+          SizedBox(height: 10.0),
+          Container(
+            alignment: Alignment(0.0, 0.6),
+            child: Text('Bluetooth',
+              style: TextStyle(
+                  fontSize: 28.0,
+                  color: Color(0xff16613D)
+              ),
+            ),
+          ),
+          Container(
+            alignment: Alignment(0.0, 0.6),
+            child: Text('Conected to \n' + device.name,
+              style: TextStyle(
+                  fontSize: 28.0,
+                  color: Color(0xff16613D)
+              ),
+            ),
+          ),
+          Container(
+            alignment: Alignment(0.0, 0.6),
+            child: Text('Conected to \n' + device.name,
+              style: TextStyle(
+                  fontSize: 28.0,
+                  color: Color(0xff16613D)
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
-
 
 
 }

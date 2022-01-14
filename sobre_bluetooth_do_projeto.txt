@@ -1,0 +1,9 @@
+breves anotacoes
+
+para a conexao do bluetooth e observacao dos dados, retirou-se dos seguintes links:
+
+https://stackoverflow.com/questions/63873493/flutter-miband-services
+https://blog.kuzzle.io/communicate-through-ble-using-flutter
+https://medium.com/flutter-community/flutter-for-bluetooth-devices-5594f105b146
+https://github.com/pauldemarco/flutter_blue
+https://btprodspecificationrefs.blob.core.windows.net/assigned-numbers/Assigned%20Number%20Types/Health%20Device%20Profile.pdf

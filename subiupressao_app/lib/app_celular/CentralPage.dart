@@ -140,7 +140,7 @@ Widget build(BuildContext context) {
           // Nesse PageView_Dados está em outra tela para deixar o codigo
           // um pouco mais organizado
           PageView_Dados(),
-          Bluetooth_testing(),
+          //Bluetooth_testing(),
           SizedBox(height: 20.0),
           /*
           Outra parte do codigo antigo que eu só quis deixar para mostrar
