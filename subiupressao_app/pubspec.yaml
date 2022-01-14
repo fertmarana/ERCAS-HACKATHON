@@ -24,7 +24,11 @@ dependencies:
   flutter:
     sdk: flutter
 
+ # flutter_blue: ^0.6.3+1
 
+  flutter_blue:
+    git:
+      url: https://github.com/pauldemarco/flutter_blue.git
   animated_splash_screen: ^1.0.1+2
   multi_select_item: ^1.0.3
   infinity_page_view: ^1.0.0
@@ -41,8 +45,7 @@ dependencies:
   table_calendar: ^2.3.3
   shared_preferences: ^0.5.4+5
   intl: ^0.16.0
-  flutter_localizations:
-    sdk: flutter
+
 
 dev_dependencies:
   flutter_test:
