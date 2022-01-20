@@ -106,13 +106,6 @@ packages:
       url: "https://github.com/pauldemarco/flutter_blue.git"
     source: git
     version: "0.8.0"
-  flutter_reactive_ble:
-    dependency: "direct main"
-    description:
-      name: flutter_reactive_ble
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.1.1+1"
   flutter_screenutil:
     dependency: "direct dev"
     description:
@@ -137,13 +130,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  functional_data:
-    dependency: transitive
-    description:
-      name: functional_data
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0"
   http:
     dependency: "direct main"
     description:

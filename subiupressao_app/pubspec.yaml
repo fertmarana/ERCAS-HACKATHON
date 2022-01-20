@@ -31,7 +31,7 @@ dependencies:
       url: https://github.com/pauldemarco/flutter_blue.git
 
 
-  flutter_reactive_ble: ^3.1.0
+
   toast: ^0.1.5
 
   animated_splash_screen: ^1.0.1+2

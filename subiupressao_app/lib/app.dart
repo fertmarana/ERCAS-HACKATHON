@@ -4,7 +4,7 @@ import 'app_celular/bottomNavigation.dart';
 import 'package:subiupressao_app/app_celular/CentralPage.dart';
 import 'package:subiupressao_app/app_celular/minhaConta.dart';
 import 'package:subiupressao_app/app_celular/Lembretes.dart';
-import 'package:subiupressao_app/app_celular/bluetooth_page.dart';
+import 'package:subiupressao_app/Bluetooth_test.dart';
 class App extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => AppState();
@@ -33,7 +33,7 @@ class AppState extends State<App> {
       tabName: "Lembretes",
       icon: Icons.menu_book_rounded ,
       page: //TestWrite(),
-      Bluetooth_page(),
+      Bluetooth_testing(),
       //Lembretes(),
     ),
   ];
