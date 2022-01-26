@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:subiupressao_app/Bluetooth_test.dart';
+import 'package:subiupressao_app/bluetooth/Bluetooth_test.dart';
 import 'package:subiupressao_app/classes_definicao/ColetaAgendada.dart';
 import 'package:subiupressao_app/app_celular/PageView_Dados.dart';
 import 'package:subiupressao_app/app_celular/PageView_Remedios.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:async';
-import 'package:subiupressao_app/Bluetooth_test.dart';
+import 'package:subiupressao_app/bluetooth/Bluetooth_test.dart';
 // Home Page for the Phone App
 // A primeira parte contem os dados de pressão do paciente ao longo do tempo
 // é tambem possivel ver em grafico ou em lista os dados dessa pressao

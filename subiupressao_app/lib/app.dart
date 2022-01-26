@@ -4,8 +4,16 @@ import 'app_celular/bottomNavigation.dart';
 import 'package:subiupressao_app/app_celular/CentralPage.dart';
 import 'package:subiupressao_app/app_celular/minhaConta.dart';
 import 'package:subiupressao_app/app_celular/Lembretes.dart';
-import 'package:subiupressao_app/Bluetooth_test.dart';
+import 'package:subiupressao_app/bluetooth/Bluetooth_test.dart';
+import 'package:subiupressao_app/bluetooth/connectionPage.dart';
+import 'package:subiupressao_app/bluetooth/heartRatePage.dart';
+import 'package:subiupressao_app/globals.dart' as globals;
+import 'dataClass.dart';
+
 class App extends StatefulWidget {
+
+  //App({Key key, @required this.Hr}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => AppState();
 }
@@ -14,6 +22,17 @@ class AppState extends State<App> {
   // this is static property so other widget throughout the app
   // can access it simply by AppState.currentTab
   static int currentTab = 1;
+  final myData dataa = myData(-1);
+  //int Hr;
+  /*
+  int heartR = -1;
+
+  callback(newheartR) {
+    setState(() {
+      heartR = newheartR;
+    });
+  }*/
+
 
   // list tabs here
   final List<TabItem> tabs = [
@@ -27,13 +46,13 @@ class AppState extends State<App> {
     TabItem(
       tabName: "Início",
       icon: Icons.home,
-      page: CentralPage(),
+      page: heartRatePage(),
     ),
     TabItem(
       tabName: "Lembretes",
       icon: Icons.menu_book_rounded ,
       page: //TestWrite(),
-      Bluetooth_testing(),
+      connectionPage(),
       //Lembretes(),
     ),
   ];

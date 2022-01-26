@@ -8,9 +8,8 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'package:toast/toast.dart';
 
 class Bluetooth_page extends StatefulWidget {
-  Bluetooth_page({Key key, this.title}) : super(key: key);
-
   final String title;
+  Bluetooth_page({Key key, this.title}) : super(key: key);
 
   @override
   _Bluetooth_page createState() => _Bluetooth_page();
