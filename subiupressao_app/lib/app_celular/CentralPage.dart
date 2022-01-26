@@ -107,7 +107,6 @@ Widget build(BuildContext context) {
     key: _scaffoldKey,
     endDrawer: drawer,
     appBar: AppBar(
-
       title: const Text('',
           style: TextStyle(color: Color(0xff16613D), fontWeight: FontWeight.bold)
       ),
@@ -129,7 +128,7 @@ Widget build(BuildContext context) {
         children: [
           Container(
             alignment: Alignment(0.0, 0.6),
-            child: Text('Bem vindo, Astolfo ',
+            child: Text('Bem vindo, Astolfo',
               style: TextStyle(
                   fontSize: 30.0,
                   color: Color(0xff16613D)
@@ -175,18 +174,8 @@ Widget build(BuildContext context) {
                 ),
 
               )
-          ),*/
-          Container(
-            alignment: Alignment(-0.5, 0.6),
-            child: Text('Horários de Remedio ',
-              style: TextStyle(
-                  fontSize: 30.0,
-                  color: Color(0xff16613D)
-              ),
-            ),
           ),
-          PageView_Remedios(),
-          /*
+
           Outra parte do codigo deletada, mas que quis deixar para mostrar como
           podemos ler um codigo json que criarmos
 
@@ -211,7 +200,6 @@ Widget build(BuildContext context) {
           )*/
         ],
       ),
-
     ),
     ),
   );

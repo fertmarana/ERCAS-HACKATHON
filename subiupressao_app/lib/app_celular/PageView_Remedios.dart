@@ -14,14 +14,8 @@ class _PageView_Remedios extends State<PageView_Remedios> {
   );
 
   @override
-  void initState() {
-    super.initState();
-
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return   Container(
+    return Container(
       alignment: Alignment.centerLeft,
       margin: EdgeInsets.symmetric(vertical: 10.0),
       height: 200.0,
@@ -167,7 +161,4 @@ class _PageView_Remedios extends State<PageView_Remedios> {
       ),
     );
   }
-
-
-
 }

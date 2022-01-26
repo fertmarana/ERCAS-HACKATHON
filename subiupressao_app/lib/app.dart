@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'tabItem.dart';
-import 'app_celular/bottomNavigation.dart';
+
+import 'package:subiupressao_app/app_celular/Remedios.dart';
+import 'package:subiupressao_app/tabItem.dart';
+import 'package:subiupressao_app/app_celular/bottomNavigation.dart';
 import 'package:subiupressao_app/app_celular/CentralPage.dart';
 import 'package:subiupressao_app/app_celular/minhaConta.dart';
 import 'package:subiupressao_app/app_celular/Lembretes.dart';
@@ -36,8 +38,12 @@ class AppState extends State<App> {
 
   // list tabs here
   final List<TabItem> tabs = [
-
-// telas no Navigation Bar
+    // telas no Navigation Bar
+    TabItem(
+      tabName: "Remédios",
+      icon: Icons.medication_rounded,
+      page: Remedios(),
+    ),
     TabItem(
       tabName: "Perfil",
       icon: Icons.person,
@@ -50,7 +56,7 @@ class AppState extends State<App> {
     ),
     TabItem(
       tabName: "Lembretes",
-      icon: Icons.menu_book_rounded ,
+      icon: Icons.menu_book_rounded,
       page: //TestWrite(),
       connectionPage(),
       //Lembretes(),
@@ -85,7 +91,7 @@ class AppState extends State<App> {
     return WillPopScope(
       onWillPop: () async {
         final isFirstRouteInCurrentTab =
-        !await tabs[currentTab].key.currentState.maybePop();
+            !await tabs[currentTab].key.currentState.maybePop();
         if (isFirstRouteInCurrentTab) {
           // if not on the 'main' tab
           if (currentTab != 0) {
