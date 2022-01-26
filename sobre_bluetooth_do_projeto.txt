@@ -13,6 +13,9 @@ https://stackoverflow.com/questions/67652343/show-value-from-ble-device-to-heart
 
 flutter + charts + bluetooth:
 https://levelup.gitconnected.com/a-realtime-chart-with-flutter-75d1840b7789
+mp_chart:
+https://pub.dev/packages/mp_chart
+
 
 https://pub.dev/packages/syncfusion_flutter_charts
 
