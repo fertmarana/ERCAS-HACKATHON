@@ -1,7 +1,4 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
-import 'dart:convert';
 
 import 'package:subiupressao_app/app_celular/PageView_Remedios.dart';
 
@@ -53,6 +50,7 @@ class _RemediosState extends State<Remedios> {
         // header
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             IconButton(
               onPressed: () {
@@ -63,7 +61,7 @@ class _RemediosState extends State<Remedios> {
                         lastDate: DateTime(2200))
                     .then((date) {
                   setState(() {
-                    widget._dateTime = date;
+                    widget._dateTime = date == null ? widget._dateTime : date;
                   });
                 });
               },
@@ -72,7 +70,7 @@ class _RemediosState extends State<Remedios> {
             Spacer(),
             Text(
               readifyDateTime(widget._dateTime),
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             Spacer(),
             IconButton(
@@ -81,6 +79,45 @@ class _RemediosState extends State<Remedios> {
             ),
           ],
         ),
+        Card(
+            margin: EdgeInsets.fromLTRB(30, 15, 30, 15),
+            elevation: 5,
+            color: const Color(0xff00ffe0),
+            child: Row(
+              children: [
+                SizedBox(width: 15,),
+                Column(
+                  children: [
+                    SizedBox(height: 15,),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(100.0),
+                      child: Image.asset(
+                        'imagens/fotoperfil.png',
+                        fit: BoxFit.cover,
+                        height: 70,
+                        width: 70,
+                      ),
+                    ),
+                    SizedBox(height: 15,),
+                  ],
+                ),
+                SizedBox(width: 20,),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Olá, Astolfo!", style: TextStyle(fontSize: 16),),
+                    SizedBox(height: 2,),
+                    Text("Hoje você tem de tomar", style: TextStyle(fontSize: 16),),
+                    SizedBox(height: 5,),
+                    Text(
+                      "1 remédio",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                )
+              ],
+            )),
         PageView_Remedios(),
       ]),
     );
