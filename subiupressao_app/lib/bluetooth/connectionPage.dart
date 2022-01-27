@@ -1,8 +1,11 @@
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:subiupressao_app/app.dart';
 import 'package:subiupressao_app/globals.dart' as globals;
 import 'dart:async';
+import 'dart:core';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 // UUIDS DOS SERVICOS QUE VAMOS USAR
 /*
@@ -23,6 +26,13 @@ class connectionPage extends StatefulWidget {
   _connectionPage createState() => _connectionPage();
 }
 
+class _ChartData{
+  int minute;
+  int epoch;
+  _ChartData(this.minute, this.epoch);
+}
+
+
 class _connectionPage extends State<connectionPage> {
   BluetoothService _service;
   BluetoothDevice device;
@@ -40,15 +50,44 @@ class _connectionPage extends State<connectionPage> {
   bool isConnected;
   int heartRate;
   bool isReading = false;
+  int greatestValue = 0;
+  int valuesofHeart = -1;
+  List<_ChartData> chartData = <_ChartData>[];
+  ChartSeriesController _chartSeriesController;
+  Timer timer;
 
   @override
   void initState() {
     // TODO: implement initState
     isConnected = false;
+    /*Timer.periodic(Duration(minutes: 1), (Timer t) => setState((){
+      greatestValue = valuesofHeart;
+      valuesofHeart = -1;
+
+    }));*/
+
+    heartRate = -1;
     super.initState();
     initBluetoothScanning();
-    heartRate = -1;
+
   }
+
+  void _updateDataSource(Timer timer) {
+    greatestValue = valuesofHeart;
+    valuesofHeart = -1;
+    chartData.add(_ChartData(DateTime.now().minute.toInt(), greatestValue ));
+    if (chartData.length == 20) {
+      // Removes the last index data of data source.
+      chartData.removeAt(0);
+      int len = chartData.length.toInt() -1;
+      // Here calling updateDataSource method with addedDataIndexes to add data in last index and removedDataIndexes to remove data from the last.
+      _chartSeriesController?.updateDataSource(addedDataIndexes: <int>[(len)],
+          removedDataIndexes: <int>[0]);
+    }
+
+  }
+
+
 
   void initBluetoothScanning(){
     flutterBlue.isScanning.listen((isScanning) {
@@ -179,6 +218,9 @@ class _connectionPage extends State<connectionPage> {
       print("valor da global ${globals.heartRate_global.toString()}");
       setState(() {
         heartRate = values[1];
+        if(heartRate > valuesofHeart){
+          valuesofHeart = heartRate;
+        }
         //globals.heartRate_global = values[1];
        // widget.callback(heartRate);
       });
@@ -237,13 +279,14 @@ class _connectionPage extends State<connectionPage> {
 
   @override
   Widget build(BuildContext context) {
+    timer = Timer.periodic(const Duration(minutes: 1), _updateDataSource);
     return Scaffold(
         body: Container(
         padding: EdgeInsets.fromLTRB(10, 70, 10, 10),
-        height: 600,
-        child: Wrap(
-          runSpacing: 6.0,
-          direction: Axis.horizontal,
+        height: 800,
+        child: ListView(
+          //runSpacing: 6.0,
+          //direction: Axis.horizontal,
           children: [
             SizedBox(height: 10.0),
             Container(
@@ -289,6 +332,32 @@ class _connectionPage extends State<connectionPage> {
 
             ),
             Container(
+              alignment: Alignment(0.0, 0.6),
+              child: heartRate == -1?
+              SizedBox()
+                  : //IMPORTANTE TER ISSO PORQUE É UMA CONDICAO NAO APAGAR
+              Text('Date Time: ' + DateTime.now().minute.toString(),
+                style: TextStyle(
+                    fontSize: 28.0,
+                    color: Color(0xff16613D)
+                ),
+              ),
+
+            ),
+            Container(
+              alignment: Alignment(0.0, 0.6),
+              child: heartRate == -1?
+              SizedBox()
+                  : //IMPORTANTE TER ISSO PORQUE É UMA CONDICAO NAO APAGAR
+              Text('Greatest Value this minute: ' + greatestValue.toString(),
+                style: TextStyle(
+                    fontSize: 28.0,
+                    color: Color(0xff16613D)
+                ),
+              ),
+
+            ),
+            Container(
                 child: Align(
                   alignment: Alignment.center,
                   child: Material(
@@ -320,6 +389,43 @@ class _connectionPage extends State<connectionPage> {
                   ),
 
                 )
+            ),
+            Container(
+              child: SfCartesianChart(
+                title: ChartTitle(text: "Heart Measure per Minute"),
+                enableAxisAnimation: true,
+                primaryXAxis: NumericAxis(
+                  // Edge labels will be shifted
+                    edgeLabelPlacement: EdgeLabelPlacement.shift,
+                    interval: 10,
+                    /*
+                    majorTickLines: MajorTickLines(
+                        size: 6,
+                        width: 1,
+                        color: Colors.blue
+                    ),
+                    */
+
+                ),
+                //legend: Legend(isVisible: true),
+                series: <LineSeries<_ChartData, int>>[
+                  LineSeries<_ChartData, int>(
+                    onRendererCreated: (ChartSeriesController controller) {
+                      // Assigning the controller to the _chartSeriesController.
+                      _chartSeriesController = controller;
+
+                    },
+
+
+                    // Binding the chartData to the dataSource of the line series.
+                    //name: "Heart Measure",
+                    dataSource: chartData,
+                    xValueMapper: (_ChartData data, _) => data.minute,
+                    yValueMapper: (_ChartData data, _) => data.epoch,
+                  )
+                ],
+               // primaryXAxis: NumericAxis(edgeLabelPlacement: EdgeLabelPlacement.shift, numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0)),
+              ),
             ),
             /*
             Container(
@@ -374,6 +480,7 @@ class _connectionPage extends State<connectionPage> {
       )
     );
   }
+
 
   Widget _itemBuilder(BuildContext context, int index) {
     return InkWell(
@@ -438,7 +545,5 @@ class _connectionPage extends State<connectionPage> {
       },*/
     ));
   }
-
-
 
 }

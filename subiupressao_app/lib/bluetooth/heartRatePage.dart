@@ -73,7 +73,7 @@ class _heartRatePage extends State<heartRatePage> {
                   find_hearRate();
                 },
                 child:
-                Text("Update",
+                Text("Update: " + hr.toString(),
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontSize: 18.0,color: Colors.white, fontWeight: FontWeight.bold)
