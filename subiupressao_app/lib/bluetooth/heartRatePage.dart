@@ -1,28 +1,27 @@
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
+
 import 'package:subiupressao_app/globals.dart' as globals;
 import 'connectionPage.dart';
-import 'dart:async';
 import 'package:subiupressao_app/dataClass.dart';
+
 class heartRatePage extends StatefulWidget {
  //
 
-
- heartRatePage({Key key, @required this.dat}) : super(key: key);
- final myData dat;
+  heartRatePage({Key key, @required this.dat}) : super(key: key);
+  final myData dat;
   //heartRatePage(this.Heartrate, this.callback);
 
   //heartRatePage({Key key, @required this.promise}) : super(key: key);
-
 
   @override
   _heartRatePage createState() => _heartRatePage();
 }
 
 class _heartRatePage extends State<heartRatePage> {
+  int hr;
 
-
-  int hr ;
   @override
   void initState() {
     super.initState();
@@ -33,7 +32,6 @@ class _heartRatePage extends State<heartRatePage> {
     final int h = await globals.heartRate_global;
     hr = h;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -77,16 +75,12 @@ class _heartRatePage extends State<heartRatePage> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontSize: 18.0,color: Colors.white, fontWeight: FontWeight.bold)
-                )
-
-                ,
+                ),
               ),
             ),
-
           )
       ),
-    ]
-    )
+    ])
     );
   }
 

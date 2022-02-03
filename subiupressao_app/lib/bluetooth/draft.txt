@@ -1,0 +1,82 @@
+void miBand(BluetoothDevice miband) async {
+  // https://leojrfs.github.io/writing/miband2-part1-auth/#reference
+
+  const String UUID_SERVICE_AUTH = "0000fee1-0000-1000-8000-00805f9b34fb";
+  const String UUID_CHARACTERISTIC_AUTH =
+      "00000009-0000-3512-2118-0009af100700";
+  const int AUTH_SEND_KEY = 0x01;
+  const int AUTH_REQUEST_RANDOM_AUTH_NUMBER = 0x02;
+  const int AUTH_SEND_ENCRYPTED_AUTH_NUMBER = 0x03;
+  const int AUTH_RESPONSE = 0x10;
+  const int AUTH_SUCCESS = 0x01;
+  const int AUTH_FAIL = 0x04;
+  const int AUTH_BYTE = 0x8;
+  const List<int> SECRET_KEY = [
+    0x30,
+    0x31,
+    0x32,
+    0x33,
+    0x34,
+    0x35,
+    0x36,
+    0x37,
+    0x38,
+    0x39,
+    0x40,
+    0x41,
+    0x42,
+    0x43,
+    0x44,
+    0x45
+  ];
+
+  List<int> message;
+  List<BluetoothService> services = await miband.discoverServices();
+  for (BluetoothService service in services) {
+    if (service.uuid.toString() == UUID_SERVICE_AUTH) {
+      print("Found auth service.");
+      for (BluetoothCharacteristic characteristic in service.characteristics) {
+        if (characteristic.uuid.toString() == UUID_CHARACTERISTIC_AUTH) {
+          print("Found auth characteristc.");
+
+          // First we need to enable for notifications at UUID 0x0009
+          await characteristic.setNotifyValue(true);
+          print("Characteristic set to true");
+
+          // Sending a "secret" key to the band
+          print("Sending a secret key to the band");
+          message = [AUTH_SEND_KEY, AUTH_BYTE] + SECRET_KEY;
+          characteristic.write(message);
+          print("Message: $message");
+
+          // Requesting a random authentication key from the band
+          print("Requesting a random authentication key from the band.");
+          List<int> notification = await characteristic.read();
+          print("Notification: $notification");
+
+          if (notification[0] == AUTH_RESPONSE &&
+              notification[1] == AUTH_SUCCESS &&
+              notification[2] == AUTH_SUCCESS) {
+            message = [AUTH_REQUEST_RANDOM_AUTH_NUMBER, AUTH_BYTE];
+            characteristic.write(message);
+            print("Making another request: $message");
+          }
+
+          // Sending the encrypted random authentication key to the band
+          print("Sending the encrypted random authentication key to the band.");
+          notification = await characteristic.read();
+          print("Notification: $notification");
+
+          if (notification[0] == AUTH_RESPONSE &&
+              notification[1] == AUTH_REQUEST_RANDOM_AUTH_NUMBER &&
+              notification[2] == AUTH_SUCCESS) {
+            print("Encrypting the secret key");
+            crypt.AES(crypt.Key.fromUtf8(SECRET_KEY.toString()),
+                mode: crypt.AESMode.ecb);
+          }
+        }
+      }
+    }
+  }
+}
+
