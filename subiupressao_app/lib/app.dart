@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:subiupressao_app/app_celular/Remedios.dart';
+import 'package:subiupressao_app/app_celular/Remedios/Remedios.dart';
 import 'package:subiupressao_app/tabItem.dart';
 import 'package:subiupressao_app/app_celular/bottomNavigation.dart';
 import 'package:subiupressao_app/app_celular/CentralPage.dart';
@@ -23,18 +23,8 @@ class App extends StatefulWidget {
 class AppState extends State<App> {
   // this is static property so other widget throughout the app
   // can access it simply by AppState.currentTab
-  static int currentTab = 1;
+  static int currentTab = 2;
   final myData dataa = myData(-1);
-  //int Hr;
-  /*
-  int heartR = -1;
-
-  callback(newheartR) {
-    setState(() {
-      heartR = newheartR;
-    });
-  }*/
-
 
   // list tabs here
   final List<TabItem> tabs = [
@@ -57,9 +47,7 @@ class AppState extends State<App> {
     TabItem(
       tabName: "Lembretes",
       icon: Icons.menu_book_rounded,
-      page: //TestWrite(),
-      connectionPage(),
-      //Lembretes(),
+      page: connectionPage(),
     ),
   ];
 
