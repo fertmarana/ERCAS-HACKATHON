@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
+import 'package:subiupressao_app/app_celular/Consultas/Appointments.dart';
 
 import 'package:subiupressao_app/app_celular/Remedios/Remedios.dart';
 import 'package:subiupressao_app/tabItem.dart';
@@ -31,24 +33,26 @@ class AppState extends State<App> {
     // telas no Navigation Bar
     TabItem(
       tabName: "Remédios",
-      icon: Icons.medication_rounded,
+      icon: MaterialCommunityIcons.pill,
+      // icon: Icons.medication_rounded,
       page: Remedios(),
     ),
+    // Menu de configurações: minhaConta_morador()
     TabItem(
-      tabName: "Perfil",
-      icon: Icons.person,
-      page: minhaConta_morador(),
-    ),
-    TabItem(
-      tabName: "Início",
-      icon: Icons.home,
+      tabName: "Pressão",
+      icon: MaterialCommunityIcons.heart_pulse,
       page: heartRatePage(),
     ),
     TabItem(
-      tabName: "Lembretes",
-      icon: Icons.menu_book_rounded,
+      tabName: "Conectar",
+      icon: Icons.bluetooth_searching,
       page: connectionPage(),
     ),
+    TabItem(
+      tabName: "Consultas",
+      icon: Icons.assignment_ind_rounded,
+      page: Appointments(),
+    )
   ];
 
   AppState() {
