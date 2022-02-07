@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:provider/provider.dart';
+import 'package:subiupressao_app/app_celular/Components/Controller.dart';
 import 'package:subiupressao_app/app_celular/Consultas/Appointments.dart';
 
 import 'package:subiupressao_app/app_celular/Remedios/Remedios.dart';
+import 'package:subiupressao_app/files/FileController.dart';
 import 'package:subiupressao_app/tabItem.dart';
 import 'package:subiupressao_app/app_celular/bottomNavigation.dart';
 import 'package:subiupressao_app/app_celular/CentralPage.dart';
@@ -15,7 +18,6 @@ import 'package:subiupressao_app/globals.dart' as globals;
 import 'dataClass.dart';
 
 class App extends StatefulWidget {
-
   //App({Key key, @required this.Hr}) : super(key: key);
 
   @override
@@ -27,35 +29,38 @@ class AppState extends State<App> {
   // can access it simply by AppState.currentTab
   static int currentTab = 2;
   final myData dataa = myData(-1);
+  Controller controller = Controller();
 
   // list tabs here
-  final List<TabItem> tabs = [
-    // telas no Navigation Bar
-    TabItem(
-      tabName: "Remédios",
-      icon: MaterialCommunityIcons.pill,
-      // icon: Icons.medication_rounded,
-      page: Remedios(),
-    ),
-    // Menu de configurações: minhaConta_morador()
-    TabItem(
-      tabName: "Pressão",
-      icon: MaterialCommunityIcons.heart_pulse,
-      page: heartRatePage(),
-    ),
-    TabItem(
-      tabName: "Conectar",
-      icon: Icons.bluetooth_searching,
-      page: connectionPage(),
-    ),
-    TabItem(
-      tabName: "Consultas",
-      icon: Icons.assignment_ind_rounded,
-      page: Appointments(),
-    )
-  ];
+  List<TabItem> tabs;
 
   AppState() {
+    tabs = [
+      // telas no Navigation Bar
+      TabItem(
+        tabName: "Remédios",
+        icon: MaterialCommunityIcons.pill,
+        // icon: Icons.medication_rounded,
+        page: Remedios(controller: controller),
+      ),
+      // Menu de configurações: minhaConta_morador()
+      TabItem(
+        tabName: "Pressão",
+        icon: MaterialCommunityIcons.heart_pulse,
+        page: HeartRatePage(),
+      ),
+      TabItem(
+        tabName: "Conectar",
+        icon: Icons.bluetooth_searching,
+        page: connectionPage(),
+      ),
+      TabItem(
+        tabName: "Consultas",
+        icon: Icons.assignment_ind_rounded,
+        page: Appointments(controller: controller),
+      )
+    ];
+
     // indexação é necessária para funcionar bem
     // em determinar qual tab no Navigation Bar está ativo
     tabs.asMap().forEach((index, details) {
@@ -79,6 +84,21 @@ class AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
+    if (controller.user == null) {
+      controller.updateUser(
+        newUser: context.select(
+          (FileController fileController) {
+            fileController.readUser();
+            return fileController.user;
+          },
+        ),
+      );
+    }
+
+    if (controller.dateTime == null) {
+      controller.updateDateTime(newDateTime: DateTime.now());
+    }
+    
     // WillPopScope handle android back btn
     return WillPopScope(
       onWillPop: () async {

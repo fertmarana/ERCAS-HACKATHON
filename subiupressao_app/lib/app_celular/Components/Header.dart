@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:subiupressao_app/app_celular/Components/UserDataInput.dart';
 import 'package:subiupressao_app/app_celular/Remedios/EditMedicine.dart';
-import 'package:subiupressao_app/app_celular/Remedios/RemediosController.dart';
+import 'package:subiupressao_app/app_celular/Components/Controller.dart';
 import 'package:subiupressao_app/files/models/user.dart';
 
 class Header extends StatefulWidget {
-  MedicineController controller;
+  Controller controller;
+  Function buttonFunction;
 
-  Header({@required this.controller});
+  Header({@required this.controller, @required this.buttonFunction});
 
   @override
   State<Header> createState() => _HeaderState();
@@ -62,17 +63,7 @@ class _HeaderState extends State<Header> {
         Spacer(),
         IconButton(
           // Add medicine button
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => EditMedicine(
-                  dateTime: _dateTime,
-                  controller: widget.controller,
-                ),
-              ),
-            );
-          },
+          onPressed: widget.buttonFunction, 
           icon: const Icon(Icons.add_box, size: 40),
         ),
       ],

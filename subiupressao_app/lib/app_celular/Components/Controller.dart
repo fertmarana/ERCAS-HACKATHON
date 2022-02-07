@@ -3,7 +3,7 @@ import 'package:subiupressao_app/files/FileController.dart';
 
 import 'package:subiupressao_app/files/models/user.dart';
 
-class MedicineController extends ChangeNotifier {
+class Controller extends ChangeNotifier {
   User _user;
   DateTime _dateTime;
   FileController _controller = new FileController();
@@ -13,7 +13,12 @@ class MedicineController extends ChangeNotifier {
 
   void updateUser({@required User newUser}) async {
     _user = newUser;
-    _controller.writeUser(newUser.name, newUser.age, newUser.medicines);
+    _controller.writeUser(
+      newUser.name,
+      newUser.age,
+      newUser.medicines,
+      newUser.appointments,
+    );
 
     notifyListeners();
   }

@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:subiupressao_app/files/models/appointment.dart';
 import 'package:subiupressao_app/files/models/medicine.dart';
 import 'package:subiupressao_app/files/models/user.dart';
 
@@ -25,7 +26,7 @@ class FileManager {
     final String path = await _directoryPath;
     return File('$path/user.json');
   }
-  
+
   Future<Map<String, dynamic>> readJsonFile() async {
     String fileContent = '';
 
@@ -44,8 +45,12 @@ class FileManager {
   }
 
   Future<User> writeJsonFile(
-      String name, int age, List<Medicine> medicines) async {
-    final User user = User(name, age, medicines);
+    String name,
+    int age,
+    List<Medicine> medicines,
+    List<Appointment> appointments,
+  ) async {
+    final User user = User(name, age, medicines, appointments);
     File file = await _jsonFile;
 
     await file.writeAsString(json.encode(user));

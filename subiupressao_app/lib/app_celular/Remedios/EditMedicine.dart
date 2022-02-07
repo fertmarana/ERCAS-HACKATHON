@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:subiupressao_app/app_celular/Components/UserDataInput.dart';
-import 'package:subiupressao_app/app_celular/Remedios/RemediosController.dart';
+import 'package:subiupressao_app/app_celular/Components/Controller.dart';
 import 'package:subiupressao_app/files/FileController.dart';
 import 'package:subiupressao_app/files/models/medicine.dart';
 import 'package:subiupressao_app/files/models/user.dart';
@@ -12,10 +12,10 @@ import 'package:table_calendar/table_calendar.dart';
 // TODO: transformar as datas dos remédios em algo realmente funcional
 
 class EditMedicine extends StatefulWidget {
-  MedicineController controller;
-  DateTime dateTime;
-  bool deleteButton;
-  Medicine element;
+  final Controller controller;
+  final DateTime dateTime;
+  final bool deleteButton;
+  final Medicine element;
 
   EditMedicine({
     @required this.dateTime,

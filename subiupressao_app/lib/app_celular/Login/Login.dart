@@ -3,11 +3,12 @@ import 'package:flutter/services.dart';
 import 'dart:io' as io;
 
 import 'package:path_provider/path_provider.dart';
-import 'package:provider/src/provider.dart';
+import 'package:provider/provider.dart';
 import 'package:subiupressao_app/app.dart';
 import 'package:subiupressao_app/app_celular/Components/ProfilePicture.dart';
 import 'package:subiupressao_app/app_celular/Components/UserDataInput.dart';
 import 'package:subiupressao_app/files/FileController.dart';
+import 'package:subiupressao_app/files/models/appointment.dart';
 import 'package:subiupressao_app/files/models/medicine.dart';
 import 'package:subiupressao_app/files/models/user.dart';
 
@@ -19,6 +20,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _user = context.select((FileController controller) {
+      // controller.deleteUser();
       controller.readUser();
       return controller.user;
     });
@@ -70,10 +72,18 @@ class LoginPage extends StatelessWidget {
                           int.parse(_ageController.text),
                           [
                             Medicine(
-                                name: "Exemplo",
-                                quantity: 0,
-                                start: DateTime.now(),
-                                end: DateTime.now())
+                              name: "Exemplo",
+                              quantity: 0,
+                              start: DateTime.now(),
+                              end: DateTime.now(),
+                            ),
+                          ],
+                          [
+                            Appointment(
+                              doctor: "Exemplo",
+                              speciality: "Exemplo",
+                              date: DateTime.now(),
+                            ),
                           ],
                         );
 

@@ -1,11 +1,11 @@
 import 'package:flutter/widgets.dart';
 import 'package:subiupressao_app/app_celular/Components/ProfileSummary.dart'
     as Profile;
-import 'package:subiupressao_app/app_celular/Remedios/RemediosController.dart';
+import 'package:subiupressao_app/app_celular/Components/Controller.dart';
 import 'package:subiupressao_app/files/models/user.dart';
 
 class ProfileSummary extends StatefulWidget {
-  MedicineController controller;
+  Controller controller;
 
   ProfileSummary({@required this.controller});
 
