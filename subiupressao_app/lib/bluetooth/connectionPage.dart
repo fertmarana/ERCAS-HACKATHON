@@ -185,20 +185,16 @@ class _connectionPage extends State<connectionPage> {
       deviceConnected_name = device.name;
     });
 
-    await device
-        .connect(timeout: Duration(seconds: 10))
-        .timeout(Duration(seconds: 10), onTimeout: () {
-      returnValue = Future.value(false);
-    }).then((data) {
-      if (returnValue == null) {
-        isConnected = true;
+    await device.connect() ;
 
-        findServices(dev);
-        List<List> values = [];
+    isConnected = true;
 
-        print("Connection successful!");
-      }
-    });
+    findServices(dev);
+    List<List> values = [];
+
+    print("Connection successful!");
+
+
   }
 
   disconnect() async {
@@ -366,7 +362,8 @@ class _connectionPage extends State<connectionPage> {
                             fontWeight: FontWeight.bold)),
               ),
             ),
-          )),
+          )
+          ),
           /*
               Container(
                 child: SfCartesianChart(
