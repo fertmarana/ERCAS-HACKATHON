@@ -10,7 +10,6 @@ import 'package:subiupressao_app/bluetooth/heartRatePage.dart';
 import 'package:subiupressao_app/globals.dart' as globals;
 
 class App2 extends StatefulWidget {
-
   //App({Key key, @required this.Hr}) : super(key: key);
 
   @override
@@ -40,15 +39,15 @@ class AppState extends State<App2> {
         items: [
           new BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            title: Text('Home'),
+            label: "Home",
           ),
           new BottomNavigationBarItem(
             icon: Icon(Icons.mail),
-            title: Text('Messages'),
+            label: "Messages",
           ),
           new BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              title: Text('Profile')
+            icon: Icon(Icons.person),
+            label: "Profile",
           )
         ],
       ),

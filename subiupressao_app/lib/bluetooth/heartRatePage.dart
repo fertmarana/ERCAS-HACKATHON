@@ -1,8 +1,8 @@
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter/material.dart';
+
 import 'package:subiupressao_app/globals.dart' as globals;
 import 'connectionPage.dart';
-import 'dart:async';
 import 'package:subiupressao_app/dataClass.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dart:io';
@@ -14,8 +14,8 @@ import 'package:intl/intl.dart';
 import 'package:subiupressao_app/database/Database.dart';
 import 'package:subiupressao_app/database/MeasuresDataModel.dart';
 
-class heartRatePage extends StatefulWidget {
- heartRatePage({Key key, @required this.dat}) : super(key: key);
+class HeartRatePage extends StatefulWidget {
+ HeartRatePage({Key key, @required this.dat}) : super(key: key);
  final myData dat;
 
   //heartRatePage(this.Heartrate, this.callback);
@@ -23,10 +23,10 @@ class heartRatePage extends StatefulWidget {
   //heartRatePage({Key key, @required this.promise}) : super(key: key);
 
   @override
-  _heartRatePage createState() => _heartRatePage();
+  _HeartRatePage createState() => _HeartRatePage();
 }
 
-class _heartRatePage extends State<heartRatePage> {
+class _HeartRatePage extends State<HeartRatePage> {
   int hr ;
   List<Heart> heartData = [];
   ZoomPanBehavior _zoomPanBehavior;
@@ -275,6 +275,4 @@ class _heartRatePage extends State<heartRatePage> {
           )
       );
   }
-
-
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:subiupressao_app/bluetooth/Bluetooth_test.dart';
 import 'package:subiupressao_app/classes_definicao/ColetaAgendada.dart';
 import 'package:subiupressao_app/app_celular/PageView_Dados.dart';
-import 'package:subiupressao_app/app_celular/PageView_Remedios.dart';
+import 'package:subiupressao_app/app_celular/Remedios/MedicinesList.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:async';
