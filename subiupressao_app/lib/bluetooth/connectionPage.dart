@@ -286,14 +286,16 @@ class _connectionPage extends State<connectionPage> {
               Container(
                 alignment: Alignment(0.0, 0.6),
                 child: isConnected ?
-                Text('Connected to \n' + deviceConnected_name,
+                Text('Conectado à \n' + deviceConnected_name,
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 28.0,
                       color: Color(0xff16613D)
                   ),
                 )
                     : //IMPORTANTE TER ISSO PORQUE É UMA CONDICAO NAO APAGAR
-                Text('No Device Connected',
+                Text('Nenhum Aparelho Conectado',
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 28.0,
                       color: Color(0xff16613D)
@@ -311,12 +313,14 @@ class _connectionPage extends State<connectionPage> {
                   ),
                 ),
               ),
+              /*
               Container(
                 alignment: Alignment(0.0, 0.6),
                 child: heartRate == -1?
                 SizedBox()
                     : //IMPORTANTE TER ISSO PORQUE É UMA CONDICAO NAO APAGAR
-                Text('Heart Rate: ' + heartRate.toString(),
+                Text('Frequência: ' + heartRate.toString(),
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 28.0,
                       color: Color(0xff16613D)
@@ -324,6 +328,9 @@ class _connectionPage extends State<connectionPage> {
                 ),
 
               ),
+
+               */
+              /*
               Container(
                 alignment: Alignment(0.0, 0.6),
                 child: heartRate == -1?
@@ -342,7 +349,7 @@ class _connectionPage extends State<connectionPage> {
                 child: heartRate == -1?
                 SizedBox()
                     : //IMPORTANTE TER ISSO PORQUE É UMA CONDICAO NAO APAGAR
-                Text('Greatest Value this minute: \n' + greatestValue.toString(),
+                Text('Maior Valor de Frequência: \n' + greatestValue.toString(),
                   style: TextStyle(
                       fontSize: 18.0,
                       color: Color(0xff16613D)
@@ -350,6 +357,7 @@ class _connectionPage extends State<connectionPage> {
                 ),
 
               ),
+              */
               Container(
                   child: Align(
                     alignment: Alignment.center,
@@ -366,12 +374,12 @@ class _connectionPage extends State<connectionPage> {
                         child:
                         isConnected ?
 
-                        Text("Scan Again",
+                        Text("Scanear",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: 20.0,color: Colors.white, fontWeight: FontWeight.bold)
                         ):
-                        Text("Scan for Devices",
+                        Text("Scanear por Aparelhos",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: 18.0,color: Colors.white, fontWeight: FontWeight.bold)
@@ -383,6 +391,7 @@ class _connectionPage extends State<connectionPage> {
 
                   )
               ),
+              /*
               Container(
                 child: SfCartesianChart(
                   zoomPanBehavior: _zoomPanBehavior,
@@ -427,9 +436,10 @@ class _connectionPage extends State<connectionPage> {
                     //edgeLabelPlacement: EdgeLabelPlacement.shift,
                     //autoScrollingDelta: 5,
                     //interval: 6,
-                    axisLine: AxisLine(width: 3),
+                    axisLine: AxisLine(width: 5),
                    // visibleMinimum: start_aplication,
-                    majorTickLines: MajorTickLines(size: 0),
+                    majorTickLines: MajorTickLines(size: 1),
+                   // minorTickLines: MinorTickLines(size: 1),
                   ),
                   //legend: Legend(isVisible: true),
                   series: <LineSeries<Heart, DateTime>>[
@@ -467,7 +477,7 @@ class _connectionPage extends State<connectionPage> {
                         .second
                         .toString() +
                     ':' +
-                    DateTime.fromMillisecondsSinceEpoch(int.parse(yValue))
+                    DateTime.fromHeart Measure per MinutMillisecondsSinceEpoch(int.parse(yValue))
                         .millisecond
                         .toString();
                     */
@@ -477,7 +487,7 @@ class _connectionPage extends State<connectionPage> {
                   primaryXAxis: CategoryAxis(
                     
                     // Edge labels will be shifted
-                    edgeLabelPlacement: EdgeLabelPlacement.shift,
+                    edgeLabelPlacHeart Measure per Minutement: EdgeLabelPlacement.shift,
                     autoScrollingDelta: 5,
                     interval: 6,
                     axisLine: AxisLine(width: 0),
@@ -503,7 +513,7 @@ class _connectionPage extends State<connectionPage> {
                   ],
                   // primaryXAxis: NumericAxis(edgeLabelPlacement: EdgeLabelPlacement.shift, numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0)),
                 ),
-              ),
+              ),*/
             ],
           ),
         )

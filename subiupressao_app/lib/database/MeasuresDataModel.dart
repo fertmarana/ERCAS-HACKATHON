@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:core';
 
+import 'package:flutter/cupertino.dart';
+
 Heart heartFromJson(String str) {
   final jsonData = json.decode(str);
   return Heart.fromMap(jsonData);
@@ -47,4 +49,16 @@ class Heart {
    // return 'Heart{id: $id, heart: $heartRate, dateTime: $dateTime}';
     return 'Heart{id: $id, heart: $heartRate, dateTime: $dateTime}';
   }
+
+  String toStringHeart() {
+    // return 'Heart{id: $id, heart: $heartRate, dateTime: $dateTime}';
+    return '$heartRate';
+  }
+
+  String toStringDateTime() {
+    // return 'Heart{id: $id, heart: $heartRate, dateTime: $dateTime}';
+
+    return '$dateTime';
+  }
+
 }

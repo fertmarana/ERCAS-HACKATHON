@@ -29,10 +29,16 @@ class heartRatePage extends StatefulWidget {
 class _heartRatePage extends State<heartRatePage> {
   int hr ;
   List<Heart> heartData = [];
-
   ZoomPanBehavior _zoomPanBehavior;
-
   ChartSeriesController _chartSeriesController;
+  int curheartRate  = -1;
+
+  var controller = PageController(
+    viewportFraction: 1 ,
+    initialPage: 0,
+  );
+
+
 
   @override
   void initState() {
@@ -69,7 +75,9 @@ class _heartRatePage extends State<heartRatePage> {
     List<Heart> aux = await DBProvider.db.getAllClients();
     setState(() {
       heartData = aux;
+
     });
+    curheartRate = heartData.last.heartRate;
     return heartData;
   }
 
@@ -84,174 +92,188 @@ class _heartRatePage extends State<heartRatePage> {
     Future.delayed(Duration(seconds: 10), (){
       _fetchDat();
     });
-    return Padding(
-        padding: EdgeInsets.fromLTRB(10, 70, 10, 10),
-    child: Wrap(
-    runSpacing: 6.0,
-    direction: Axis.horizontal,
-    children: [
-      /*
-      Container(
-        alignment: Alignment(0.0, 0.6),
-        child: FutureBuilder(
-          future: this.promise,
-          builder: (BuildContext context, AsyncSnapshot snapshot){
-            return Text('Heart Rate: ' + snapshot.data.toString(),
-                style: TextStyle(
-                fontSize: 28.0,
-                color: Color(0xff16613D)
+    return
+      Scaffold(
+          body: Container(
+          padding: EdgeInsets.fromLTRB(10, 70, 10, 10),
+          height: 800,
+          child:
+            ListView(
+              children: [
+                      /*
+                      Container(
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Material(
+                              borderRadius: BorderRadius.circular(30.0),
+                              color: Color(0xFF009E74),
+                              child: MaterialButton(
+                                minWidth: 200.0,
+                                padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                                onPressed: () {
+                                  //scanForDevices();
+
+                                  find_hearRate();
+                                  _fetchDat();
+                                  //heartData = await DBProvider.db.getAllClients();
+                                },
+                                child:
+                                Text("Atualizar" ,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 18.0,color: Colors.white, fontWeight: FontWeight.bold)
+                                )
+                                ,
+                              ),
+                            ),
+
+                          )
+                      ),
+                      Container(
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Material(
+                              borderRadius: BorderRadius.circular(30.0),
+                              color: Colors.red,
+                              child: MaterialButton(
+                                minWidth: 200.0,
+                                padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                                onPressed: () {
+                                  //scanForDevices();
+
+                                  deleteDatabase();
+                                  //heartData = await DBProvider.db.getAllClients();
+                                },
+                                child:
+                                Text("Deletar"))
+                            )
+                          )
+                      ),*/
+                      Container(
+                        alignment: Alignment(0.0, 0.6),
+                        child: curheartRate == -1?
+                        SizedBox()
+                            : //IMPORTANTE TER ISSO PORQUE É UMA CONDICAO NAO APAGAR
+                        Text('Última Frequência Registrada: ' + curheartRate.toString(),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 28.0,
+                              color: Color(0xff16613D)
+                          ),
+                        ),
+
+                      ),
+                      /*
+                      Container(
+                      child: SfCartesianChart(
+                        // zoomPanBehavior: _zoomPanBehavior,
+
+                        title: ChartTitle(text: "Heart Measure per Minute"),
+                        //enableAxisAnimation: true,
+                        primaryXAxis: DateTimeAxis(
+                          dateFormat: DateFormat.Hms(),
+                          intervalType: DateTimeIntervalType.minutes,
+                          // Edge labels will be shifted
+                          //edgeLabelPlacement: EdgeLabelPlacement.shift,
+                          //autoScrollingDelta: 5,
+                          //interval: 6,
+                          axisLine: AxisLine(width: 0),
+                          // visibleMinimum: start_aplication,
+                          majorTickLines: MajorTickLines(size: 0),
+                        ),
+                        //legend: Legend(isVisible: true),
+                        series: <LineSeries<Heart, DateTime>>[
+                          LineSeries<Heart, DateTime>(
+                            onRendererCreated: (ChartSeriesController controller) {
+                              // Assigning the controller to the _chartSeriesController.
+                              _chartSeriesController = controller;
+
+                            },
+                            // Binding the chartData to the dataSDateTimeource of the line series.
+                            //name: "Heart Measure",
+                            dataSource: heartData,
+                            xValueMapper: (Heart data, _) => data.dateTime,//data.dateTime.minute.toString(),
+                            yValueMapper: (Heart data, _) => data.heartRate,
+                          )
+                        ],
+                        // primaryXAxis: NumericAxis(edgeLabelPlacement: EdgeLabelPlacement.shift, numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0)),
+                      ),
+                ),*/
+                Container(
+                  alignment: Alignment.centerLeft,
+                  margin: EdgeInsets.symmetric(vertical: 10.0),
+                  height: 400.0,
+                  width: 500,
+                  child:
+                      PageView(
+                          controller: controller,
+                          scrollDirection: Axis.horizontal,
+                          children: [
+                            Container(
+                              child: SfCartesianChart(
+                                 //zoomPanBehavior: _zoomPanBehavior,
+
+                                title: ChartTitle(text: "Frequência"),
+                                enableAxisAnimation: true,
+                                primaryXAxis: DateTimeAxis(
+                                  dateFormat: DateFormat.Hms(),
+                                  intervalType: DateTimeIntervalType.minutes,
+
+                                  // Edge labels will be shifted
+                                  //edgeLabelPlacement: EdgeLabelPlacement.shift,
+                                  //autoScrollingDelta: 5,
+                                  //interval: 6,
+                                  axisLine: AxisLine(width: 0),
+                                  // visibleMinimum: start_aplication,
+                                  majorTickLines: MajorTickLines(size: 0),
+                                ),
+                                //legend: Legend(isVisible: true),
+                                series: <LineSeries<Heart, DateTime>>[
+                                  LineSeries<Heart, DateTime>(
+                                    onRendererCreated: (ChartSeriesController controller) {
+                                      // Assigning the controller to the _chartSeriesController.
+                                      _chartSeriesController = controller;
+
+                                    },
+                                    // Binding the chartData to the dataSDateTimeource of the line series.
+                                    //name: "Heart Measure",
+                                    dataSource: heartData,
+                                    xValueMapper: (Heart data, _) => data.dateTime,//data.dateTime.minute.toString(),
+                                    yValueMapper: (Heart data, _) => data.heartRate,
+                                  )
+                                ],
+                                // primaryXAxis: NumericAxis(edgeLabelPlacement: EdgeLabelPlacement.shift, numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0)),
+                              ),
+                            ),
+                            Container(
+                              child: SizedBox(
+                                // height: 400.0,
+                                  child:   ListView.builder(
+                                    itemCount: heartData.length,
+                                    itemBuilder: (BuildContext context, int position) {
+                                      final item = heartData[position];
+                                      //get your item data here ...
+                                      return Card(
+                                        child: ListTile(
+                                          title: Text(
+                                             // "Data: " + heartData[position].toString()
+                                            "Frequência:  " + heartData[position].toStringHeart() + '\n' + "Data: " + heartData[position].toStringDateTime(),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  )
+                              ),
+                            ),
+                          ]
+                        ),
                 ),
-                );
-          },
-        )
-      ),
-      */
-      Container(
-          child: Align(
-            alignment: Alignment.center,
-            child: Material(
-              borderRadius: BorderRadius.circular(30.0),
-              color: Color(0xFF009E74),
-              child: MaterialButton(
-                minWidth: 200.0,
-                padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                onPressed: () {
-                  //scanForDevices();
-                  print("Encontreee");
-                  find_hearRate();
-                  _fetchDat();
-                  //heartData = await DBProvider.db.getAllClients();
-                },
-                child:
-                Text("Update: " ,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: 18.0,color: Colors.white, fontWeight: FontWeight.bold)
-                )
 
-                ,
-              ),
-            ),
-
-          )
-      ),
-      Container(
-          child: Align(
-            alignment: Alignment.center,
-            child: Material(
-              borderRadius: BorderRadius.circular(30.0),
-              color: Colors.red,
-              child: MaterialButton(
-                minWidth: 200.0,
-                padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                onPressed: () {
-                  //scanForDevices();
-                  print("Encontreee");
-                  deleteDatabase();
-                  //heartData = await DBProvider.db.getAllClients();
-                },
-                child:
-                Text("Delete all: " ,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: 18.0,color: Colors.white, fontWeight: FontWeight.bold)
-                )
-
-                ,
-              ),
-            ),
-
-          )
-      ),
-      Container(
-      child: SizedBox(
-      height: 200.0,
-        child:   ListView.builder(
-            itemCount: heartData.length,
-            itemBuilder: (BuildContext context, int position) {
-            final item = heartData[position];
-            //get your item data here ...
-            return Card(
-              child: ListTile(
-                title: Text(
-                "Data " + heartData[position].toString()),
-              ),
-            );
-            },
-          )
-      ),
-      ),
-      Container(
-        child: SfCartesianChart(
-          // zoomPanBehavior: _zoomPanBehavior,
-
-          title: ChartTitle(text: "Heart Measure per Minute"),
-          //enableAxisAnimation: true,
-          primaryXAxis: DateTimeAxis(
-            dateFormat: DateFormat.Hms(),
-            intervalType: DateTimeIntervalType.minutes,
-            // Edge labels will be shifted
-            //edgeLabelPlacement: EdgeLabelPlacement.shift,
-            //autoScrollingDelta: 5,
-            //interval: 6,
-            axisLine: AxisLine(width: 0),
-            // visibleMinimum: start_aplication,
-            majorTickLines: MajorTickLines(size: 0),
-          ),
-          //legend: Legend(isVisible: true),
-          series: <LineSeries<Heart, DateTime>>[
-            LineSeries<Heart, DateTime>(
-              onRendererCreated: (ChartSeriesController controller) {
-                // Assigning the controller to the _chartSeriesController.
-                _chartSeriesController = controller;
-
-              },
-              // Binding the chartData to the dataSDateTimeource of the line series.
-              //name: "Heart Measure",
-              dataSource: heartData,
-              xValueMapper: (Heart data, _) => data.dateTime,//data.dateTime.minute.toString(),
-              yValueMapper: (Heart data, _) => data.heartRate,
-            )
-          ],
-          // primaryXAxis: NumericAxis(edgeLabelPlacement: EdgeLabelPlacement.shift, numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0)),
-        ),
-      ),
-
-      /*
-      Container(
-        child: SizedBox(
-          height: 200.0,
-          child:   FutureBuilder<List>(
-            future: _fetchDat(),
-            initialData: [],
-            builder: (context, snapshot) {
-              return snapshot.hasData
-                  ? ListView.builder(
-                itemCount: snapshot.data.length,
-                itemBuilder: (BuildContext context, int position) {
-                  final item = snapshot.data[position];
-                  //get your item data here ...
-                  return Card(
-                    child: ListTile(
-                      title: Text(
-                          "Data " + snapshot.data[position].toString()),
-                    ),
-                  );
-                },
+                ]
               )
-                  : Center(
-                child: CircularProgressIndicator(),
-              );
-            },
-          ),
-        ),
-      ),*/
-
-
-
-    ]
-    )
-    );
+          )
+      );
   }
 
 
