@@ -31,7 +31,7 @@ class AppState extends State<App> {
   final myData dataa = myData(-1);
   Controller controller = Controller();
 
-  // list tabs here
+  //  list tabs here
   List<TabItem> tabs;
 
   AppState() {
@@ -98,7 +98,7 @@ class AppState extends State<App> {
     if (controller.dateTime == null) {
       controller.updateDateTime(newDateTime: DateTime.now());
     }
-    
+
     // WillPopScope handle android back btn
     return WillPopScope(
       onWillPop: () async {

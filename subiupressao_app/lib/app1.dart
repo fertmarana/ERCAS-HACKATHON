@@ -78,19 +78,19 @@ class AppState extends State<App1> {
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            title: Text("Home"),
+            label: "Home",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.favorite),
-            title: Text("Favorite"),
+            label: "Favorite",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            title: Text("Profile"),
+            label: "Profile",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
-            title: Text("Settings"),
+            label: "Settings",
           ),
         ],
         onTap: _onTap,
