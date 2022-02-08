@@ -83,7 +83,7 @@ class _EditMedicineState extends State<EditMedicine> {
         ),
         Spacer(),
         Text(
-          "Novo Remédio",
+          widget.element == null ? "Novo Remédio" : "Editar Remédio",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         Spacer(),
@@ -150,18 +150,18 @@ class _EditMedicineState extends State<EditMedicine> {
 
   List<Widget> buildColumn({User user, Size size}) {
     List<Widget> column = [
-      SizedBox(height: 30),
+      SizedBox(height: size.height * 0.05),
       // Head (Cancel button, title and save button)
       buildHead(user: user),
-      SizedBox(height: 5),
-      Icon(Icons.medication, size: 70),
-      SizedBox(height: 20),
+      SizedBox(height: size.height * 0.005),
+      Icon(Icons.medication, size: size.height * 0.1),
+      SizedBox(height: size.height * 0.03),
       UserDataInput(
         controller: _medicineNameController,
         fieldName: "Nome do remédio",
         hintString: "Nome do Remédio",
       ),
-      SizedBox(height: 20),
+      SizedBox(height: size.height * 0.03),
       UserDataInput(
         controller: _pillsController,
         keyboard: TextInputType.number,
@@ -169,17 +169,17 @@ class _EditMedicineState extends State<EditMedicine> {
         fieldName: "São quantos comprimidos por dia?",
         hintString: "Comprimidos por dia",
       ),
-      SizedBox(height: 20),
+      SizedBox(height: size.height * 0.03),
       UserDataInput(
         controller: new TextEditingController(),
         enabled: false,
         fieldName: "Início do remédio",
         hintString: DateFormat("dd/MM/yyyy").format(widget.dateTime),
       ),
-      SizedBox(height: 20),
+      SizedBox(height: size.height * 0.03),
       Row(
         children: [
-          SizedBox(width: 15),
+          SizedBox(width: size.width * 0.05),
           Text("Até quando o remédio deve ser tomado?",
               style: TextStyle(fontSize: 16)),
           Spacer(),
