@@ -8,31 +8,39 @@ class ProfileSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Stack(
       children: [
         Positioned(
           child: Image.asset(
             'imagens/CardBackground.png',
-            height: 110,
+            height: size.height * 0.1,
+            width: size.width * 2,
           ),
           bottom: 0,
-          left: 20,
+          left: size.width * -0.80,
         ),
         Card(
-          margin: EdgeInsets.fromLTRB(20, 15, 20, 15),
+          margin: EdgeInsets.fromLTRB(
+            size.width * 0.03,
+            size.width * 0.03,
+            size.width * 0.03,
+            size.width * 0.03,
+          ),
           elevation: 5,
           color: const Color(0xff00ffe0),
           child: Row(
             children: [
-              SizedBox(width: 15),
+              SizedBox(width: size.width * 0.04),
               Column(
                 children: [
-                  SizedBox(height: 15),
+                  SizedBox(height: size.height * 0.02),
                   ProfilePicture(),
-                  SizedBox(height: 15),
+                  SizedBox(height: size.height * 0.02),
                 ],
               ),
-              SizedBox(width: 20),
+              SizedBox(width: size.width * 0.06),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: children,

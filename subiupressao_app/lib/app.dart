@@ -52,7 +52,7 @@ class AppState extends State<App> {
       TabItem(
         tabName: "Conectar",
         icon: Icons.bluetooth_searching,
-        page: connectionPage(),
+        page: ConnectionPage(controller: controller),
       ),
       TabItem(
         tabName: "Consultas",
