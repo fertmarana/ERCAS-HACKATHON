@@ -195,7 +195,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
           size.width * 0.03,
           size.height * 0.05,
           size.width * 0.03,
-          size.height * 0.03,
+          size.height * 0.05,
         ),
         child: Column(
           children: [
