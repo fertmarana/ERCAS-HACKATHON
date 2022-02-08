@@ -8,7 +8,7 @@ class ProfilePicture extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(100.0),
       child: Image.asset(
-        'imagens/fotoperfil.png',
+        'imagens/perfilMaria.png',
         fit: BoxFit.cover,
         height: size.height * 0.1,
         width: size.width * 0.2,

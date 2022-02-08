@@ -1,8 +1,14 @@
+import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter/material.dart';
 import 'package:subiupressao_app/app_celular/Components/Controller.dart';
 import 'package:subiupressao_app/app_celular/Components/Header.dart';
 import 'package:subiupressao_app/bluetooth/HeartRate/ProfileSummary.dart';
-
+import 'package:path_provider/path_provider.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart' as Path;
+import 'dart:io';
+import 'package:subiupressao_app/bluetooth/connection/connectionPage.dart';
+import 'dart:async';
 import 'package:subiupressao_app/dataClass.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'dart:core';
@@ -24,9 +30,10 @@ class HeartRatePage extends StatefulWidget {
 class _HeartRatePage extends State<HeartRatePage> {
   int hr;
   List<Heart> heartData = [];
-  int curheartRate = -1;
+  int curheartRate = 0;
+  ChartSeriesController _chartSeriesController;
 
-  var controller = PageController(
+  var controller2 = PageController(
     viewportFraction: 1,
     initialPage: 0,
   );
@@ -37,19 +44,30 @@ class _HeartRatePage extends State<HeartRatePage> {
     super.initState();
   }
 
-  Future<List<Heart>> _fetchDat() async {
-    try {
-      List<Heart> aux = await DBProvider.db.getAllClients();
-      curheartRate = aux.last.heartRate;
+  void find_heartRate() async {
+   for(int i=0; i<heartData.length;i++) {
+     print("heart : ${heartData[i].heartRate}");
+   }
+  }
 
+
+  Future<List<Heart>> _fetchDat() async {
+
+      List<Heart> aux = await DBProvider.db.getAllClients();
       setState(() {
         heartData = aux;
       });
-    } on StateError catch (_) {
-      curheartRate = -1;
-    }
+      /*
+      try{
+        curheartRate = aux.last.heartRate;
 
-    return heartData;
+      } catch(){
+        curheartRate = -1;
+      }*/
+      curheartRate = -1;
+      print("PRINTAAAAAAAAAAAAAAAAAA");
+      find_heartRate();
+      return heartData;
   }
 
   void deleteDatabase() async {
@@ -63,7 +81,7 @@ class _HeartRatePage extends State<HeartRatePage> {
     Future.delayed(Duration(seconds: 10), () {
       _fetchDat();
     });
-
+    find_heartRate();
     return Scaffold(
         body: Padding(
       padding: EdgeInsets.fromLTRB(
@@ -73,7 +91,9 @@ class _HeartRatePage extends State<HeartRatePage> {
         size.height * 0.015,
       ),
       child: Column(children: [
-        Header(controller: widget.controller, buttonFunction: () {}),
+        Header(controller: widget.controller, buttonFunction: () {
+          find_heartRate();
+          _fetchDat();}),
         SizedBox(height: size.height * 0.015),
         Container(
           alignment: Alignment(0.0, 0.6),
@@ -91,7 +111,7 @@ class _HeartRatePage extends State<HeartRatePage> {
           height: size.height * 0.55,
           width: size.width,
           child: PageView(
-              controller: controller,
+              controller: controller2,
               scrollDirection: Axis.horizontal,
               children: [
                 Container(
@@ -106,6 +126,9 @@ class _HeartRatePage extends State<HeartRatePage> {
                     ),
                     series: <LineSeries<Heart, DateTime>>[
                       LineSeries<Heart, DateTime>(
+                        onRendererCreated: (ChartSeriesController controllerChart){
+                          _chartSeriesController = controllerChart;
+                        },
                         // Binding the chartData to the dataSDateTimeource of the line series.
                         dataSource: heartData,
                         xValueMapper: (Heart data, _) => data.dateTime,
@@ -119,6 +142,7 @@ class _HeartRatePage extends State<HeartRatePage> {
                       child: ListView.builder(
                     itemCount: heartData.length,
                     itemBuilder: (BuildContext context, int position) {
+                      final item = heartData[position];
                       //get your item data here ...
                       return Card(
                         child: ListTile(

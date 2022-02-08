@@ -124,7 +124,7 @@ class AppState extends State<App> {
         // Bottom navigation
         bottomNavigationBar: BottomNavigation(
           onSelectTab: _selectTab,
-          tabs: tabs,
+          tabs: tabs, //@required this.dat
         ),
       ),
     );

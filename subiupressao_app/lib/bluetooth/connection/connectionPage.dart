@@ -7,6 +7,11 @@ import 'package:subiupressao_app/globals.dart' as globals;
 import 'dart:async';
 import 'dart:core';
 import 'package:subiupressao_app/database/MeasuresDataModel.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
+import 'package:subiupressao_app/database/Database.dart';
+import 'package:intl/intl.dart';
 
 // UUIDS DOS SERVICOS QUE VAMOS USAR
 /*
@@ -45,7 +50,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
   String deviceConnectedName = "";
   static const CHARACTERISTIC_UUID = "00002a37-0000-1000-8000-00805f9b34fb";
   bool isConnected;
-  int heartRate;
+  int heartRate = -1;
   bool isReading = false;
   int greatestValue = 0;
   int valuesofHeart = -1;
@@ -131,17 +136,12 @@ class _ConnectionPageState extends State<ConnectionPage> {
     });
 
     await device
-        .connect(timeout: Duration(seconds: 10))
-        .timeout(Duration(seconds: 10), onTimeout: () {
-      returnValue = Future.value(false);
-    }).then((data) {
-      if (returnValue == null) {
+        .connect();
         isConnected = true;
 
         findServices(dev);
         print("Connection successful!");
-      }
-    });
+
   }
 
   disconnect() async {
@@ -175,7 +175,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
     } else {
       print("${c.uuid} can't be read");
     }
-
+    print("to aqui");
     if (c != null) {
       await c.setNotifyValue(true);
       c.value.listen((value) {
@@ -195,9 +195,10 @@ class _ConnectionPageState extends State<ConnectionPage> {
           size.width * 0.03,
           size.height * 0.05,
           size.width * 0.03,
-          size.height * 0.05,
+          size.height * 0.03,
         ),
         child: Column(
+
           children: [
             Header(
                 controller: widget.controller,
@@ -210,7 +211,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
               connected: isConnected,
             ),
             SizedBox(
-              height: size.height * 0.05,
+              height: size.height * 0.04,
             ),
             Image.asset(
               'imagens/dispositivo.png',
@@ -221,7 +222,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
             ),
             Container(
               child: SizedBox(
-                height: size.height * 0.3,
+                height: size.height * 0.2,
                 child: ListView.builder(
                   scrollDirection: Axis.vertical,
                   itemCount: scanResultList.length,
@@ -229,6 +230,13 @@ class _ConnectionPageState extends State<ConnectionPage> {
                 ),
               ),
             ),
+            /*
+            Container(
+              child: SizedBox(
+                height: size.height * 0.2,
+                child: Text("Frequencia: " + heartRate.toString()),
+              ),
+            ),*/
           ],
         ),
       ),
@@ -254,7 +262,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
             onPressed: () {
               connectDevice(scanResultList[index].device);
             },
-            child: Text('Connect to Device'),
+            child: Text('Conectar'),
           ),
           Container(
               alignment: Alignment(0.0, 0.6),
@@ -267,7 +275,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
                       onPressed: () {
                         findServices(device);
                       },
-                      child: Text('Read Heart Rate'),
+                      child: Text('Ler Frequência'),
                     )
                   : //IMPORTANTE TER ISSO PORQUE É UMA CONDICAO NAO APAGAR
                   SizedBox()),
