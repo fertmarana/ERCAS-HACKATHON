@@ -5,8 +5,8 @@ import 'package:subiupressao_app/app_celular/CentralPage.dart';
 import 'package:subiupressao_app/app_celular/minhaConta.dart';
 import 'package:subiupressao_app/app_celular/Lembretes.dart';
 import 'package:subiupressao_app/bluetooth/Bluetooth_test.dart';
-import 'package:subiupressao_app/bluetooth/connectionPage.dart';
-import 'package:subiupressao_app/bluetooth/heartRatePage.dart';
+import 'package:subiupressao_app/bluetooth/connection/connectionPage.dart';
+import 'package:subiupressao_app/bluetooth/HeartRate/heartRatePage.dart';
 import 'package:subiupressao_app/globals.dart' as globals;
 
 class App2 extends StatefulWidget {

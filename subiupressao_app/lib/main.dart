@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:subiupressao_app/app.dart';
 import 'package:subiupressao_app/app1.dart';
 import 'package:subiupressao_app/app_celular/Login/Login.dart';
-import 'package:subiupressao_app/bluetooth/connectionPage.dart';
 import 'package:subiupressao_app/files/FileController.dart';
 
 // Aqui a inicializacao começa e o NavigationBar é setado
