@@ -15,8 +15,8 @@ import 'package:subiupressao_app/database/Database.dart';
 import 'package:subiupressao_app/database/MeasuresDataModel.dart';
 
 class HeartRatePage extends StatefulWidget {
- HeartRatePage({Key key, @required this.dat}) : super(key: key);
- final myData dat;
+  HeartRatePage({Key key, @required this.dat}) : super(key: key);
+  final myData dat;
 
   //heartRatePage(this.Heartrate, this.callback);
 
@@ -27,18 +27,16 @@ class HeartRatePage extends StatefulWidget {
 }
 
 class _HeartRatePage extends State<HeartRatePage> {
-  int hr ;
+  int hr;
   List<Heart> heartData = [];
   ZoomPanBehavior _zoomPanBehavior;
   ChartSeriesController _chartSeriesController;
-  int curheartRate  = -1;
+  int curheartRate = -1;
 
   var controller = PageController(
-    viewportFraction: 1 ,
+    viewportFraction: 1,
     initialPage: 0,
   );
-
-
 
   @override
   void initState() {
@@ -59,28 +57,29 @@ class _HeartRatePage extends State<HeartRatePage> {
     return hr;
   }*/
 
-
-
-  void find_hearRate() async{
+  void find_hearRate() async {
     //final int h = await globals.heartRate_global;
-    for(int i =0; i<heartData.length; i++){
-
+    for (int i = 0; i < heartData.length; i++) {
       print("heart: ${heartData[i].heartRate}");
     }
 
-   // hr = h;
+    // hr = h;
   }
 
-  Future<List<Heart>> _fetchDat() async{
-    List<Heart> aux = await DBProvider.db.getAllClients();
-    setState(() {
-      heartData = aux;
+  Future<List<Heart>> _fetchDat() async {
+    try {
+      List<Heart> aux = await DBProvider.db.getAllClients();
+      curheartRate = aux.last.heartRate;
 
-    });
-    curheartRate = heartData.last.heartRate;
+      setState(() {
+        heartData = aux;
+      });
+    } on StateError catch (_) {
+      curheartRate = -1;
+    }
+
     return heartData;
   }
-
 
   void deleteDatabase() async {
     await DBProvider.db.deleteAll();
@@ -89,18 +88,15 @@ class _HeartRatePage extends State<HeartRatePage> {
 
   @override
   Widget build(BuildContext context) {
-    Future.delayed(Duration(seconds: 10), (){
+    Future.delayed(Duration(seconds: 10), () {
       _fetchDat();
     });
-    return
-      Scaffold(
-          body: Container(
-          padding: EdgeInsets.fromLTRB(10, 70, 10, 10),
-          height: 800,
-          child:
-            ListView(
-              children: [
-                      /*
+    return Scaffold(
+        body: Container(
+            padding: EdgeInsets.fromLTRB(10, 70, 10, 10),
+            height: 800,
+            child: ListView(children: [
+              /*
                       Container(
                           child: Align(
                             alignment: Alignment.center,
@@ -149,21 +145,20 @@ class _HeartRatePage extends State<HeartRatePage> {
                             )
                           )
                       ),*/
-                      Container(
-                        alignment: Alignment(0.0, 0.6),
-                        child: curheartRate == -1?
-                        SizedBox()
-                            : //IMPORTANTE TER ISSO PORQUE É UMA CONDICAO NAO APAGAR
-                        Text('Última Frequência Registrada: ' + curheartRate.toString(),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 28.0,
-                              color: Color(0xff16613D)
-                          ),
-                        ),
-
+              Container(
+                alignment: Alignment(0.0, 0.6),
+                child: curheartRate == -1
+                    ? SizedBox()
+                    : //IMPORTANTE TER ISSO PORQUE É UMA CONDICAO NAO APAGAR
+                    Text(
+                        'Última Frequência Registrada: ' +
+                            curheartRate.toString(),
+                        textAlign: TextAlign.center,
+                        style:
+                            TextStyle(fontSize: 28.0, color: Color(0xff16613D)),
                       ),
-                      /*
+              ),
+              /*
                       Container(
                       child: SfCartesianChart(
                         // zoomPanBehavior: _zoomPanBehavior,
@@ -199,80 +194,78 @@ class _HeartRatePage extends State<HeartRatePage> {
                         // primaryXAxis: NumericAxis(edgeLabelPlacement: EdgeLabelPlacement.shift, numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0)),
                       ),
                 ),*/
-                Container(
-                  alignment: Alignment.centerLeft,
-                  margin: EdgeInsets.symmetric(vertical: 10.0),
-                  height: 400.0,
-                  width: 500,
-                  child:
-                      PageView(
-                          controller: controller,
-                          scrollDirection: Axis.horizontal,
-                          children: [
-                            Container(
-                              child: SfCartesianChart(
-                                 //zoomPanBehavior: _zoomPanBehavior,
+              Container(
+                alignment: Alignment.centerLeft,
+                margin: EdgeInsets.symmetric(vertical: 10.0),
+                height: 400.0,
+                width: 500,
+                child: PageView(
+                    controller: controller,
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      Container(
+                        child: SfCartesianChart(
+                          //zoomPanBehavior: _zoomPanBehavior,
 
-                                title: ChartTitle(text: "Frequência"),
-                                enableAxisAnimation: true,
-                                primaryXAxis: DateTimeAxis(
-                                  dateFormat: DateFormat.Hms(),
-                                  intervalType: DateTimeIntervalType.minutes,
+                          title: ChartTitle(text: "Frequência"),
+                          enableAxisAnimation: true,
+                          primaryXAxis: DateTimeAxis(
+                            dateFormat: DateFormat.Hms(),
+                            intervalType: DateTimeIntervalType.minutes,
 
-                                  // Edge labels will be shifted
-                                  //edgeLabelPlacement: EdgeLabelPlacement.shift,
-                                  //autoScrollingDelta: 5,
-                                  //interval: 6,
-                                  axisLine: AxisLine(width: 0),
-                                  // visibleMinimum: start_aplication,
-                                  majorTickLines: MajorTickLines(size: 0),
-                                ),
-                                //legend: Legend(isVisible: true),
-                                series: <LineSeries<Heart, DateTime>>[
-                                  LineSeries<Heart, DateTime>(
-                                    onRendererCreated: (ChartSeriesController controller) {
-                                      // Assigning the controller to the _chartSeriesController.
-                                      _chartSeriesController = controller;
-
-                                    },
-                                    // Binding the chartData to the dataSDateTimeource of the line series.
-                                    //name: "Heart Measure",
-                                    dataSource: heartData,
-                                    xValueMapper: (Heart data, _) => data.dateTime,//data.dateTime.minute.toString(),
-                                    yValueMapper: (Heart data, _) => data.heartRate,
-                                  )
-                                ],
-                                // primaryXAxis: NumericAxis(edgeLabelPlacement: EdgeLabelPlacement.shift, numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0)),
-                              ),
-                            ),
-                            Container(
-                              child: SizedBox(
-                                // height: 400.0,
-                                  child:   ListView.builder(
-                                    itemCount: heartData.length,
-                                    itemBuilder: (BuildContext context, int position) {
-                                      final item = heartData[position];
-                                      //get your item data here ...
-                                      return Card(
-                                        child: ListTile(
-                                          title: Text(
-                                             // "Data: " + heartData[position].toString()
-                                            "Frequência:  " + heartData[position].toStringHeart() + '\n' + "Data: " + heartData[position].toStringDateTime(),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  )
-                              ),
-                            ),
-                          ]
+                            // Edge labels will be shifted
+                            //edgeLabelPlacement: EdgeLabelPlacement.shift,
+                            //autoScrollingDelta: 5,
+                            //interval: 6,
+                            axisLine: AxisLine(width: 0),
+                            // visibleMinimum: start_aplication,
+                            majorTickLines: MajorTickLines(size: 0),
+                          ),
+                          //legend: Legend(isVisible: true),
+                          series: <LineSeries<Heart, DateTime>>[
+                            LineSeries<Heart, DateTime>(
+                              onRendererCreated:
+                                  (ChartSeriesController controller) {
+                                // Assigning the controller to the _chartSeriesController.
+                                _chartSeriesController = controller;
+                              },
+                              // Binding the chartData to the dataSDateTimeource of the line series.
+                              //name: "Heart Measure",
+                              dataSource: heartData,
+                              xValueMapper: (Heart data, _) => data
+                                  .dateTime, //data.dateTime.minute.toString(),
+                              yValueMapper: (Heart data, _) => data.heartRate,
+                            )
+                          ],
+                          // primaryXAxis: NumericAxis(edgeLabelPlacement: EdgeLabelPlacement.shift, numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0)),
                         ),
-                ),
-
-                ]
-              )
-          )
-      );
+                      ),
+                      Container(
+                        child: SizedBox(
+                            // height: 400.0,
+                            child: ListView.builder(
+                          itemCount: heartData.length,
+                          itemBuilder: (BuildContext context, int position) {
+                            final item = heartData[position];
+                            //get your item data here ...
+                            return Card(
+                              child: ListTile(
+                                title: Text(
+                                  // "Data: " + heartData[position].toString()
+                                  "Frequência:  " +
+                                      heartData[position].toStringHeart() +
+                                      '\n' +
+                                      "Data: " +
+                                      heartData[position].toStringDateTime(),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            );
+                          },
+                        )),
+                      ),
+                    ]),
+              ),
+            ])));
   }
 }
