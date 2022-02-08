@@ -1,10 +1,6 @@
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:subiupressao_app/app_celular/Components/UserDataInput.dart';
-import 'package:subiupressao_app/app_celular/Remedios/EditMedicine.dart';
 import 'package:subiupressao_app/app_celular/Components/Controller.dart';
-import 'package:subiupressao_app/files/models/user.dart';
 
 class Header extends StatefulWidget {
   Controller controller;
@@ -18,16 +14,13 @@ class Header extends StatefulWidget {
 
 class _HeaderState extends State<Header> {
   DateTime _dateTime;
-  User _user;
 
   @override
   void initState() {
-    _user = widget.controller.user;
     _dateTime = widget.controller.dateTime;
 
     widget.controller.addListener(() {
       setState(() {
-        _user = widget.controller.user;
         _dateTime = widget.controller.dateTime;
       });
     });
@@ -63,7 +56,7 @@ class _HeaderState extends State<Header> {
         Spacer(),
         IconButton(
           // Add medicine button
-          onPressed: widget.buttonFunction, 
+          onPressed: widget.buttonFunction,
           icon: const Icon(Icons.add_box, size: 40),
         ),
       ],

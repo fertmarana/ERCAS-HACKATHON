@@ -1,6 +1,7 @@
-import '../app.dart';
 import 'package:flutter/material.dart';
-import '../tabItem.dart';
+
+import 'package:subiupressao_app/app.dart';
+import 'package:subiupressao_app/tabItem.dart';
 
 class BottomNavigation extends StatelessWidget {
   BottomNavigation({
@@ -17,11 +18,11 @@ class BottomNavigation extends StatelessWidget {
       items: tabs
           .map(
             (e) => _buildItem(
-          index: e.getIndex(),
-          icon: e.icon,
-          tabName: e.tabName,
-        ),
-      )
+              index: e.getIndex(),
+              icon: e.icon,
+              tabName: e.tabName,
+            ),
+          )
           .toList(),
       onTap: (index) => onSelectTab(
         index,

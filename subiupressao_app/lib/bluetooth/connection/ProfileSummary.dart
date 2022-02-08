@@ -5,8 +5,8 @@ import 'package:subiupressao_app/app_celular/Components/Controller.dart';
 import 'package:subiupressao_app/files/models/user.dart';
 
 class ProfileSummary extends StatefulWidget {
-  Controller controller;
-  bool connected;
+  final Controller controller;
+  final bool connected;
 
   ProfileSummary({@required this.controller, @required this.connected});
 

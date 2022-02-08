@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 
 import 'package:subiupressao_app/app_celular/Components/Controller.dart';
@@ -69,29 +68,31 @@ class _EditAppointmentState extends State<EditAppointment> {
       ),
       SizedBox(height: size.height * 0.005),
       Icon(Icons.assignment_ind, size: size.height * 0.1),
-      SizedBox(height: size.height * 0.05),
+      SizedBox(height: size.height * 0.03),
       UserDataInput(
         controller: doctorController,
         fieldName: "Nome do Médico",
         hintString: "Médico",
       ),
-      SizedBox(height: size.height * 0.05),
+      SizedBox(height: size.height * 0.03),
       UserDataInput(
         controller: specialityController,
         fieldName: "Especialidade do Médico",
         hintString: "Especialidade",
       ),
-      SizedBox(height: size.height * 0.05),
+      SizedBox(height: size.height * 0.03),
       UserDataInput(
         controller: TextEditingController(
-            text: DateFormat("dd/MM/yyyy")
-                .format(widget.controller.dateTime)),
+            text: DateFormat("dd/MM/yyyy").format(widget.controller.dateTime)),
         enabled: false,
         fieldName: "Data da Consulta",
       ),
     ];
 
     if (widget.element != null) {
+      children.add(SizedBox(
+        height: size.height * 0.03,
+      ));
       children.add(
         ElevatedButton(
           onPressed: () {

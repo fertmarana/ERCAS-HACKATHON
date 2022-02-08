@@ -1,19 +1,11 @@
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:subiupressao_app/app.dart';
 import 'package:subiupressao_app/app_celular/Components/Controller.dart';
 import 'package:subiupressao_app/app_celular/Components/Header.dart';
 import 'package:subiupressao_app/bluetooth/connection/ProfileSummary.dart';
-import 'package:subiupressao_app/database/Database_test.dart';
 import 'package:subiupressao_app/globals.dart' as globals;
 import 'dart:async';
 import 'dart:core';
-import 'package:syncfusion_flutter_charts/charts.dart';
-
-import 'package:path/path.dart';
-
-import 'package:subiupressao_app/database/Database.dart';
 import 'package:subiupressao_app/database/MeasuresDataModel.dart';
 
 // UUIDS DOS SERVICOS QUE VAMOS USAR
@@ -40,7 +32,6 @@ class _ChartData {
 }
 
 class _ConnectionPageState extends State<ConnectionPage> {
-  BluetoothService _service;
   BluetoothDevice device;
   BluetoothState state;
   BluetoothCharacteristic characteristicBluetooth;
@@ -51,7 +42,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
   Stream<List<int>> listStream;
   bool _isScanning = true;
   final Map<Guid, List<int>> readValues = new Map<Guid, List<int>>();
-  String deviceConnected_name = "";
+  String deviceConnectedName = "";
   static const CHARACTERISTIC_UUID = "00002a37-0000-1000-8000-00805f9b34fb";
   bool isConnected;
   int heartRate;
@@ -59,70 +50,18 @@ class _ConnectionPageState extends State<ConnectionPage> {
   int greatestValue = 0;
   int valuesofHeart = -1;
   List<_ChartData> chartData = <_ChartData>[];
-  ChartSeriesController _chartSeriesController;
   int count = 0;
-  double start_aplication = 0;
+  double startAplication = 0;
   List<Heart> testHeart = [];
   Heart testingHeart;
-  ZoomPanBehavior _zoomPanBehavior;
-
-  void _updateDatabase(int _greatestValue, int count, DateTime dt) async {
-    var fido = Heart(
-      id: count,
-      //dateTime: "a",//DateTime.now().minute.toString(),
-      dateTime: dt,
-      heartRate: _greatestValue,
-    );
-    await DBProvider.db.insertHeart(fido);
-
-    setState(() {
-      testHeart.add(fido);
-    });
-
-    print("DONEEEEEEEEEEEEEEEEEEEEEE");
-  }
 
   @override
   void initState() {
-    start_aplication = DateTime.now().minute.toDouble();
-    // TODO: implement initState
+    startAplication = DateTime.now().minute.toDouble();
     isConnected = false;
-    _zoomPanBehavior = ZoomPanBehavior(
-        // Enables pinch zooming
-        enableDoubleTapZooming: true,
-        enablePinching: true);
-    /*Timer.periodic(Duration(minutes: 1), (Timer t) => setState((){
-      greatestValue = valuesofHeart;
-      valuesofHeart = -1;
-
-    }));*/
-
     heartRate = -1;
     super.initState();
     initBluetoothScanning();
-    //  _updateDatabase(greatestValue);
-  }
-
-  void _updateDataSource(Timer timer) async {
-    if (valuesofHeart != -1) {
-      greatestValue = valuesofHeart;
-      valuesofHeart = -1;
-      count++;
-      chartData.add(_ChartData(count, greatestValue));
-
-      _updateDatabase(greatestValue, count, DateTime.now());
-      //print(await DBProvider.db.toString());
-      // chartData.add(_ChartData(DateTime.now().minute.toInt(), greatestValue ));
-    }
-
-    if (chartData.length == 20) {
-      // Removes the last index data of data source.
-      chartData.removeAt(0);
-      int len = chartData.length.toInt() - 1;
-      // Here calling updateDataSource method with addedDataIndexes to add data in last index and removedDataIndexes to remove data from the last.
-      _chartSeriesController?.updateDataSource(
-          addedDataIndexes: <int>[(len)], removedDataIndexes: <int>[0]);
-    }
   }
 
   void initBluetoothScanning() {
@@ -155,12 +94,12 @@ class _ConnectionPageState extends State<ConnectionPage> {
     var characteristics = service.characteristics;
     for (BluetoothCharacteristic c in characteristics) {
       print("c:   ${c.uuid}");
-      if (c.uuid.toString() == Guid("0002a3700001000800000805f9b34fb")) {
+      if (c.uuid.toString() == CHARACTERISTIC_UUID) {
         var val = c.read();
-        print("Printandoo valor ${val}");
+        print("Printandoo valor $val");
       }
       List<int> value = await c.read();
-      print("Characteristic: ${value}");
+      print("Characteristic: $value");
     }
   }
 
@@ -188,7 +127,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
 
     setState(() {
       device = dev;
-      deviceConnected_name = device.name;
+      deviceConnectedName = device.name;
     });
 
     await device
@@ -200,8 +139,6 @@ class _ConnectionPageState extends State<ConnectionPage> {
         isConnected = true;
 
         findServices(dev);
-        List<List> values = [];
-
         print("Connection successful!");
       }
     });
@@ -210,7 +147,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
   disconnect() async {
     await device.disconnect();
     setState(() {
-      deviceConnected_name = " ";
+      deviceConnectedName = " ";
       device = null;
       isConnected = false;
     });
@@ -218,16 +155,14 @@ class _ConnectionPageState extends State<ConnectionPage> {
 
   _readInfoFromDevice(List values) async {
     if (values.length > 0) {
-      globals.heartRate_global = await values[1];
+      globals.heartRateGlobal = await values[1];
       print("value: ${values[1]}");
-      print("valor da global ${globals.heartRate_global.toString()}");
+      print("valor da global ${globals.heartRateGlobal.toString()}");
       setState(() {
         heartRate = values[1];
         if (heartRate > valuesofHeart) {
           valuesofHeart = heartRate;
         }
-        //globals.heartRate_global = values[1];
-        // widget.callback(heartRate);
       });
     } else {
       print("No info on device");
@@ -235,7 +170,6 @@ class _ConnectionPageState extends State<ConnectionPage> {
   }
 
   void _readthisCharacteristic(BluetoothCharacteristic c) async {
-    List<int> values = [];
     if (c.properties.read) {
       print("Reading properties from ${c.uuid}");
     } else {
@@ -250,29 +184,19 @@ class _ConnectionPageState extends State<ConnectionPage> {
     }
   }
 
-  void _readCharacteristics() async {
-    List<List> values = [];
-    if (_service != null) {
-      for (BluetoothCharacteristic c in _service.characteristics) {
-        values.add(await c.read());
-      }
-    }
-    heartRate = values[0][0];
-  }
-
   @override
   Widget build(BuildContext context) {
-    Timer timer =
-        Timer.periodic(const Duration(seconds: 30), _updateDataSource);
     Size size = MediaQuery.of(context).size;
-
-    print("start_application_value : ${start_aplication}");
-
-    //testHeart = DBProvider.db.getAllClients();
+    print("start_application_value : $startAplication");
 
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.fromLTRB(10, 40, 10, 10),
+        padding: EdgeInsets.fromLTRB(
+          size.width * 0.03,
+          size.height * 0.05,
+          size.width * 0.03,
+          size.height * 0.03,
+        ),
         child: Column(
           children: [
             Header(
@@ -285,7 +209,9 @@ class _ConnectionPageState extends State<ConnectionPage> {
               controller: widget.controller,
               connected: isConnected,
             ),
-            SizedBox(height: size.height * 0.05,),
+            SizedBox(
+              height: size.height * 0.05,
+            ),
             Image.asset(
               'imagens/dispositivo.png',
               height: size.width * 0.5,
@@ -340,7 +266,6 @@ class _ConnectionPageState extends State<ConnectionPage> {
                       ),
                       onPressed: () {
                         findServices(device);
-                        //_readCharacteristics();
                       },
                       child: Text('Read Heart Rate'),
                     )

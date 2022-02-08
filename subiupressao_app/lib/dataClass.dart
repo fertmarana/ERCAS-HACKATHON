@@ -1,5 +1,5 @@
-class myData{
+class MyData {
   int heartRate = -2;
 
-  myData(this.heartRate);
+  MyData(this.heartRate);
 }

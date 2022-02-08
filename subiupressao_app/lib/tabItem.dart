@@ -4,11 +4,12 @@ import 'app.dart';
 class TabItem {
   // you can customize what kind of information is needed
   // for each tab
+  final GlobalKey<NavigatorState> key = GlobalKey<NavigatorState>();
   final String tabName;
   final IconData icon;
-  final GlobalKey<NavigatorState> key = GlobalKey<NavigatorState>();
   int _index = 0;
   Widget _page;
+
   TabItem({
     @required this.tabName,
     @required this.icon,
@@ -25,9 +26,9 @@ class TabItem {
 
   int getIndex() => _index;
 
-// adds a wrapper around the page widgets for visibility
-// visibility widget removes unnecessary problems
-// like interactivity and animations when the page is inactive
+  // adds a wrapper around the page widgets for visibility
+  // visibility widget removes unnecessary problems
+  // like interactivity and animations when the page is inactive
   Widget get page {
     return Visibility(
       // only paint this page when currentTab is active

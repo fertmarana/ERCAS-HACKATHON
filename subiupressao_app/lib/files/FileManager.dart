@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
 
-import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:subiupressao_app/files/models/appointment.dart';
 import 'package:subiupressao_app/files/models/medicine.dart';

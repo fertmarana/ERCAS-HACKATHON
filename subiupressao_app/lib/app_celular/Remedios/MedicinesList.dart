@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:subiupressao_app/app_celular/Remedios/EditMedicine.dart';
 import 'package:subiupressao_app/app_celular/Components/Controller.dart';
-import 'dart:async';
 
 import 'package:subiupressao_app/files/models/user.dart';
 
@@ -38,7 +37,7 @@ class _MedicinesList extends State<MedicinesList> {
               ),
               child: Row(
                 children: [
-                  SizedBox(width: 15),
+                  SizedBox(width: size.width * 0.04),
                   Container(
                     child: Text(element.name),
                     constraints: BoxConstraints(
@@ -46,7 +45,7 @@ class _MedicinesList extends State<MedicinesList> {
                       minWidth: size.width * 0.3,
                     ),
                   ),
-                  SizedBox(width: 20),
+                  SizedBox(width: size.width * 0.05),
                   Text(
                     "${element.quantity} comprimido" +
                         "${element.quantity > 1 ? "s" : ""}",
@@ -70,7 +69,7 @@ class _MedicinesList extends State<MedicinesList> {
                 ],
               ),
             ),
-            SizedBox(height: 15),
+            SizedBox(height: size.height * 0.02),
           ],
         ),
       );
@@ -97,8 +96,15 @@ class _MedicinesList extends State<MedicinesList> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Container(
-      padding: EdgeInsets.fromLTRB(10, 0, 10, 20),
+      padding: EdgeInsets.fromLTRB(
+        size.width * 0.03,
+        size.height * 0.0,
+        size.width * 0.03,
+        size.height * 0.03,
+      ),
       child: ListView(
         children: medicineCards,
         scrollDirection: Axis.vertical,

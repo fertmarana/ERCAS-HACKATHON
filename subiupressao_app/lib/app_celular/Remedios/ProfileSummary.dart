@@ -28,12 +28,14 @@ class _ProfileSummary extends State<ProfileSummary> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    
     return Profile.ProfileSummary(
       children: [
         Text("Olá, ${_user.name}!", style: TextStyle(fontSize: 16)),
-        SizedBox(height: 2),
+        SizedBox(height: size.height * 0.003),
         Text("Hoje você tem de tomar", style: TextStyle(fontSize: 16)),
-        SizedBox(height: 5),
+        SizedBox(height: size.height * 0.007),
         Text(
           "${_user.medicines.length} remédio" +
               "${_user.medicines.length > 1 ? "s" : ""}",

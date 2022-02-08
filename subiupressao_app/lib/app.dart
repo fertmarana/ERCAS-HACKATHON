@@ -8,13 +8,8 @@ import 'package:subiupressao_app/app_celular/Remedios/Remedios.dart';
 import 'package:subiupressao_app/files/FileController.dart';
 import 'package:subiupressao_app/tabItem.dart';
 import 'package:subiupressao_app/app_celular/bottomNavigation.dart';
-import 'package:subiupressao_app/app_celular/CentralPage.dart';
-import 'package:subiupressao_app/app_celular/minhaConta.dart';
-import 'package:subiupressao_app/app_celular/Lembretes.dart';
-import 'package:subiupressao_app/bluetooth/Bluetooth_test.dart';
 import 'package:subiupressao_app/bluetooth/connection/connectionPage.dart';
 import 'package:subiupressao_app/bluetooth/HeartRate/heartRatePage.dart';
-import 'package:subiupressao_app/globals.dart' as globals;
 import 'dataClass.dart';
 
 class App extends StatefulWidget {
@@ -28,7 +23,7 @@ class AppState extends State<App> {
   // this is static property so other widget throughout the app
   // can access it simply by AppState.currentTab
   static int currentTab = 2;
-  final myData dataa = myData(-1);
+  final MyData dataa = MyData(-1);
   Controller controller = Controller();
 
   //  list tabs here

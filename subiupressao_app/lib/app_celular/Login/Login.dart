@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'dart:io' as io;
 
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:subiupressao_app/app.dart';
-import 'package:subiupressao_app/app_celular/Components/ProfilePicture.dart';
 import 'package:subiupressao_app/app_celular/Components/UserDataInput.dart';
 import 'package:subiupressao_app/files/FileController.dart';
 import 'package:subiupressao_app/files/models/appointment.dart';
@@ -19,6 +16,7 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     _user = context.select((FileController controller) {
       // controller.deleteUser();
       controller.readUser();
@@ -31,18 +29,18 @@ class LoginPage extends StatelessWidget {
         backgroundColor: Colors.black,
         body: Column(
           children: [
-            SizedBox(height: 80),
+            SizedBox(height: size.height * 0.11),
             Image.asset('imagens/SubiuPressao.png'),
-            SizedBox(height: 30),
+            SizedBox(height: size.height * 0.04),
             SizedBox(
-              height: 520,
+              height: size.height * 0.7,
               child: Card(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: Column(
                   children: [
-                    SizedBox(height: 30),
+                    SizedBox(height: size.height * 0.04),
                     Text("Cadastre-se", style: TextStyle(fontSize: 24)),
                     UserDataInput(
                       controller: _nameController,
@@ -56,7 +54,7 @@ class LoginPage extends StatelessWidget {
                       fieldName: "Idade",
                       hintString: "Insira sua idade aqui",
                     ),
-                    SizedBox(height: 15),
+                    SizedBox(height: size.height * 0.02),
                     ElevatedButton(
                       child: Text(
                         "Confirmar",
@@ -93,7 +91,7 @@ class LoginPage extends StatelessWidget {
                             (route) => false);
                       },
                     ),
-                    SizedBox(height: 15),
+                    SizedBox(height: size.height * 0.02),
                   ],
                 ),
               ),

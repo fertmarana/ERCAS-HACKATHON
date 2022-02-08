@@ -23,7 +23,7 @@ class UserDataInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double inputSize = 1 - spacerInterval * 2;
+    double inputSize = 1 - (spacerInterval * 2);
     Size size = MediaQuery.of(context).size;
 
     return Column(children: [
@@ -41,7 +41,8 @@ class UserDataInput extends StatelessWidget {
         inputFormatters: this.filter,
         decoration: InputDecoration(
           constraints: BoxConstraints(
-              maxWidth: size.width * inputSize, minWidth: size.width * inputSize),
+              maxWidth: size.width * inputSize,
+              minWidth: size.width * inputSize),
           border: OutlineInputBorder(),
           hintText: this.hintString,
           suffixIcon: IconButton(

@@ -1,30 +1,24 @@
-
-
 class Coletas {
   final List<ColetaAgendada> coletando;
-
 
   Coletas({
     this.coletando,
   });
 
   factory Coletas.fromJson(Map<String, dynamic> parsedJson) {
-
     var list = parsedJson['agendamentos'] as List;
-    List<ColetaAgendada> coletasList = list.map((i) => ColetaAgendada.fromJson(i)).toList();
+    List<ColetaAgendada> coletasList =
+        list.map((i) => ColetaAgendada.fromJson(i)).toList();
 
     //List<ColetaAgendada> col = new List<ColetaAgendada>();
     //col = parsedJson.map((i)=>ColetaAgendada.fromJson(i)).toList();
-    return new Coletas(
-      coletando: coletasList
-    );
+    return new Coletas(coletando: coletasList);
   }
   Map<String, dynamic> toJson() {
-        List<Map<String,dynamic>> aaagenda = coletando.map((e) => e.toJson()).toList();
-        return {'agendamentos': aaagenda };
-   }
-
-
+    List<Map<String, dynamic>> aaagenda =
+        coletando.map((e) => e.toJson()).toList();
+    return {'agendamentos': aaagenda};
+  }
 }
 
 class ColetaAgendada {
@@ -38,11 +32,18 @@ class ColetaAgendada {
   String statusPedido;
   String statusColeta;
 
+  ColetaAgendada(
+      {this.id,
+      this.moradorNome,
+      this.enderecoColeta,
+      this.cooperativa,
+      this.diaColeta,
+      this.horaColeta,
+      this.tipoLixo,
+      this.statusPedido,
+      this.statusColeta});
 
-
-  ColetaAgendada({this.id, this.moradorNome, this.enderecoColeta, this.cooperativa,this.diaColeta,this.horaColeta,this.tipoLixo,this.statusPedido, this.statusColeta});
-
-  factory ColetaAgendada.fromJson(Map<String, dynamic> json){
+  factory ColetaAgendada.fromJson(Map<String, dynamic> json) {
     return ColetaAgendada(
       id: json['id'] as String,
       moradorNome: json['moradorNome'] as String,
@@ -60,18 +61,15 @@ class ColetaAgendada {
     this.statusPedido = currentPedido;
   }
 
-
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         'id': id,
         'moradorNome': moradorNome,
         'enderecoColeta': enderecoColeta,
         'cooperativa': cooperativa,
-        'diaColeta' : diaColeta,
-        'horaColeta' : horaColeta,
-        'tipoLixo' : tipoLixo,
+        'diaColeta': diaColeta,
+        'horaColeta': horaColeta,
+        'tipoLixo': tipoLixo,
         'statusPedido': statusPedido,
-        'statusColeta' : statusColeta,
+        'statusColeta': statusColeta,
       };
-
 }

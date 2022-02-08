@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:subiupressao_app/app_celular/Consultas/EditAppointment.dart';
-import 'package:subiupressao_app/app_celular/Remedios/EditMedicine.dart';
 import 'package:subiupressao_app/app_celular/Components/Controller.dart';
-import 'dart:async';
 
 import 'package:subiupressao_app/files/models/user.dart';
 
@@ -17,7 +15,6 @@ class AppointmentsList extends StatefulWidget {
 
 class _AppointmentsList extends State<AppointmentsList> {
   List<Widget> medicineCards = [];
-  DateTime _dateTime;
   User _user;
 
   List<Widget> createMedicineCards() {
@@ -39,7 +36,7 @@ class _AppointmentsList extends State<AppointmentsList> {
               ),
               child: Row(
                 children: [
-                  SizedBox(width: 15),
+                  SizedBox(width: size.width * 0.04),
                   Container(
                     child: Text(element.doctor),
                     constraints: BoxConstraints(
@@ -69,7 +66,7 @@ class _AppointmentsList extends State<AppointmentsList> {
                 ],
               ),
             ),
-            SizedBox(height: 15),
+            SizedBox(height: size.height * 0.02),
           ],
         ),
       );
@@ -81,12 +78,10 @@ class _AppointmentsList extends State<AppointmentsList> {
   @override
   void initState() {
     _user = widget.controller.user;
-    _dateTime = widget.controller.dateTime;
 
     widget.controller.addListener(() {
       setState(() {
         _user = widget.controller.user;
-        _dateTime = widget.controller.dateTime;
         medicineCards = createMedicineCards();
       });
     });
@@ -96,8 +91,15 @@ class _AppointmentsList extends State<AppointmentsList> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Container(
-      padding: EdgeInsets.fromLTRB(10, 0, 10, 20),
+      padding: EdgeInsets.fromLTRB(
+        size.width * 0.03,
+        size.height * 0,
+        size.width * 0.03,
+        size.height * 0.03,
+      ),
       child: ListView(
         children: medicineCards,
         scrollDirection: Axis.vertical,

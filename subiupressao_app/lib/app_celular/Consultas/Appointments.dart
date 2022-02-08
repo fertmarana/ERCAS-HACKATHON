@@ -12,8 +12,15 @@ class Appointments extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Padding(
-      padding: EdgeInsets.fromLTRB(10, 40, 10, 10),
+      padding: EdgeInsets.fromLTRB(
+        size.width * 0.03,
+        size.height * 0.06,
+        size.width * 0.03,
+        size.height * 0.015,
+      ),
       child: Column(
         children: [
           Header(
@@ -29,8 +36,12 @@ class Appointments extends StatelessWidget {
               );
             },
           ),
-          ProfileSummary(controller: controller,),
-          AppointmentsList(controller: controller,),
+          ProfileSummary(
+            controller: controller,
+          ),
+          AppointmentsList(
+            controller: controller,
+          ),
         ],
       ),
     );

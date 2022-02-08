@@ -5,8 +5,8 @@ import 'package:subiupressao_app/app_celular/Components/Controller.dart';
 import 'package:subiupressao_app/files/models/user.dart';
 
 class ProfileSummary extends StatefulWidget {
-  Controller controller;
-  int heartRate;
+  final Controller controller;
+  final int heartRate;
 
   ProfileSummary({@required this.controller, @required this.heartRate});
 
@@ -29,12 +29,14 @@ class _ProfileSummaryState extends State<ProfileSummary> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Profile.ProfileSummary(
       children: [
         Text("Olá, ${_user.name}!", style: TextStyle(fontSize: 16)),
-        SizedBox(height: 2),
+        SizedBox(height: size.height * 0.003),
         Text("Sua frequência cardíaca é", style: TextStyle(fontSize: 16)),
-        SizedBox(height: 5),
+        SizedBox(height: size.height * 0.007),
         Text(
           "${widget.heartRate} bpm",
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),

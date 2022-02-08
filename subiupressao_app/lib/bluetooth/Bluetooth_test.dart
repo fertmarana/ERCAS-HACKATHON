@@ -3,81 +3,76 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 // UUIDS DOS SERVICOS QUE VAMOS USAR
- /*
+/*
 0002a37-0000-1000-8000-00805f9b34fb"), "Heart Rate Measurement");
 00002a39-0000-1000-8000-00805f9b34fb"), "Heart Rate Control Point");
 "00002a49-0000-1000-8000-00805f9b34fb"), "Blood Pressure Feature");
 "00002a35-0000-1000-8000-00805f9b34fb"), "Blood Pressure Measurement");
 
 */
-class Bluetooth_testing extends StatefulWidget {
+class BluetoothTesting extends StatefulWidget {
   @override
-  _Bluetooth_testing createState() => _Bluetooth_testing();
+  _BluetoothTesting createState() => _BluetoothTesting();
 }
 
-class _Bluetooth_testing extends State<Bluetooth_testing> {
+class _BluetoothTesting extends State<BluetoothTesting> {
   BluetoothService _service;
   BluetoothDevice device;
   BluetoothState state;
   BluetoothCharacteristic characteristicBluetooth;
   BluetoothDeviceState deviceState;
-  StreamSubscription<BluetoothState> scanSubscription;
   FlutterBlue flutterBlue = FlutterBlue.instance;
   List<ScanResult> scanResultList = [];
   Stream<List<int>> listStream;
   bool _isScanning = true;
   final Map<Guid, List<int>> readValues = new Map<Guid, List<int>>();
-  String deviceConnected_name = "";
+  String deviceConnectedName = "";
   static const CHARACTERISTIC_UUID = "00002a37-0000-1000-8000-00805f9b34fb";
   bool isConnected;
   int heartRate;
 
-
   @override
   void initState() {
-    // TODO: implement initState
     isConnected = false;
     super.initState();
     initBluetoothScanning();
     heartRate = -1;
   }
 
-  void initBluetoothScanning(){
+  void initBluetoothScanning() {
     flutterBlue.isScanning.listen((isScanning) {
       _isScanning = isScanning;
       setState(() {});
     });
   }
 
-  scan() async{
-    if(!_isScanning){
+  scan() async {
+    if (!_isScanning) {
       scanResultList.clear();
       flutterBlue.startScan(timeout: Duration(seconds: 4));
-      flutterBlue.scanResults.listen((results) {
-       // scanResultList = results;
 
+      flutterBlue.scanResults.listen((results) {
         for (ScanResult r in results) {
-          print('${r.device.name} found! id: ${r.device.id.id} len: ${r.device.name.length} ');
-          if(r.device.name.length> 0){
+          print(
+              '${r.device.name} found! id: ${r.device.id.id} len: ${r.device.name.length} ');
+          if (r.device.name.length > 0) {
             scanResultList.add(r);
           }
         }
         scanResultList = scanResultList.toSet().toList();
-        setState(() { });
       });
-    }else{
+    } else {
       flutterBlue.stopScan();
     }
   }
 
-  Widget deviceSignal(ScanResult r){
+  Widget deviceSignal(ScanResult r) {
     return Text(r.rssi.toString());
   }
 
-  Widget deviceMacAddress(ScanResult r){
+  Widget deviceMacAddress(ScanResult r) {
     return Text(r.device.id.id);
   }
-
 
   void scanForDevicesGeneral() async {
     flutterBlue.startScan(timeout: Duration(seconds: 49));
@@ -88,99 +83,71 @@ class _Bluetooth_testing extends State<Bluetooth_testing> {
       }
     });
 
-  // Stop scanning
-  flutterBlue.stopScan();
-
+    // Stop scanning
+    flutterBlue.stopScan();
   }
 
-  void findDescriptors(BluetoothCharacteristic charact) async{
+  void findDescriptors(BluetoothCharacteristic charact) async {
     var descriptor = charact.descriptors;
-    for(BluetoothDescriptor d in descriptor) {
+    for (BluetoothDescriptor d in descriptor) {
       List<int> value = await d.read();
-      print("Descriptors: ${value}");
-
+      print("Descriptors: $value");
     }
   }
 
-
-  void findCaracteristics(BluetoothService service) async{
+  void findCaracteristics(BluetoothService service) async {
     var characteristics = service.characteristics;
 
-
-     // setState(() {
-     //   widget.readValues[characteristic.uuid] = value;
-      //});
-
-    for(BluetoothCharacteristic c in characteristics) {
+    for (BluetoothCharacteristic c in characteristics) {
       print("c:   ${c.uuid}");
-      if(c.uuid.toString() == Guid("0002a3700001000800000805f9b34fb")){
+
+      if (c.uuid.toString() == CHARACTERISTIC_UUID) {
         var val = c.read();
-        //List<int> values = c.lastValue;
-          print("Oiiiii");
-          print("Printandoo valor ${val}");
-
-
-
+        print("Printandoo valor $val");
       }
-      List<int> value = await c.read();
-      print("Characteristic: ${value}");
 
+      List<int> value = await c.read();
+      print("Characteristic: $value");
     }
   }
 
   void findServices(BluetoothDevice dev) async {
-
     List<BluetoothService> services = await dev.discoverServices();
     services.forEach((service) {
       // do something with service
-      print("foiiiii");
-      if(service.uuid.toString() == "0000180d-0000-1000-8000-00805f9b34fb"){
+      if (service.uuid.toString() == "0000180d-0000-1000-8000-00805f9b34fb") {
         print("UUID SERVICE: ${service.uuid.toString()}");
-        //findCaracteristics(service);
+
         service.characteristics.forEach((element) {
           print("Characteristic uuid: ${element.uuid}");
-          //if(element.uuid.toString() == "0002a37-0000-1000-8000-00805f9b34fb"){
-          if(element.uuid.toString() == CHARACTERISTIC_UUID){
-            print("é sim");
-
+          if (element.uuid.toString() == CHARACTERISTIC_UUID) {
             characteristicBluetooth = element;
             print(element.value);
-            //Future<List<int>> _futureOfList = element.read();
-            //List<int> list = await _futureOfList ;
-
-
           }
-         // listStream = element.value;
-         // element.setNotifyValue(!element.isNotifying);
         });
       }
-
-
     });
   }
 
-  void connectDevice(BluetoothDevice dev) async{
+  void connectDevice(BluetoothDevice dev) async {
     setState(() {
       device = dev;
-      deviceConnected_name = device.name;
-
+      deviceConnectedName = device.name;
     });
-    await device.connect() ;
+
+    await device.connect();
     isConnected = true;
-    findServices(dev); List<List> values = [];
+    findServices(dev);
   }
 
-
-  disconnect() async{
-
+  disconnect() async {
     await device.disconnect();
     setState(() {
-      deviceConnected_name = " ";
+      deviceConnectedName = " ";
       device = null;
       isConnected = false;
     });
   }
-
 
   void _readCharacteristics() async {
     List<List> values = [];
@@ -190,109 +157,94 @@ class _Bluetooth_testing extends State<Bluetooth_testing> {
       }
     }
     heartRate = values[0][0];
-
-    //notifyListeners();
   }
-
-
-  /*
-  interpretReceivedData(String data) async {
-    if (data == "abt_HANDS_SHAKE") {//Do something here or send next command to device
-    sendTransparentData('Hello');
-    } else {
-      print("Determine what to do with $data");
-    }
-  }
-  */
-
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return Padding(
-      padding: EdgeInsets.fromLTRB(10, 70, 10, 10),
+      padding: EdgeInsets.fromLTRB(
+        size.width * 0.03,
+        size.height * 0.1,
+        size.width * 0.03,
+        size.height * 0.015,
+      ),
       child: Wrap(
         runSpacing: 6.0,
         direction: Axis.horizontal,
         children: [
-          SizedBox(height: 10.0),
+          SizedBox(height: size.height * 0.015),
           Container(
             alignment: Alignment(0.0, 0.6),
-            child: Text('Bluetooth',
-              style: TextStyle(
-                  fontSize: 28.0,
-                  color: Color(0xff16613D)
-              ),
+            child: Text(
+              'Bluetooth',
+              style: TextStyle(fontSize: 28.0, color: Color(0xff16613D)),
             ),
           ),
           Container(
             alignment: Alignment(0.0, 0.6),
-            child: Text('Conected to ' + deviceConnected_name,
-              style: TextStyle(
-                  fontSize: 28.0,
-                  color: Color(0xff16613D)
-              ),
+            child: Text(
+              'Conected to ' + deviceConnectedName,
+              style: TextStyle(fontSize: 28.0, color: Color(0xff16613D)),
             ),
           ),
           Container(
               child: Align(
-                alignment: Alignment.center,
-                child: Material(
-
-                  borderRadius: BorderRadius.circular(30.0),
-
-                  color: Colors.red,
-                  child: MaterialButton(
-
-                    minWidth: 200.0,
-                    padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                    onPressed: () {
-                      //scanForDevices();
-                      scan();
-
-                    },
-                    child: Text("Disconnect all",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 20.0,color: Colors.white, fontWeight: FontWeight.bold)),
-                  ),
+            alignment: Alignment.center,
+            child: Material(
+              borderRadius: BorderRadius.circular(30.0),
+              color: Colors.red,
+              child: MaterialButton(
+                minWidth: size.width * 0.55,
+                padding: EdgeInsets.fromLTRB(
+                  size.width * 0.05,
+                  size.height * 0.02,
+                  size.width * 0.05,
+                  size.height * 0.02,
                 ),
-
-              )
-          ),
+                onPressed: () {
+                  scan();
+                },
+                child: Text("Disconnect all",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold)),
+              ),
+            ),
+          )),
           Container(
               child: Align(
-                alignment: Alignment.center,
-                child: Material(
-
-                  borderRadius: BorderRadius.circular(30.0),
-
-
-                  color: Color(0xFF009E74),
-                  child: MaterialButton(
-
-                    minWidth: 200.0,
-                    padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                    onPressed: () {
-                      //scanForDevices();
-                      scan();
-                    },
-                    child: Text("Scanning",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 20.0,color: Colors.white, fontWeight: FontWeight.bold)),
-                  ),
+            alignment: Alignment.center,
+            child: Material(
+              borderRadius: BorderRadius.circular(30.0),
+              color: Color(0xFF009E74),
+              child: MaterialButton(
+                minWidth: size.width * 0.55,
+                padding: EdgeInsets.fromLTRB(
+                  size.width * 0.05,
+                  size.height * 0.02,
+                  size.width * 0.05,
+                  size.height * 0.02,
                 ),
-
-              )
-          ),
-
+                onPressed: () {
+                  //scanForDevices();
+                  scan();
+                },
+                child: Text("Scanning",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 20.0,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold)),
+              ),
+            ),
+          )),
           Container(
             child: SizedBox(
-              height: 200.0,
+              height: size.height * 0.3,
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
                 itemCount: scanResultList.length,
@@ -300,48 +252,22 @@ class _Bluetooth_testing extends State<Bluetooth_testing> {
               ),
             ),
           ),
-          /*
           StreamBuilder<List<int>>(
-            stream: listStream,
+            stream: listStream, //here we're using our char's value
             initialData: [],
             builder: (BuildContext context, AsyncSnapshot<List<int>> snapshot) {
-              if (snapshot.connectionState == ConnectionState.active){
-              interpretReceivedData(currentValue);
-              return Center(child: Text('We are finding the data..'));}
-              else {
-                return SizedBox();}
-              },
-            );
-            */
+              if (snapshot.connectionState == ConnectionState.active) {
+                //In this method we'll interpret received data
 
-          /*
-          StreamBuilder<BluetoothState>(
-              stream: FlutterBlue.instance.state,
-              initialData: BluetoothState.unknown,
-              builder: (c, snapshot) {
-                final state = snapshot.data;listStream.elementAt(1);
-    for(var dev in flutterBlue.connectedDevices.toString()){
-                if (state == BluetoothState.on) {
-                  return FindDevicesScreen();
-                }
-                return BluetoothOffScreen(state: state);
-              }),
-          */
-      StreamBuilder<List<int>>(
-        stream: listStream,  //here we're using our char's value
-        initialData: [],
-        builder: (BuildContext context, AsyncSnapshot<List<int>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.active)
-          {//In this method we'll interpret received data
-            //interpretReceivedData(currentValue);
-            //print(listStream.elementAt(1).toString());
-            return Center(child: Text('We are finding the data..' + heartRate.toString() , ));
-          } else {
-            return SizedBox();
-          }
-        },
-      ),
-
+                return Center(
+                    child: Text(
+                  'We are finding the data..' + heartRate.toString(),
+                ));
+              } else {
+                return SizedBox();
+              }
+            },
+          ),
         ],
       ),
     );
@@ -360,24 +286,17 @@ class _Bluetooth_testing extends State<Bluetooth_testing> {
           ),
         ),
       ),
-      onTap: (){
-        if(isConnected){
+      onTap: () {
+        if (isConnected) {
           findServices(device);
           _readCharacteristics();
-          print("heartRate: ${heartRate}");
+          print("heartRate: $heartRate");
           //values.add(await element.read());
-        }else{
+        } else {
           print("Conectandoooo ${scanResultList[index].device.name}");
           connectDevice(scanResultList[index].device);
-
         }
-
-
-
-     },
+      },
     );
   }
-
-
-
 }
