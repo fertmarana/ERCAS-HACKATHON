@@ -7,22 +7,28 @@ import 'package:subiupressao_app/app_celular/Components/UserDataInput.dart';
 import 'package:subiupressao_app/files/models/appointment.dart';
 import 'package:subiupressao_app/files/models/user.dart';
 
-class EditAppointment extends StatelessWidget {
+class EditAppointment extends StatefulWidget {
   final Appointment element;
   final Controller controller;
-  final TextEditingController doctorController = new TextEditingController();
-  final TextEditingController specialityController = TextEditingController();
 
   EditAppointment({@required this.controller, this.element});
+
+  @override
+  State<EditAppointment> createState() => _EditAppointmentState();
+}
+
+class _EditAppointmentState extends State<EditAppointment> {
+  final TextEditingController doctorController = TextEditingController();
+  final TextEditingController specialityController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    User user = controller.user;
+    User user = widget.controller.user;
 
     List<Widget> children = [
-      SizedBox(height: size.height * 0.1),
+      SizedBox(height: size.height * 0.05),
       Row(
         children: [
           IconButton(
@@ -32,24 +38,37 @@ class EditAppointment extends StatelessWidget {
             icon: Icon(Icons.close),
           ),
           Spacer(),
-          Text(this.element == null ? "Nova Consulta" : "Editar Consulta"),
+          Text(
+            this.widget.element == null ? "Nova Consulta" : "Editar Consulta",
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          ),
           Spacer(),
           IconButton(
             onPressed: () {
-              user.appointments.add(
+              int index = user.appointments.length;
+
+              if (widget.element != null) {
+                index = user.appointments.indexOf(widget.element);
+                user.appointments.remove(widget.element);
+              }
+
+              user.appointments.insert(
+                index,
                 Appointment(
                     doctor: doctorController.text,
                     speciality: specialityController.text,
-                    date: controller.dateTime),
+                    date: widget.controller.dateTime),
               );
-              controller.updateUser(newUser: user);
+              widget.controller.updateUser(newUser: user);
+
+              Navigator.of(context).pop();
             },
             icon: Icon(Icons.check),
           )
         ],
       ),
-      SizedBox(height: size.height * 0.05),
-      Icon(Icons.assignment_ind_outlined),
+      SizedBox(height: size.height * 0.005),
+      Icon(Icons.assignment_ind, size: size.height * 0.1),
       SizedBox(height: size.height * 0.05),
       UserDataInput(
         controller: doctorController,
@@ -63,27 +82,21 @@ class EditAppointment extends StatelessWidget {
         hintString: "Especialidade",
       ),
       SizedBox(height: size.height * 0.05),
-      element == null
-          ? UserDataInput(
-              controller: TextEditingController(
-                  text: DateFormat("dd/MM/yyyy").format(controller.dateTime)),
-              enabled: false,
-              fieldName: "Data da Consulta",
-            )
-          : showDatePicker(
-              context: context,
-              initialDate: controller.dateTime,
-              firstDate: DateTime(2010),
-              lastDate: DateTime(2200),
-            ),
+      UserDataInput(
+        controller: TextEditingController(
+            text: DateFormat("dd/MM/yyyy")
+                .format(widget.controller.dateTime)),
+        enabled: false,
+        fieldName: "Data da Consulta",
+      ),
     ];
 
-    if (element != null) {
+    if (widget.element != null) {
       children.add(
         ElevatedButton(
           onPressed: () {
-            user.medicines.remove(element);
-            controller.updateUser(newUser: user);
+            user.appointments.remove(widget.element);
+            widget.controller.updateUser(newUser: user);
             Navigator.of(context).pop();
           },
           child: Text("Deletar Consulta"),

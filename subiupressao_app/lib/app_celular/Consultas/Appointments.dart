@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:subiupressao_app/app_celular/Components/Controller.dart';
 import 'package:subiupressao_app/app_celular/Components/Header.dart';
+import 'package:subiupressao_app/app_celular/Consultas/AppointmentsList.dart';
 import 'package:subiupressao_app/app_celular/Consultas/EditAppointment.dart';
+import 'package:subiupressao_app/app_celular/Consultas/ProfileSummary.dart';
 
 class Appointments extends StatelessWidget {
   Controller controller;
@@ -27,6 +29,8 @@ class Appointments extends StatelessWidget {
               );
             },
           ),
+          ProfileSummary(controller: controller,),
+          AppointmentsList(controller: controller,),
         ],
       ),
     );
