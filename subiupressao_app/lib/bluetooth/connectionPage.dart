@@ -8,6 +8,7 @@ import 'dart:async';
 import 'dart:core';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:path/path.dart';
 
 import 'package:subiupressao_app/database/Database.dart';
@@ -98,6 +99,7 @@ class _connectionPage extends State<connectionPage> {
   }
 
   void _updateDataSource(Timer timer) async {
+    if(isConnected == false) return;
     if (valuesofHeart != -1) {
       greatestValue = valuesofHeart;
       valuesofHeart = -1;
@@ -162,10 +164,10 @@ class _connectionPage extends State<connectionPage> {
     List<BluetoothService> services = await dev.discoverServices();
     for (BluetoothService service in services) {
       // do something with service
-      if (service.uuid.toString() == "0000180d-0000-1000-8000-00805f9b34fb") {
+      if (service.uuid.toString().toLowerCase()  == "0000180d-0000-1000-8000-00805f9b34fb") {
         for (BluetoothCharacteristic element in service.characteristics) {
           print("Characteristic uuid: ${element.uuid}");
-          if (element.uuid.toString() == CHARACTERISTIC_UUID) {
+          if (element.uuid.toString().toLowerCase() == CHARACTERISTIC_UUID) {
             _readthisCharacteristic(element);
 
             characteristicBluetooth = element;
@@ -197,10 +199,10 @@ class _connectionPage extends State<connectionPage> {
 
   }
 
-  disconnect() async {
-    await device.disconnect();
+  disconnect(BluetoothDevice dev) async {
+    await dev.disconnect();
     setState(() {
-      deviceConnected_name = " ";
+      deviceConnected_name = "";
       device = null;
       isConnected = false;
     });
@@ -208,8 +210,9 @@ class _connectionPage extends State<connectionPage> {
 
   _readInfoFromDevice(List values) async {
     if (values.length > 0) {
+
       globals.heartRate_global = await values[1];
-      print("value: ${values[1]}");
+      print("value: ${values}");
       print("valor da global ${globals.heartRate_global.toString()}");
       setState(() {
         heartRate = values[1];
@@ -233,8 +236,10 @@ class _connectionPage extends State<connectionPage> {
     }
 
     if (c != null) {
+      print("tentando ler de ${c.uuid}");
       await c.setNotifyValue(true);
       c.value.listen((value) {
+        print("esperando e tentando ler de ${c.uuid}");
         _readInfoFromDevice(value);
       });
     }
@@ -253,7 +258,7 @@ class _connectionPage extends State<connectionPage> {
   @override
   Widget build(BuildContext context) {
     timer = Timer.periodic(const Duration(seconds: 30), _updateDataSource);
-    print("start_application_value : ${start_aplication}");
+    //print("start_application_value : ${start_aplication}");
     //testHeart = DBProvider.db.getAllClients();
     return Scaffold(
         body: Container(
@@ -266,7 +271,7 @@ class _connectionPage extends State<connectionPage> {
           SizedBox(height: 10.0),
           Container(
             alignment: Alignment(0.0, 0.6),
-            child: isConnected
+            child: isConnected == true
                 ? Text(
                     'Conectado à \n' + deviceConnected_name,
                     textAlign: TextAlign.center,
@@ -282,11 +287,41 @@ class _connectionPage extends State<connectionPage> {
           Container(
             child: SizedBox(
               height: 200.0,
-              child: ListView.builder(
+              child: isConnected == false?
+              ListView.builder(
                 scrollDirection: Axis.vertical,
                 itemCount: scanResultList.length,
                 itemBuilder: _itemBuilder,
-              ),
+              ):
+              Column(children: <Widget>[
+                Container(
+                  alignment: Alignment(0.0, 0.6),
+                  child: TextButton(
+                    style: ButtonStyle(
+                      foregroundColor:
+                      MaterialStateProperty.all<Color>(Colors.orange),
+                    ),
+                    onPressed: () {
+                      findServices(device);
+                      //_readCharacteristics();
+                    },
+                    child: Text('Ler Frequência'),
+                  ),
+                ),
+                Container(
+                    alignment: Alignment(0.0, 0.6),
+                    child:TextButton(
+                      style: ButtonStyle(
+                        foregroundColor:
+                        MaterialStateProperty.all<Color>(Colors.blue),
+                      ),
+                      onPressed: () {
+                        disconnect(device);
+                      },
+                      child: Text('Desconectar'),
+                    )
+                ),
+              ]),
             ),
           ),
           /*
@@ -334,8 +369,11 @@ class _connectionPage extends State<connectionPage> {
 
               ),
               */
+          SizedBox(height: 20.0),
           Container(
-              child: Align(
+              child:
+              isConnected == false?
+              Align(
             alignment: Alignment.center,
             child: Material(
               borderRadius: BorderRadius.circular(30.0),
@@ -347,146 +385,41 @@ class _connectionPage extends State<connectionPage> {
                   //scanForDevices();
                   scan();
                 },
-                child: isConnected
-                    ? Text("Scanear",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 20.0,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold))
-                    : Text("Scanear por Aparelhos",
+                child: Text("Escanear por Aparelhos",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontSize: 18.0,
                             color: Colors.white,
-                            fontWeight: FontWeight.bold)),
+                            fontWeight: FontWeight.bold))
               ),
             ),
-          )
+          ):
+              Container(
+                child:
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text('Sua Frequência está sendo escaneada \n', textAlign: TextAlign.center,style: TextStyle(fontSize: 15.0, color: Color(0xff16613D))),
+                    Text("Para conferir mais detalhes clique em", textAlign: TextAlign.center,style: TextStyle(fontSize: 15.0, color: Color(0xff16613D)) ),
+                    Container(
+                      alignment: Alignment.center,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text("Pressão", textAlign: TextAlign.center,style: TextStyle(fontSize: 15.0, color: Color(0xff16613D)) ),
+                          Icon(MaterialCommunityIcons.heart_pulse,color: Color(0xff16613D)),
+                          Text(' abaixo', textAlign: TextAlign.center,style: TextStyle(fontSize: 15.0, color: Color(0xff16613D)) ),
+                        ],
+                      )
+                  )
+                  ],
+                )
+              ),
+
           ),
-          /*
-              Container(
-                child: SfCartesianChart(
-                  zoomPanBehavior: _zoomPanBehavior,
-                  title: ChartTitle(text: "Heart Measure per Minute"),
-                  //enableAxisAnimation: true,
-                  primaryXAxis: NumericAxis(
-                    // Edge labels will be shifted
-                      edgeLabelPlacement: EdgeLabelPlacement.shift,
-                      interval: 10,
-                      axisLine: AxisLine(width: 2),
-                      majorTickLines: MajorTickLines(size: 0),
 
-                  ),
-                  //legend: Legend(isVisible: true),
-                  series: <LineSeries<_ChartData, int>>[
-                    LineSeries<_ChartData, int>(
-                      onRendererCreated: (ChartSeriesController controller) {
-                        // Assigning the controller to the _chartSeriesController.
-                        _chartSeriesController = controller;
-
-                      },
-                      // Binding the chartData to the dataSource of the line series.
-                      //name: "Heart Measure",
-                      dataSource: chartData,
-                      xValueMapper: (_ChartData data, _) => data.minute,
-                      yValueMapper: (_ChartData data, _) => data.epoch,
-                    )
-                  ],
-                 // primaryXAxis: NumericAxis(edgeLabelPlacement: EdgeLabelPlacement.shift, numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0)),
-                ),
-              ),
-              Container(
-                child: SfCartesianChart(
-                  // zoomPanBehavior: _zoomPanBehavior,
-
-                  title: ChartTitle(text: "Heart Measure per Minute"),
-                  //enableAxisAnimation: true,
-                  primaryXAxis: DateTimeAxis(
-                    dateFormat: DateFormat.Hms(),
-                    intervalType: DateTimeIntervalType.minutes,
-                    // Edge labels will be shifted
-                    //edgeLabelPlacement: EdgeLabelPlacement.shift,
-                    //autoScrollingDelta: 5,
-                    //interval: 6,
-                    axisLine: AxisLine(width: 5),
-                   // visibleMinimum: start_aplication,
-                    majorTickLines: MajorTickLines(size: 1),
-                   // minorTickLines: MinorTickLines(size: 1),
-                  ),
-                  //legend: Legend(isVisible: true),
-                  series: <LineSeries<Heart, DateTime>>[
-                    LineSeries<Heart, DateTime>(
-                      onRendererCreated: (ChartSeriesController controller) {
-                        // Assigning the controller to the _chartSeriesController.
-                        _chartSeriesController = controller;
-
-                      },
-                      // Binding the chartData to the dataSDateTimeource of the line series.
-                      //name: "Heart Measure",
-                      dataSource: testHeart,
-                      xValueMapper: (Heart data, _) => data.dateTime,//data.dateTime.minute.toString(),
-                      yValueMapper: (Heart data, _) => data.heartRate,
-                    )
-                  ],
-                  // primaryXAxis: NumericAxis(edgeLabelPlacement: EdgeLabelPlacement.shift, numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0)),
-                ),
-              ),
-              Container(
-                child: SfCartesianChart(
-
-                  zoomPanBehavior: _zoomPanBehavior,
-                  onTooltipRender: (args){
-                    String yValue = args.dataPoints[args.pointIndex].y.toString();
-                    args.text = DateTime.fromMillisecondsSinceEpoch(int.parse(yValue))
-                        .minute
-                        .toString();
-                    /*
-                        DateTime.fromMillisecondsSinceEpoch(int.parse(yValue))
-                        .minute
-                        .toString() +
-                    ':' +
-                    DateTime.fromMillisecondsSinceEpoch(int.parse(yValue))
-                        .second
-                        .toString() +
-                    ':' +
-                    DateTime.fromHeart Measure per MinutMillisecondsSinceEpoch(int.parse(yValue))
-                        .millisecond
-                        .toString();
-                    */
-                  },
-                  title: ChartTitle(text: "Heart Measure per Minute"),
-                  //enableAxisAnimation: true,
-                  primaryXAxis: CategoryAxis(
-                    
-                    // Edge labels will be shifted
-                    edgeLabelPlacHeart Measure per Minutement: EdgeLabelPlacement.shift,
-                    autoScrollingDelta: 5,
-                    interval: 6,
-                    axisLine: AxisLine(width: 0),
-                    // visibleMinimum: start_aplication,
-                    majorTickLines: MajorTickLines(size: 0),
-                  ),
-                  //legend: Legend(isVisible: true),
-                  series: <LineSeries<Heart, String>>[
-                    LineSeries<Heart,String>(
-                      onRendererCreated: (ChartSeriesController controller) {
-                        // Assigning the controller to the _chartSeriesController.
-                        _chartSeriesController = controller;
-
-                      },
-                      // Binding the chartData to the dataSDateTimeource of the line series.
-                      //name: "Heart Measure",
-                      dataSource: testHeart,
-                      xValueMapper: (Heart data, _) => DateTime.fromMillisecondsSinceEpoch(int.parse(DateTime.now().second.toString()))
-                          .minute
-                          .toString(),//data.dateTime.minute.toString(),
-                      yValueMapper: (Heart data, _) => data.heartRate,
-                    )
-                  ],
-                  // primaryXAxis: NumericAxis(edgeLabelPlacement: EdgeLabelPlacement.shift, numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0)),
-                ),
-              ),*/
         ],
       ),
     ));
@@ -496,7 +429,8 @@ class _connectionPage extends State<connectionPage> {
     return InkWell(
         child: Card(
       child: Center(
-        child: Column(children: <Widget>[
+        child:
+        Column(children: <Widget>[
           Text(
             "${scanResultList[index].device.name}",
             style: TextStyle(
@@ -504,6 +438,9 @@ class _connectionPage extends State<connectionPage> {
               color: Colors.orange,
             ),
           ),
+        Container(
+            alignment: Alignment(0.0, 0.6),
+            child:
           TextButton(
             style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
@@ -511,25 +448,13 @@ class _connectionPage extends State<connectionPage> {
             onPressed: () {
               connectDevice(scanResultList[index].device);
             },
-            child: Text('Connect to Device'),
-          ),
-          Container(
-              alignment: Alignment(0.0, 0.6),
-              child: isConnected
-                  ? TextButton(
-                      style: ButtonStyle(
-                        foregroundColor:
-                            MaterialStateProperty.all<Color>(Colors.blue),
-                      ),
-                      onPressed: () {
-                        findServices(device);
-                        //_readCharacteristics();
-                      },
-                      child: Text('Read Heart Rate'),
-                    )
-                  : //IMPORTANTE TER ISSO PORQUE É UMA CONDICAO NAO APAGAR
-                  SizedBox()),
-        ]),
+            child: Text('Conectar ao Aparelho'),
+          )
+
+        ),
+
+        ]
+        )
       ),
     ));
   }
