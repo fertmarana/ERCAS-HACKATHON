@@ -60,6 +60,8 @@ class _connectionPage extends State<connectionPage> {
   List<Heart> testHeart = [];
   Heart testingHeart;
   ZoomPanBehavior _zoomPanBehavior;
+  bool isreadingFrequency = false;
+  bool nodataisbeingdetected = true;
 
   void _updateDatabase(int _greatestValue, int count, DateTime dt) async {
     var fido = Heart(
@@ -161,6 +163,7 @@ class _connectionPage extends State<connectionPage> {
   }
 
   void findServices(BluetoothDevice dev) async {
+    isreadingFrequency = true;
     List<BluetoothService> services = await dev.discoverServices();
     for (BluetoothService service in services) {
       // do something with service
@@ -200,6 +203,8 @@ class _connectionPage extends State<connectionPage> {
   }
 
   disconnect(BluetoothDevice dev) async {
+    isreadingFrequency = false;
+    nodataisbeingdetected = true;
     await dev.disconnect();
     setState(() {
       deviceConnected_name = "";
@@ -215,6 +220,7 @@ class _connectionPage extends State<connectionPage> {
       print("value: ${values}");
       print("valor da global ${globals.heartRate_global.toString()}");
       setState(() {
+        nodataisbeingdetected = false;
         heartRate = values[1];
         if (heartRate > valuesofHeart) {
           valuesofHeart = heartRate;
@@ -299,9 +305,11 @@ class _connectionPage extends State<connectionPage> {
                   child: TextButton(
                     style: ButtonStyle(
                       foregroundColor:
-                      MaterialStateProperty.all<Color>(Colors.orange),
+                      MaterialStateProperty.all<Color>(Colors.blue),
+
                     ),
                     onPressed: () {
+
                       findServices(device);
                       //_readCharacteristics();
                     },
@@ -313,7 +321,7 @@ class _connectionPage extends State<connectionPage> {
                     child:TextButton(
                       style: ButtonStyle(
                         foregroundColor:
-                        MaterialStateProperty.all<Color>(Colors.blue),
+                        MaterialStateProperty.all<Color>(Colors.red),
                       ),
                       onPressed: () {
                         disconnect(device);
@@ -395,27 +403,40 @@ class _connectionPage extends State<connectionPage> {
             ),
           ):
               Container(
-                child:
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text('Sua Frequência está sendo escaneada \n', textAlign: TextAlign.center,style: TextStyle(fontSize: 15.0, color: Color(0xff16613D))),
-                    Text("Para conferir mais detalhes clique em", textAlign: TextAlign.center,style: TextStyle(fontSize: 15.0, color: Color(0xff16613D)) ),
-                    Container(
-                      alignment: Alignment.center,
-                      child: Row(
+                child: isreadingFrequency?
+                  Container (
+                  child: nodataisbeingdetected?
+                      Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text('Certifique-se que a pulseira está em seu pulso \n', textAlign: TextAlign.center,style: TextStyle(fontSize: 15.0, color: Colors.red)),
+                            Text('Se estiver, espere um minuto que a leitura logo será feita\n', textAlign: TextAlign.center,style: TextStyle(fontSize: 15.0, color: Colors.red)),
+                          ],
+                      ):
+
+                      Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text("Pressão", textAlign: TextAlign.center,style: TextStyle(fontSize: 15.0, color: Color(0xff16613D)) ),
-                          Icon(MaterialCommunityIcons.heart_pulse,color: Color(0xff16613D)),
-                          Text(' abaixo', textAlign: TextAlign.center,style: TextStyle(fontSize: 15.0, color: Color(0xff16613D)) ),
+                          Text('Sua Frequência está sendo escaneada \n', textAlign: TextAlign.center,style: TextStyle(fontSize: 15.0, color: Color(0xff16613D))),
+                          Text("Para conferir mais detalhes clique em", textAlign: TextAlign.center,style: TextStyle(fontSize: 15.0, color: Color(0xff16613D)) ),
+                          Container(
+                            alignment: Alignment.center,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text("Pressão", textAlign: TextAlign.center,style: TextStyle(fontSize: 15.0, color: Color(0xff16613D)) ),
+                                Icon(MaterialCommunityIcons.heart_pulse,color: Color(0xff16613D)),
+                                Text(' abaixo', textAlign: TextAlign.center,style: TextStyle(fontSize: 15.0, color: Color(0xff16613D)) ),
+                              ],
+                            )
+                        )
                         ],
                       )
-                  )
-                  ],
-                )
+                  ):
+                  SizedBox(),
               ),
 
           ),
