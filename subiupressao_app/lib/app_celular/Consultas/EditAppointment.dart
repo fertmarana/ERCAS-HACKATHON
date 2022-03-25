@@ -7,19 +7,25 @@ import 'package:subiupressao_app/app_celular/Components/UserDataInput.dart';
 import 'package:subiupressao_app/files/models/appointment.dart';
 import 'package:subiupressao_app/files/models/user.dart';
 
-class EditAppointment extends StatelessWidget {
+class EditAppointment extends StatefulWidget {
   final Appointment element;
   final Controller controller;
-  final TextEditingController doctorController = new TextEditingController();
-  final TextEditingController specialityController = TextEditingController();
 
   EditAppointment({@required this.controller, this.element});
+
+  @override
+  State<EditAppointment> createState() => _EditAppointmentState();
+}
+
+class _EditAppointmentState extends State<EditAppointment> {
+  final TextEditingController doctorController = TextEditingController();
+  final TextEditingController specialityController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    User user = controller.user;
+    User user = widget.controller.user;
 
     List<Widget> children = [
       SizedBox(height: size.height * 0.1),
@@ -32,7 +38,7 @@ class EditAppointment extends StatelessWidget {
             icon: Icon(Icons.close),
           ),
           Spacer(),
-          Text(this.element == null ? "Nova Consulta" : "Editar Consulta"),
+          Text(this.widget.element == null ? "Nova Consulta" : "Editar Consulta"),
           Spacer(),
           IconButton(
             onPressed: () {
@@ -40,9 +46,9 @@ class EditAppointment extends StatelessWidget {
                 Appointment(
                     doctor: doctorController.text,
                     speciality: specialityController.text,
-                    date: controller.dateTime),
+                    date: widget.controller.dateTime),
               );
-              controller.updateUser(newUser: user);
+              widget.controller.updateUser(newUser: user);
             },
             icon: Icon(Icons.check),
           )
@@ -63,27 +69,27 @@ class EditAppointment extends StatelessWidget {
         hintString: "Especialidade",
       ),
       SizedBox(height: size.height * 0.05),
-      element == null
+      widget.element == null
           ? UserDataInput(
               controller: TextEditingController(
-                  text: DateFormat("dd/MM/yyyy").format(controller.dateTime)),
+                  text: DateFormat("dd/MM/yyyy").format(widget.controller.dateTime)),
               enabled: false,
               fieldName: "Data da Consulta",
             )
           : showDatePicker(
               context: context,
-              initialDate: controller.dateTime,
+              initialDate: widget.controller.dateTime,
               firstDate: DateTime(2010),
               lastDate: DateTime(2200),
             ),
     ];
 
-    if (element != null) {
+    if (widget.element != null) {
       children.add(
         ElevatedButton(
           onPressed: () {
-            user.medicines.remove(element);
-            controller.updateUser(newUser: user);
+            user.medicines.remove(widget.element);
+            widget.controller.updateUser(newUser: user);
             Navigator.of(context).pop();
           },
           child: Text("Deletar Consulta"),
