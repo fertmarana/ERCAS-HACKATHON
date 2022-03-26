@@ -88,9 +88,8 @@ class _Bluetooth_testing extends State<Bluetooth_testing> {
       }
     });
 
-  // Stop scanning
-  flutterBlue.stopScan();
-
+    // Stop scanning
+    flutterBlue.stopScan();
   }
 
   void findDescriptors(BluetoothCharacteristic charact) async{

@@ -25,13 +25,14 @@ class TabItem {
 
   int getIndex() => _index;
 
-// adds a wrapper around the page widgets for visibility
-// visibility widget removes unnecessary problems
-// like interactivity and animations when the page is inactive
+  // adds a wrapper around the page widgets for visibility
+  // visibility widget removes unnecessary problems
+  // like interactivity and animations when the page is inactive
   Widget get page {
     return Visibility(
       // only paint this page when currentTab is active
       visible: _index == AppState.currentTab,
+      
       // important to preserve state while switching between tabs
       maintainState: true,
       child: Navigator(
