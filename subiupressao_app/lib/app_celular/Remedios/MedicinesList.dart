@@ -58,12 +58,12 @@ class _MedicinesList extends State<MedicinesList> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => EditMedicine(
-                                    dateTime: _dateTime,
-                                    controller: widget.controller,
-                                    deleteButton: true,
-                                    element: element,
-                                  )),
+                            builder: (context) => EditMedicine(
+                              controller: widget.controller,
+                              deleteButton: true,
+                              element: element,
+                            ),
+                          ),
                         );
                       },
                       icon: Icon(Icons.edit)),

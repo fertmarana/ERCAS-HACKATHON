@@ -13,12 +13,10 @@ import 'package:table_calendar/table_calendar.dart';
 
 class EditMedicine extends StatefulWidget {
   final Controller controller;
-  final DateTime dateTime;
   final bool deleteButton;
   final Medicine element;
 
   EditMedicine({
-    @required this.dateTime,
     @required this.controller,
     this.deleteButton = false,
     this.element,
@@ -41,6 +39,7 @@ class _EditMedicineState extends State<EditMedicine> {
     "Sem tempo definido": Duration(seconds: 0),
   };
   String durationValue;
+  DateTime dateTime;
 
   @override
   void initState() {
@@ -51,6 +50,10 @@ class _EditMedicineState extends State<EditMedicine> {
     _medicineNameController = TextEditingController(
       text: widget.element == null ? "" : widget.element.name,
     );
+
+    dateTime = widget.element == null
+        ? widget.controller.dateTime
+        : widget.element.start;
   }
 
   @override
@@ -83,7 +86,7 @@ class _EditMedicineState extends State<EditMedicine> {
         ),
         Spacer(),
         Text(
-          "Novo Remédio",
+          widget.element == null ? "Novo Remédio" : "Editar Remédio",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         Spacer(),
@@ -96,17 +99,15 @@ class _EditMedicineState extends State<EditMedicine> {
               user.medicines.remove(widget.element);
             }
 
-            print("New value: $durationValue");
-            print("Duration: ${intervals[durationValue].toString()}");
             user.medicines.insert(
               index,
               Medicine(
                 name: _medicineNameController.text,
                 quantity: int.parse(_pillsController.text),
-                start: widget.dateTime,
+                start: dateTime,
                 end: intervals[durationValue] == Duration(seconds: 0)
                     ? DateTime(2200)
-                    : widget.dateTime.add(intervals[durationValue]),
+                    : dateTime.add(intervals[durationValue]),
               ),
             );
 
@@ -149,37 +150,79 @@ class _EditMedicineState extends State<EditMedicine> {
   }
 
   List<Widget> buildColumn({User user, Size size}) {
+    var horizontalOffset = 0.05;
+
     List<Widget> column = [
-      SizedBox(height: 30),
+      SizedBox(height: size.height * 0.05),
       // Head (Cancel button, title and save button)
       buildHead(user: user),
-      SizedBox(height: 5),
+      SizedBox(height: size.height * 0.01),
       Icon(Icons.medication, size: 70),
-      SizedBox(height: 20),
+      SizedBox(height: size.height * 0.03),
       UserDataInput(
         controller: _medicineNameController,
         fieldName: "Nome do remédio",
         hintString: "Nome do Remédio",
+        spacerInterval: horizontalOffset,
       ),
-      SizedBox(height: 20),
+      SizedBox(height: size.height * 0.03),
       UserDataInput(
         controller: _pillsController,
         keyboard: TextInputType.number,
         filter: [FilteringTextInputFormatter.digitsOnly],
         fieldName: "São quantos comprimidos por dia?",
         hintString: "Comprimidos por dia",
+        spacerInterval: horizontalOffset,
       ),
-      SizedBox(height: 20),
-      UserDataInput(
-        controller: new TextEditingController(),
-        enabled: false,
-        fieldName: "Início do remédio",
-        hintString: DateFormat("dd/MM/yyyy").format(widget.dateTime),
+      SizedBox(height: size.height * 0.03),
+      Row(
+        children: [
+          SizedBox(width: horizontalOffset * size.width),
+          Text(
+            "Quando deve começar a ser tomado?",
+            style: TextStyle(fontSize: 16),
+          ),
+          Spacer()
+        ],
+      ),
+      Row(
+        children: [
+          SizedBox(width: size.width * horizontalOffset),
+          TextField(
+            enabled: false,
+            decoration: InputDecoration(
+              constraints: BoxConstraints(maxWidth: size.width * 0.75),
+              border: OutlineInputBorder(),
+              hintText: DateFormat("dd/MM/yyyy").format(dateTime),
+            ),
+          ),
+          Spacer(),
+          IconButton(
+            onPressed: () {
+              showDatePicker(
+                      context: context,
+                      initialDate: dateTime,
+                      firstDate: DateTime(2010),
+                      lastDate: DateTime(2200))
+                  .then((date) {
+                setState(() {
+                  dateTime = (date == null ? dateTime : date);
+                });
+              });
+            },
+            icon: const Icon(
+              Icons.calendar_today_rounded,
+              size: 25,
+            ),
+            iconSize: size.width * 0.05,
+          ),
+          SizedBox(width: size.width * horizontalOffset),
+        ],
       ),
       SizedBox(height: 20),
       Row(
         children: [
-          SizedBox(width: 15),
+          SizedBox(width: size.width * horizontalOffset),
           Text("Até quando o remédio deve ser tomado?",
               style: TextStyle(fontSize: 16)),
           Spacer(),

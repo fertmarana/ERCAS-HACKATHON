@@ -29,7 +29,6 @@ class Remedios extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => EditMedicine(
-                    dateTime: controller.dateTime,
                     controller: controller,
                   ),
                 ),
