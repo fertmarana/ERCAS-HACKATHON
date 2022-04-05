@@ -332,51 +332,7 @@ class _connectionPage extends State<connectionPage> {
               ]),
             ),
           ),
-          /*
-              Container(
-                alignment: Alignment(0.0, 0.6),
-                child: heartRate == -1?
-                SizedBox()
-                    : //IMPORTANTE TER ISSO PORQUE É UMA CONDICAO NAO APAGAR
-                Text('Frequência: ' + heartRate.toString(),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 28.0,
-                      color: Color(0xff16613D)
-                  ),
-                ),
-
-              ),
-
-               */
-          /*
-              Container(
-                alignment: Alignment(0.0, 0.6),
-                child: heartRate == -1?
-                SizedBox()
-                    : //IMPORTANTE TER ISSO PORQUE É UMA CONDICAO NAO APAGAR
-                Text('Date Time: ' + DateTime.now().minute.toString(),
-                  style: TextStyle(
-                      fontSize: 28.0,
-                      color: Color(0xff16613D)
-                  ),
-                ),
-
-              ),
-              Container(
-                alignment: Alignment(0.0, 0.6),
-                child: heartRate == -1?
-                SizedBox()
-                    : //IMPORTANTE TER ISSO PORQUE É UMA CONDICAO NAO APAGAR
-                Text('Maior Valor de Frequência: \n' + greatestValue.toString(),
-                  style: TextStyle(
-                      fontSize: 18.0,
-                      color: Color(0xff16613D)
-                  ),
-                ),
-
-              ),
-              */
+          
           SizedBox(height: 20.0),
           Container(
               child:
