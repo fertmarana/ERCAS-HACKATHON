@@ -69,6 +69,9 @@ class _connectionPage extends State<connectionPage> {
   ZoomPanBehavior _zoomPanBehavior;
   bool isreadingFrequency = false;
   bool nodataisbeingdetected = true;
+  bool clicked_Ler_frequencia = false;
+  int size_of_dataBase = 0;
+  bool istryingtoconnect = false;
 
   void _updateDatabase(int _greatestValue, int count, DateTime dt) async {
     var fido = Heart(
@@ -78,7 +81,7 @@ class _connectionPage extends State<connectionPage> {
       heartRate: _greatestValue,
     );
     await DBProvider.db.insertHeart(fido);
-
+    size_of_dataBase = await DBProvider.db.getDatabaseSize();
     setState(() {
       testHeart.add(fido);
     });
@@ -114,6 +117,8 @@ class _connectionPage extends State<connectionPage> {
       valuesofHeart = -1;
       count++;
       chartData.add(_ChartData(count, greatestValue));
+
+
 
       _updateDatabase(greatestValue, count, DateTime.now());
       //print(await DBProvider.db.toString());
@@ -170,6 +175,7 @@ class _connectionPage extends State<connectionPage> {
   }
 
   void findServices(BluetoothDevice dev) async {
+    clicked_Ler_frequencia = true;
     isreadingFrequency = true;
     List<BluetoothService> services = await dev.discoverServices();
     for (BluetoothService service in services) {
@@ -190,6 +196,7 @@ class _connectionPage extends State<connectionPage> {
   }
 
   void connectDevice(BluetoothDevice dev) async {
+    istryingtoconnect = true;
     Future<bool> returnValue;
 
     setState(() {
@@ -200,9 +207,9 @@ class _connectionPage extends State<connectionPage> {
     await device.connect() ;
 
     isConnected = true;
+    istryingtoconnect = false;
+    //findServices(dev);
 
-    findServices(dev);
-    List<List> values = [];
 
     print("Connection successful!");
 
@@ -210,7 +217,7 @@ class _connectionPage extends State<connectionPage> {
   }
 
   disconnect(BluetoothDevice dev) async {
-
+    clicked_Ler_frequencia = false;
     isreadingFrequency = false;
     nodataisbeingdetected = true;
     await dev.disconnect();
@@ -218,6 +225,7 @@ class _connectionPage extends State<connectionPage> {
       deviceConnected_name = "";
       device = null;
       isConnected = false;
+      DBProvider.db.deleteAll();
       //scanResultList.clear();
     });
   }
@@ -260,16 +268,6 @@ class _connectionPage extends State<connectionPage> {
     }
   }
 
-  void _readCharacteristics() async {
-    List<List> values = [];
-    if (_service != null) {
-      for (BluetoothCharacteristic c in _service.characteristics) {
-        values.add(await c.read());
-      }
-    }
-    heartRate = values[0][0];
-  }
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -295,23 +293,6 @@ class _connectionPage extends State<connectionPage> {
             //runSpacing: 6.0,
             //direction: Axis.horizontal,
             children: [
-              /*
-              SizedBox(height: 3.0),
-              Container(
-                alignment: Alignment(0.0, 0.6),
-                child: isConnected == true
-                    ? Text(
-                        'Conectado à \n' + deviceConnected_name,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 28.0, color: Color(0xff16613D)),
-                      )
-                    : //IMPORTANTE TER ISSO PORQUE É UMA CONDICAO NAO APAGAR
-                    Text(
-                        'Nenhum Aparelho Conectado',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 28.0, color: Color(0xff16613D)),
-                      ),
-              ),*/
               Container(
                 child: SizedBox(
                   height: 200.0,
@@ -332,13 +313,29 @@ class _connectionPage extends State<connectionPage> {
 
                         ),
                         onPressed: () {
+                          setState(() {
+                            clicked_Ler_frequencia = true;
+                          });
 
                           findServices(device);
-                          //_readCharacteristics();
                         },
-                        child: Text('Ler Frequência'),
+                        child:
+                        clicked_Ler_frequencia == false?
+                        Text('Ler Frequência',style: TextStyle(fontSize: 14,color: Colors.blue),)
+                        : size_of_dataBase == 0?
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CircularProgressIndicator(color: Colors.blue,),
+                            SizedBox(width: 4,),
+                            Text("Procurando Frequência...", style: TextStyle(fontSize: 14,color: Colors.blue),),
+
+                          ],
+                        ):SizedBox( ),
+
                       ),
                     ),
+
                     Container(
                         alignment: Alignment(0.0, 0.6),
                         child:TextButton(
@@ -395,27 +392,6 @@ class _connectionPage extends State<connectionPage> {
                     ),
                   ),
                 ),
-
-
-                /*Material(
-                  borderRadius: BorderRadius.circular(30.0),
-                  color: Colors.blue,
-                  child: MaterialButton(
-                    minWidth: 200.0,
-                    padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                    shape: Circle|Border(),
-                    onPressed: () {
-                      //scanForDevices();
-                      scan();
-                    },
-                    child: Text("Escanear por Aparelhos",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 18.0,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold))
-                  ),
-                ),*/
               ):
                   Container(
                     child: isreadingFrequency?

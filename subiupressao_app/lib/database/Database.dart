@@ -81,6 +81,15 @@ class DBProvider {
     );
   }
 
+  getDatabaseSize() async{
+
+    final db = await this.database;
+    int res =  Sqflite.firstIntValue(
+        await db.rawQuery("SELECT COUNT (*) FROM $Heart")
+    );
+
+    return res;
+  }
 
 
   updateClient(Heart newClient) async {
@@ -96,17 +105,6 @@ class DBProvider {
     return res.isNotEmpty ? Heart.fromMap(res.first) : null;
   }
 
-  Future<List<Heart>> getBlockedClients() async {
-    final db = await database;
-
-    print("works");
-    // var res = await db.rawQuery("SELECT * FROM Client WHERE blocked=1");
-    var res = await db.query("Heart", where: "blocked = ? ", whereArgs: [1]);
-
-    List<Heart> list =
-    res.isNotEmpty ? res.map((c) => Heart.fromMap(c)).toList() : [];
-    return list;
-  }
 
   Future<List<Heart>> getAllClients() async {
     final db = await database;
