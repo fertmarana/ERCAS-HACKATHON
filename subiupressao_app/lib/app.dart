@@ -3,8 +3,8 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:subiupressao_app/app_celular/Components/Controller.dart';
 import 'package:subiupressao_app/app_celular/Consultas/Appointments.dart';
+import 'package:subiupressao_app/app_celular/Remedios/Medicines.dart';
 
-import 'package:subiupressao_app/app_celular/Remedios/Remedios.dart';
 import 'package:subiupressao_app/files/FileController.dart';
 import 'package:subiupressao_app/tabItem.dart';
 import 'package:subiupressao_app/app_celular/bottomNavigation.dart';
@@ -38,7 +38,7 @@ class AppState extends State<App> {
         tabName: "Remédios",
         icon: MaterialCommunityIcons.pill,
         // icon: Icons.medication_rounded,
-        page: Remedios(controller: controller),
+        page: Medicines(controller: controller),
       ),
       // Menu de configurações: minhaConta_morador()
       TabItem(

@@ -30,12 +30,12 @@ class _EditMedicineState extends State<EditMedicine> {
   TextEditingController _medicineNameController;
   TextEditingController _pillsController;
   Map<String, Duration> intervals = {
-    "3 dias": Duration(days: 3),
-    "5 dias": Duration(days: 5),
-    "1 semana": Duration(days: 7),
-    "2 semanas": Duration(days: 14),
-    "3 semanas": Duration(days: 21),
-    "4 semanas": Duration(days: 28),
+    "3 dias": Duration(days: 2),
+    "5 dias": Duration(days: 4),
+    "1 semana": Duration(days: 6),
+    "2 semanas": Duration(days: 13),
+    "3 semanas": Duration(days: 20),
+    "4 semanas": Duration(days: 27),
     "Sem tempo definido": Duration(seconds: 0),
   };
   String durationValue;
@@ -239,6 +239,11 @@ class _EditMedicineState extends State<EditMedicine> {
           Navigator.of(context).pop();
         },
         child: Text("Deletar remédio"),
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(
+            Color.fromARGB(255, 190, 40, 30),
+          ),
+        ),
       ));
     }
 
