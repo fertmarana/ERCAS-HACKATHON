@@ -61,4 +61,32 @@ class Heart {
     return '$dateTime';
   }
 
+  int get_hearetRate(){
+    return heartRate;
+  }
+  String toStringdateTime_minute(){
+    if(dateTime.minute< 10) return "0" + dateTime.minute.toString();
+    return dateTime.minute.toString();
+  }
+  String toStringdateTime_second(){
+    if(dateTime.second< 10) return "0" + dateTime.second.toString();
+    return dateTime.second.toString();
+  }
+  String toStringdateTime_hour(){
+    if(dateTime.hour< 10) return "0" + dateTime.hour.toString();
+    return dateTime.hour.toString();
+  }
+  String toStringdateTime_day(){
+    if(dateTime.day< 10) return "0" + dateTime.day.toString();
+    return dateTime.day.toString();
+  }
+  String toStringdateTime_month(){
+    if(dateTime.month< 10) return "0" + dateTime.month.toString();
+    return dateTime.month.toString();
+  }
+  String toStringdateTime_year(){
+    if(dateTime.year< 10) return "0" + dateTime.year.toString();
+    return dateTime.year.toString();
+  }
+
 }
