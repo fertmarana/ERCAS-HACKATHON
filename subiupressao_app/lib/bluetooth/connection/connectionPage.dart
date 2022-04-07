@@ -2,12 +2,15 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:subiupressao_app/app.dart';
+import 'package:subiupressao_app/app_celular/Consultas/AppointmentsList.dart';
 import 'package:subiupressao_app/database/Database_test.dart';
 import 'package:subiupressao_app/globals.dart' as globals;
 import 'dart:async';
 import 'dart:core';
 import 'package:syncfusion_flutter_charts/charts.dart';
-
+import 'package:subiupressao_app/bluetooth/ProfileSummary.dart';
+import 'package:subiupressao_app/app_celular/Components/Controller.dart';
+import 'package:subiupressao_app/app_celular/Components/Header.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:path/path.dart';
 
@@ -23,6 +26,10 @@ import 'package:subiupressao_app/database/MeasuresDataModel.dart';
 */
 
 class connectionPage extends StatefulWidget {
+ // Controller controller;
+
+ // connectionPage({@required this.controller});
+
   @override
   _connectionPage createState() => _connectionPage();
 }
@@ -62,6 +69,9 @@ class _connectionPage extends State<connectionPage> {
   ZoomPanBehavior _zoomPanBehavior;
   bool isreadingFrequency = false;
   bool nodataisbeingdetected = true;
+  bool clicked_Ler_frequencia = false;
+  int size_of_dataBase = 0;
+  bool istryingtoconnect = false;
 
   void _updateDatabase(int _greatestValue, int count, DateTime dt) async {
     var fido = Heart(
@@ -71,7 +81,7 @@ class _connectionPage extends State<connectionPage> {
       heartRate: _greatestValue,
     );
     await DBProvider.db.insertHeart(fido);
-
+    size_of_dataBase = await DBProvider.db.getDatabaseSize();
     setState(() {
       testHeart.add(fido);
     });
@@ -107,6 +117,8 @@ class _connectionPage extends State<connectionPage> {
       valuesofHeart = -1;
       count++;
       chartData.add(_ChartData(count, greatestValue));
+
+
 
       _updateDatabase(greatestValue, count, DateTime.now());
       //print(await DBProvider.db.toString());
@@ -163,6 +175,7 @@ class _connectionPage extends State<connectionPage> {
   }
 
   void findServices(BluetoothDevice dev) async {
+    clicked_Ler_frequencia = true;
     isreadingFrequency = true;
     List<BluetoothService> services = await dev.discoverServices();
     for (BluetoothService service in services) {
@@ -183,6 +196,7 @@ class _connectionPage extends State<connectionPage> {
   }
 
   void connectDevice(BluetoothDevice dev) async {
+    istryingtoconnect = true;
     Future<bool> returnValue;
 
     setState(() {
@@ -193,9 +207,9 @@ class _connectionPage extends State<connectionPage> {
     await device.connect() ;
 
     isConnected = true;
+    istryingtoconnect = false;
+    //findServices(dev);
 
-    findServices(dev);
-    List<List> values = [];
 
     print("Connection successful!");
 
@@ -203,6 +217,7 @@ class _connectionPage extends State<connectionPage> {
   }
 
   disconnect(BluetoothDevice dev) async {
+    clicked_Ler_frequencia = false;
     isreadingFrequency = false;
     nodataisbeingdetected = true;
     await dev.disconnect();
@@ -210,6 +225,8 @@ class _connectionPage extends State<connectionPage> {
       deviceConnected_name = "";
       device = null;
       isConnected = false;
+      DBProvider.db.deleteAll();
+      //scanResultList.clear();
     });
   }
 
@@ -251,199 +268,177 @@ class _connectionPage extends State<connectionPage> {
     }
   }
 
-  void _readCharacteristics() async {
-    List<List> values = [];
-    if (_service != null) {
-      for (BluetoothCharacteristic c in _service.characteristics) {
-        values.add(await c.read());
-      }
-    }
-    heartRate = values[0][0];
-  }
-
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     timer = Timer.periodic(const Duration(seconds: 30), _updateDataSource);
     //print("start_application_value : ${start_aplication}");
     //testHeart = DBProvider.db.getAllClients();
     return Scaffold(
         body: Container(
-      padding: EdgeInsets.fromLTRB(10, 70, 10, 10),
-      height: 800,
-      child: ListView(
-        //runSpacing: 6.0,
-        //direction: Axis.horizontal,
+        padding: EdgeInsets.fromLTRB(10, 80, 10, 0),
+        height: 800,
+        child: Column(
         children: [
-          SizedBox(height: 10.0),
-          Container(
-            alignment: Alignment(0.0, 0.6),
-            child: isConnected == true
-                ? Text(
-                    'Conectado à \n' + deviceConnected_name,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 28.0, color: Color(0xff16613D)),
-                  )
-                : //IMPORTANTE TER ISSO PORQUE É UMA CONDICAO NAO APAGAR
-                Text(
-                    'Nenhum Aparelho Conectado',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 28.0, color: Color(0xff16613D)),
-                  ),
-          ),
-          Container(
-            child: SizedBox(
-              height: 200.0,
-              child: isConnected == false?
-              ListView.builder(
-                scrollDirection: Axis.vertical,
-                itemCount: scanResultList.length,
-                itemBuilder: _itemBuilder,
-              ):
-              Column(children: <Widget>[
-                Container(
-                  alignment: Alignment(0.0, 0.6),
-                  child: TextButton(
-                    style: ButtonStyle(
-                      foregroundColor:
-                      MaterialStateProperty.all<Color>(Colors.blue),
 
-                    ),
-                    onPressed: () {
-
-                      findServices(device);
-                      //_readCharacteristics();
-                    },
-                    child: Text('Ler Frequência'),
-                  ),
-                ),
-                Container(
-                    alignment: Alignment(0.0, 0.6),
-                    child:TextButton(
-                      style: ButtonStyle(
-                        foregroundColor:
-                        MaterialStateProperty.all<Color>(Colors.red),
-                      ),
-                      onPressed: () {
-                        disconnect(device);
-                      },
-                      child: Text('Desconectar'),
-                    )
-                ),
-              ]),
-            ),
-          ),
-          /*
+        ProfileSummary(
+       // controller: widget.controller,
+        connected: isConnected,
+        ),
+        SizedBox(height: 1),
+        Container(
+          padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+          height: 400,
+          child: ListView(
+            //runSpacing: 6.0,
+            //direction: Axis.horizontal,
+            children: [
               Container(
-                alignment: Alignment(0.0, 0.6),
-                child: heartRate == -1?
-                SizedBox()
-                    : //IMPORTANTE TER ISSO PORQUE É UMA CONDICAO NAO APAGAR
-                Text('Frequência: ' + heartRate.toString(),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 28.0,
-                      color: Color(0xff16613D)
-                  ),
-                ),
+                child: SizedBox(
+                  height: 200.0,
+                  child: isConnected == false?
+                  ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    itemCount: scanResultList.length,
+                    itemBuilder: _itemBuilder,
+                  ):
+                  Column(children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.fromLTRB(0,40,0,40),
+                      alignment: Alignment(0.0, 0.6),
+                      child: TextButton(
+                        style: ButtonStyle(
+                          foregroundColor:
+                          MaterialStateProperty.all<Color>(Colors.blue),
 
-              ),
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            clicked_Ler_frequencia = true;
+                          });
 
-               */
-          /*
-              Container(
-                alignment: Alignment(0.0, 0.6),
-                child: heartRate == -1?
-                SizedBox()
-                    : //IMPORTANTE TER ISSO PORQUE É UMA CONDICAO NAO APAGAR
-                Text('Date Time: ' + DateTime.now().minute.toString(),
-                  style: TextStyle(
-                      fontSize: 28.0,
-                      color: Color(0xff16613D)
-                  ),
-                ),
-
-              ),
-              Container(
-                alignment: Alignment(0.0, 0.6),
-                child: heartRate == -1?
-                SizedBox()
-                    : //IMPORTANTE TER ISSO PORQUE É UMA CONDICAO NAO APAGAR
-                Text('Maior Valor de Frequência: \n' + greatestValue.toString(),
-                  style: TextStyle(
-                      fontSize: 18.0,
-                      color: Color(0xff16613D)
-                  ),
-                ),
-
-              ),
-              */
-          SizedBox(height: 20.0),
-          Container(
-              child:
-              isConnected == false?
-              Align(
-            alignment: Alignment.center,
-            child: Material(
-              borderRadius: BorderRadius.circular(30.0),
-              color: Color(0xFF009E74),
-              child: MaterialButton(
-                minWidth: 200.0,
-                padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                onPressed: () {
-                  //scanForDevices();
-                  scan();
-                },
-                child: Text("Escanear por Aparelhos",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 18.0,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold))
-              ),
-            ),
-          ):
-              Container(
-                child: isreadingFrequency?
-                  Container (
-                  child: nodataisbeingdetected?
-                      Column(
+                          findServices(device);
+                        },
+                        child:
+                        clicked_Ler_frequencia == false?
+                        Text('Ler Frequência',style: TextStyle(fontSize: 14,color: Colors.blue),)
+                        : size_of_dataBase == 0?
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text('Certifique-se que a pulseira está em seu pulso \n', textAlign: TextAlign.center,style: TextStyle(fontSize: 15.0, color: Colors.red)),
-                            Text('Se estiver, espere um minuto que a leitura logo será feita\n', textAlign: TextAlign.center,style: TextStyle(fontSize: 15.0, color: Colors.red)),
-                          ],
-                      ):
+                            CircularProgressIndicator(color: Colors.blue,),
+                            SizedBox(width: 4,),
+                            Text("Procurando Frequência...", style: TextStyle(fontSize: 14,color: Colors.blue),),
 
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text('Sua Frequência está sendo escaneada \n', textAlign: TextAlign.center,style: TextStyle(fontSize: 15.0, color: Color(0xff16613D))),
-                          Text("Para conferir mais detalhes clique em", textAlign: TextAlign.center,style: TextStyle(fontSize: 15.0, color: Color(0xff16613D)) ),
-                          Container(
-                            alignment: Alignment.center,
-                            child: Row(
+                          ],
+                        ):SizedBox( ),
+
+                      ),
+                    ),
+
+                    Container(
+                        alignment: Alignment(0.0, 0.6),
+                        child:TextButton(
+                          style: ButtonStyle(
+                            foregroundColor:
+                            MaterialStateProperty.all<Color>(Colors.red),
+                          ),
+                          onPressed: () {
+                            disconnect(device);
+                          },
+                          child: Text('Desconectar'),
+                        )
+                    ),
+                  ]),
+                ),
+              ),
+
+              SizedBox(height: 10.0),
+              Container(
+                  child:
+                  isConnected == false?
+                  Align(
+                alignment: Alignment.center,
+                child:
+                Container(
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                  child: ClipOval(
+                    child: Material(
+                      color: Colors.blue, // button color
+                      child: MaterialButton(
+                          minWidth: 100.0,
+                          height: 100,
+                          padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                          shape: CircleBorder(),
+                          onPressed: () {
+                          scan();
+                        }, // button pressed
+                        child: _isScanning == false?
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(Icons.bluetooth,color: Colors.white,), // icon
+                            Text("Escanear",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 18.0,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold)), // text
+                          ],
+                        ):
+                            CircularProgressIndicator(color: Colors.white,strokeWidth: 6,)
+                      ),
+                    ),
+                  ),
+                ),
+              ):
+                  Container(
+                    child: isreadingFrequency?
+                      Container (
+                      child: nodataisbeingdetected?
+                          Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Text("Pressão", textAlign: TextAlign.center,style: TextStyle(fontSize: 15.0, color: Color(0xff16613D)) ),
-                                Icon(MaterialCommunityIcons.heart_pulse,color: Color(0xff16613D)),
-                                Text(' abaixo', textAlign: TextAlign.center,style: TextStyle(fontSize: 15.0, color: Color(0xff16613D)) ),
+                                Text('Certifique-se que a pulseira está em seu pulso \n', textAlign: TextAlign.center,style: TextStyle(fontSize: 15.0, color: Colors.red)),
+                                Text('Se estiver, espere um minuto que a leitura logo será feita\n', textAlign: TextAlign.center,style: TextStyle(fontSize: 15.0, color: Colors.red)),
                               ],
+                          ):
+
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text('Sua Frequência está sendo escaneada \n', textAlign: TextAlign.center,style: TextStyle(fontSize: 15.0, color: Color(0xff16613D))),
+                              Text("Para conferir mais detalhes clique em", textAlign: TextAlign.center,style: TextStyle(fontSize: 15.0, color: Color(0xff16613D)) ),
+                              Container(
+                                alignment: Alignment.center,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text("Pressão", textAlign: TextAlign.center,style: TextStyle(fontSize: 15.0, color: Color(0xff16613D)) ),
+                                    Icon(MaterialCommunityIcons.heart_pulse,color: Color(0xff16613D)),
+                                    Text(' abaixo', textAlign: TextAlign.center,style: TextStyle(fontSize: 15.0, color: Color(0xff16613D)) ),
+                                  ],
+                                )
                             )
-                        )
-                        ],
-                      )
-                  ):
-                  SizedBox(),
+                            ],
+                          )
+                      ):
+                      SizedBox(),
+                  ),
+
               ),
 
+            ],
+            ),
           ),
-
-        ],
-      ),
-    ));
+        ]
+        )
+      )
+    );
   }
 
   Widget _itemBuilder(BuildContext context, int index) {
