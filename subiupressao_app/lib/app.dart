@@ -9,8 +9,8 @@ import 'package:subiupressao_app/files/FileController.dart';
 import 'package:subiupressao_app/tabItem.dart';
 import 'package:subiupressao_app/app_celular/bottomNavigation.dart';
 import 'package:subiupressao_app/bluetooth/Bluetooth_test.dart';
-import 'package:subiupressao_app/bluetooth/connectionPage.dart';
-import 'package:subiupressao_app/bluetooth/heartRatePage.dart';
+import 'package:subiupressao_app/bluetooth/connection/connectionPage.dart';
+import 'package:subiupressao_app/bluetooth/heart/heartRatePage.dart';
 import 'package:subiupressao_app/globals.dart' as globals;
 import 'dataClass.dart';
 
