@@ -94,7 +94,15 @@ class _EditMedicineState extends State<EditMedicine> {
 
             if (widget.element != null) {
               index = user.medicines.indexOf(widget.element);
+
+              print(index);
+              if (index == -1) return;
+
               user.medicines.remove(widget.element);
+            }
+
+            if (durationValue == null) {
+              durationValue = "Sem tempo definido";
             }
 
             user.medicines.insert(
@@ -152,7 +160,6 @@ class _EditMedicineState extends State<EditMedicine> {
 
     List<Widget> column = [
       SizedBox(height: size.height * 0.05),
-      // Head (Cancel button, title and save button)
       buildHead(user: user),
       SizedBox(height: size.height * 0.01),
       Icon(Icons.medication, size: 70),
