@@ -9,8 +9,6 @@ import 'package:subiupressao_app/files/models/medicine.dart';
 import 'package:subiupressao_app/files/models/user.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-// TODO: transformar as datas dos remédios em algo realmente funcional
-
 class EditMedicine extends StatefulWidget {
   final Controller controller;
   final bool deleteButton;
@@ -235,7 +233,9 @@ class _EditMedicineState extends State<EditMedicine> {
       column.add(ElevatedButton(
         onPressed: () {
           user.medicines.remove(widget.element);
-          widget.controller.updateUser(newUser: user);
+          setState(() {
+            widget.controller.updateUser(newUser: user);
+          });
           Navigator.of(context).pop();
         },
         child: Text("Deletar remédio"),

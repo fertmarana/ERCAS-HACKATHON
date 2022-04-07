@@ -151,7 +151,9 @@ class _EditAppointmentState extends State<EditAppointment> {
           SizedBox(width: size.width * horizontalOffset),
         ],
       ),
-      SizedBox(height: size.height * 0.015,)
+      SizedBox(
+        height: size.height * 0.015,
+      )
     ];
 
     if (widget.element != null) {
@@ -163,6 +165,11 @@ class _EditAppointmentState extends State<EditAppointment> {
             Navigator.of(context).pop();
           },
           child: Text("Deletar Consulta"),
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(
+              Color.fromARGB(255, 190, 40, 30),
+            ),
+          ),
         ),
       );
     }

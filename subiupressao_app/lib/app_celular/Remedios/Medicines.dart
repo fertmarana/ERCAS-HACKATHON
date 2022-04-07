@@ -49,14 +49,14 @@ class _MedicinesState extends State<Medicines> {
             controller: widget.controller,
             // showAll: showAll,
           ),
-          ElevatedButton(
-            onPressed: () {
-              setState(() {
-                showAll = true;
-              });
-            },
-            child: Text("Ver Todos Remédios"),
-          ),
+          // ElevatedButton(
+          //   onPressed: () {
+          //     setState(() {
+          //       showAll = true;
+          //     });
+          //   },
+          //   child: Text("Ver Todos Remédios"),
+          // ),
         ],
       ),
     );
