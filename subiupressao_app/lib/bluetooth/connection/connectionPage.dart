@@ -8,7 +8,7 @@ import 'package:subiupressao_app/globals.dart' as globals;
 import 'dart:async';
 import 'dart:core';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:subiupressao_app/bluetooth/ProfileSummary.dart';
+import 'package:subiupressao_app/bluetooth/connection/ProfileSummary.dart';
 import 'package:subiupressao_app/app_celular/Components/Controller.dart';
 import 'package:subiupressao_app/app_celular/Components/Header.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -196,18 +196,19 @@ class _connectionPage extends State<connectionPage> {
   }
 
   void connectDevice(BluetoothDevice dev) async {
-    istryingtoconnect = true;
+
     Future<bool> returnValue;
 
     setState(() {
       device = dev;
       deviceConnected_name = device.name;
+
     });
 
     await device.connect() ;
 
     isConnected = true;
-    istryingtoconnect = false;
+
     //findServices(dev);
 
 
@@ -217,7 +218,7 @@ class _connectionPage extends State<connectionPage> {
   }
 
   disconnect(BluetoothDevice dev) async {
-    clicked_Ler_frequencia = false;
+
     isreadingFrequency = false;
     nodataisbeingdetected = true;
     await dev.disconnect();
@@ -226,6 +227,9 @@ class _connectionPage extends State<connectionPage> {
       device = null;
       isConnected = false;
       DBProvider.db.deleteAll();
+      clicked_Ler_frequencia = false;
+      size_of_dataBase = 0;
+      istryingtoconnect = false;
       //scanResultList.clear();
     });
   }
@@ -331,7 +335,10 @@ class _connectionPage extends State<connectionPage> {
                             Text("Procurando Frequência...", style: TextStyle(fontSize: 14,color: Colors.blue),),
 
                           ],
-                        ):SizedBox( ),
+                        ):
+                        Text('Frequência Encontrada!',style: TextStyle(fontSize: 14,color: Colors.blue),)
+
+                        ,
 
                       ),
                     ),
@@ -462,9 +469,16 @@ class _connectionPage extends State<connectionPage> {
               foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
             ),
             onPressed: () {
+              setState(() {
+                istryingtoconnect = true;
+              });
               connectDevice(scanResultList[index].device);
             },
-            child: Text('Conectar ao Aparelho'),
+            child: istryingtoconnect == false?
+            Text('Conectar ao Aparelho')
+            :
+            CircularProgressIndicator(color: Colors.blue,strokeWidth: 6,)
+            ,
           )
 
         ),
