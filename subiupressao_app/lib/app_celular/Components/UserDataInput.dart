@@ -9,6 +9,7 @@ class UserDataInput extends StatelessWidget {
   final String hintString;
   final double spacerInterval;
   final bool enabled;
+  final double maxWidth;
 
   const UserDataInput({
     Key key,
@@ -19,6 +20,7 @@ class UserDataInput extends StatelessWidget {
     this.hintString,
     this.enabled = true,
     this.spacerInterval = 0.05,
+    this.maxWidth = 0.9,
   }) : super(key: key);
 
   @override
@@ -28,18 +30,18 @@ class UserDataInput extends StatelessWidget {
     return Column(children: [
       Row(
         children: [
-          SizedBox(width: spacerInterval * size.width),
+          SizedBox(width: size.width * this.maxWidth * this.spacerInterval),
           Text(fieldName, style: TextStyle(fontSize: 16)),
-          Spacer()
         ],
       ),
       TextField(
         controller: this.controller,
+        textCapitalization: TextCapitalization.sentences,
         enabled: this.enabled,
         keyboardType: this.keyboard,
         inputFormatters: this.filter,
         decoration: InputDecoration(
-          constraints: BoxConstraints(maxWidth: size.width * 0.9),
+          constraints: BoxConstraints(maxWidth: size.width * this.maxWidth),
           border: OutlineInputBorder(),
           hintText: this.hintString,
           suffixIcon: IconButton(
@@ -50,6 +52,9 @@ class UserDataInput extends StatelessWidget {
           ),
         ),
       ),
+      SizedBox(
+        height: size.height * spacerInterval / 2,
+      )
     ]);
   }
 }

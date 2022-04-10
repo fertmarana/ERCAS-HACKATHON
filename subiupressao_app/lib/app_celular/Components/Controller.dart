@@ -59,6 +59,8 @@ class Controller extends ChangeNotifier {
     _controller.writeUser(
       newUser.name,
       newUser.age,
+      newUser.weight,
+      newUser.height,
       newUser.medicines,
       newUser.appointments,
     );

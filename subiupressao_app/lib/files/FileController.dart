@@ -23,12 +23,16 @@ class FileController extends ChangeNotifier {
   void writeUser(
     String name,
     int age,
+    int weight,
+    int height,
     List<Medicine> medicines,
     List<Appointment> appointments,
   ) async {
     _user = await FileManager().writeJsonFile(
       name,
       age,
+      weight,
+      height,
       medicines,
       appointments,
     );
