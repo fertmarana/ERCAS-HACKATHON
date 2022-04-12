@@ -3,6 +3,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:subiupressao_app/app_celular/Components/Controller.dart';
 import 'package:subiupressao_app/app_celular/Consultas/Appointments.dart';
+import 'package:subiupressao_app/app_celular/Profile/Profile.dart';
 import 'package:subiupressao_app/app_celular/Remedios/Medicines.dart';
 
 import 'package:subiupressao_app/files/FileController.dart';
@@ -55,6 +56,11 @@ class AppState extends State<App> {
         tabName: "Consultas",
         icon: Icons.assignment_ind_rounded,
         page: Appointments(controller: controller),
+      ),
+      TabItem(
+        tabName: "Perfil",
+        icon: Icons.person,
+        page: Profile(controller: controller),
       )
     ];
 

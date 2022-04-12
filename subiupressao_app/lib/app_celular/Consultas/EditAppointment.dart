@@ -41,7 +41,6 @@ class _EditAppointmentState extends State<EditAppointment> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    // print(size.toString());
 
     User user = widget.controller.user;
 

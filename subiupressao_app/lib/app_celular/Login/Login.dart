@@ -22,7 +22,6 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    print(size);
 
     _user = context.select((FileController controller) {
       // controller.deleteUser();
