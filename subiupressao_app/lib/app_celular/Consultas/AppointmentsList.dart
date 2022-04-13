@@ -21,7 +21,7 @@ class _AppointmentsList extends State<AppointmentsList> {
     Size size = MediaQueryData.fromWindow(WidgetsBinding.instance.window).size;
     List<Widget> newCards = [];
 
-    _user.appointments.forEach((element) {
+    widget.controller.todayAppointments.forEach((element) {
       newCards.add(
         Column(
           children: [

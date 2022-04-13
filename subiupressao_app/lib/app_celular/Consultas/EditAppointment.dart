@@ -18,8 +18,25 @@ class EditAppointment extends StatefulWidget {
 }
 
 class _EditAppointmentState extends State<EditAppointment> {
-  final TextEditingController doctorController = TextEditingController();
-  final TextEditingController specialityController = TextEditingController();
+  TextEditingController _doctorController;
+  TextEditingController _specialityController;
+  var horizontalOffset = 0.05;
+  DateTime dateTime;
+
+  @override
+  void initState() {
+    _doctorController = new TextEditingController(
+      text: widget.element == null ? "" : widget.element.doctor,
+    );
+
+    _specialityController = new TextEditingController(
+      text: widget.element == null ? "" : widget.element.speciality,
+    );
+
+    dateTime = widget.element == null
+        ? widget.controller.dateTime
+        : widget.element.date;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +45,7 @@ class _EditAppointmentState extends State<EditAppointment> {
     User user = widget.controller.user;
 
     List<Widget> children = [
-      SizedBox(height: size.height * 0.1),
+      SizedBox(height: size.height * 0.05),
       Row(
         children: [
           IconButton(
@@ -38,61 +55,120 @@ class _EditAppointmentState extends State<EditAppointment> {
             icon: Icon(Icons.close),
           ),
           Spacer(),
-          Text(this.widget.element == null ? "Nova Consulta" : "Editar Consulta"),
+          Text(
+            this.widget.element == null ? "Nova Consulta" : "Editar Consulta",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
+          ),
           Spacer(),
           IconButton(
             onPressed: () {
-              user.appointments.add(
+              int index = user.appointments.length;
+
+              if (widget.element != null) {
+                index = user.appointments.indexOf(widget.element);
+                user.appointments.remove(widget.element);
+              }
+
+              user.appointments.insert(
+                index,
                 Appointment(
-                    doctor: doctorController.text,
-                    speciality: specialityController.text,
-                    date: widget.controller.dateTime),
+                  doctor: _doctorController.text,
+                  speciality: _specialityController.text,
+                  date: dateTime,
+                ),
               );
+
               widget.controller.updateUser(newUser: user);
+
+              Navigator.of(context).pop();
             },
             icon: Icon(Icons.check),
           )
         ],
       ),
-      SizedBox(height: size.height * 0.05),
-      Icon(Icons.assignment_ind_outlined),
-      SizedBox(height: size.height * 0.05),
+      SizedBox(height: size.height * 0.01),
+      Icon(Icons.assignment_ind_outlined, size: 70),
+      SizedBox(height: size.height * 0.03),
       UserDataInput(
-        controller: doctorController,
+        controller: _doctorController,
         fieldName: "Nome do Médico",
         hintString: "Médico",
+        spacerInterval: horizontalOffset,
       ),
-      SizedBox(height: size.height * 0.05),
+      SizedBox(height: size.height * 0.03),
       UserDataInput(
-        controller: specialityController,
+        controller: _specialityController,
         fieldName: "Especialidade do Médico",
         hintString: "Especialidade",
+        spacerInterval: horizontalOffset,
       ),
-      SizedBox(height: size.height * 0.05),
-      widget.element == null
-          ? UserDataInput(
-              controller: TextEditingController(
-                  text: DateFormat("dd/MM/yyyy").format(widget.controller.dateTime)),
-              enabled: false,
-              fieldName: "Data da Consulta",
-            )
-          : showDatePicker(
-              context: context,
-              initialDate: widget.controller.dateTime,
-              firstDate: DateTime(2010),
-              lastDate: DateTime(2200),
+      SizedBox(height: size.height * 0.03),
+      Row(
+        children: [
+          SizedBox(width: horizontalOffset * size.width),
+          Text(
+            "Qual a data da consulta?",
+            style: TextStyle(fontSize: 16),
+          ),
+          Spacer()
+        ],
+      ),
+      Row(
+        children: [
+          SizedBox(width: size.width * horizontalOffset),
+          TextField(
+            enabled: false,
+            decoration: InputDecoration(
+              constraints: BoxConstraints(maxWidth: size.width * 0.75),
+              border: OutlineInputBorder(),
+              hintText: DateFormat("dd/MM/yyyy").format(dateTime),
             ),
+          ),
+          Spacer(),
+          IconButton(
+            onPressed: () {
+              showDatePicker(
+                      context: context,
+                      initialDate: dateTime,
+                      firstDate: DateTime(2010),
+                      lastDate: DateTime(2200))
+                  .then((date) {
+                setState(() {
+                  dateTime = (date == null ? dateTime : date);
+                });
+              });
+            },
+            icon: const Icon(
+              Icons.calendar_today_rounded,
+              size: 25,
+            ),
+            iconSize: size.width * 0.05,
+          ),
+          SizedBox(width: size.width * horizontalOffset),
+        ],
+      ),
+      SizedBox(
+        height: size.height * 0.015,
+      )
     ];
 
     if (widget.element != null) {
       children.add(
         ElevatedButton(
           onPressed: () {
-            user.medicines.remove(widget.element);
+            user.appointments.remove(widget.element);
             widget.controller.updateUser(newUser: user);
             Navigator.of(context).pop();
           },
           child: Text("Deletar Consulta"),
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(
+              Color.fromARGB(255, 190, 40, 30),
+            ),
+          ),
         ),
       );
     }

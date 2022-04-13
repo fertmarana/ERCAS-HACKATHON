@@ -37,10 +37,12 @@ class _ProfileSummaryState extends State<ProfileSummary> {
       children: [
         //Text("Olá, ${_user.name}!", style: TextStyle(fontSize: 16)),
         SizedBox(height: size.height * 0.003),
+
         Text("Sua frequência cardíaca é", style: TextStyle(fontSize: 16)),
         SizedBox(height: size.height * 0.007),
         Text(
           "${widget.heartRate == -1? "-": widget.heartRate} bpm",
+
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
       ],

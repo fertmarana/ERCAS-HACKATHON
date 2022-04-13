@@ -35,8 +35,8 @@ class _ProfileSummary extends State<ProfileSummary> {
         Text("Hoje você tem de tomar", style: TextStyle(fontSize: 16)),
         SizedBox(height: 5),
         Text(
-          "${_user.medicines.length} remédio" +
-              "${_user.medicines.length > 1 ? "s" : ""}",
+          "${widget.controller.todayMedicines.length} remédio" +
+              "${widget.controller.todayMedicines.length > 1 ? "s" : ""}",
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
       ],

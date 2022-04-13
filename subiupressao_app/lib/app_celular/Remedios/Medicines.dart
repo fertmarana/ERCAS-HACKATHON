@@ -11,10 +11,17 @@ import 'package:subiupressao_app/files/FileController.dart';
 // TODO: usar página de remédios para marcar os remédios já tomados no dia
 // Ajuda no dia-a-dia de quem tem que tomar muitos remédios e pode esquecer
 
-class Remedios extends StatelessWidget {
+class Medicines extends StatefulWidget {
   Controller controller;
 
-  Remedios({@required this.controller});
+  Medicines({@required this.controller});
+
+  @override
+  State<Medicines> createState() => _MedicinesState();
+}
+
+class _MedicinesState extends State<Medicines> {
+  bool showAll = false;
 
   @override
   Widget build(BuildContext context) {
@@ -23,21 +30,33 @@ class Remedios extends StatelessWidget {
       child: Wrap(
         children: [
           Header(
-            controller: controller,
+            controller: widget.controller,
             buttonFunction: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => EditMedicine(
-                    dateTime: controller.dateTime,
-                    controller: controller,
+                    controller: widget.controller,
                   ),
                 ),
               );
             },
           ),
-          ProfileSummary(controller: controller),
-          MedicinesList(controller: controller),
+          ProfileSummary(
+            controller: widget.controller,
+          ),
+          MedicinesList(
+            controller: widget.controller,
+            // showAll: showAll,
+          ),
+          // ElevatedButton(
+          //   onPressed: () {
+          //     setState(() {
+          //       showAll = true;
+          //     });
+          //   },
+          //   child: Text("Ver Todos Remédios"),
+          // ),
         ],
       ),
     );

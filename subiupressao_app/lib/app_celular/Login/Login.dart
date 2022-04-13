@@ -15,10 +15,14 @@ import 'package:subiupressao_app/files/models/user.dart';
 class LoginPage extends StatelessWidget {
   final _ageController = TextEditingController();
   final _nameController = TextEditingController();
+  final _weightController = TextEditingController();
+  final _heightController = TextEditingController();
   User _user;
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     _user = context.select((FileController controller) {
       // controller.deleteUser();
       controller.readUser();
@@ -31,18 +35,18 @@ class LoginPage extends StatelessWidget {
         backgroundColor: Colors.black,
         body: Column(
           children: [
-            SizedBox(height: 80),
+            SizedBox(height: 0.1 * size.height),
             Image.asset('imagens/SubiuPressao.png'),
-            SizedBox(height: 30),
+            SizedBox(height: 0.05 * size.height),
             SizedBox(
-              height: 520,
+              height: 0.70 * size.height,
               child: Card(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: Column(
                   children: [
-                    SizedBox(height: 30),
+                    SizedBox(height: 0.05 * size.height),
                     Text("Cadastre-se", style: TextStyle(fontSize: 24)),
                     UserDataInput(
                       controller: _nameController,
@@ -56,7 +60,28 @@ class LoginPage extends StatelessWidget {
                       fieldName: "Idade",
                       hintString: "Insira sua idade aqui",
                     ),
-                    SizedBox(height: 15),
+                    Row(children: [
+                      UserDataInput(
+                        controller: _weightController,
+                        keyboard: TextInputType.number,
+                        filter: [FilteringTextInputFormatter.digitsOnly],
+                        fieldName: "Peso (kg)",
+                        hintString: "Peso",
+                        maxWidth: 0.4,
+                      ),
+                      SizedBox(
+                        width: 0.05 * size.width,
+                      ),
+                      UserDataInput(
+                        controller: _heightController,
+                        keyboard: TextInputType.number,
+                        filter: [FilteringTextInputFormatter.digitsOnly],
+                        fieldName: "Altura (cm)",
+                        hintString: "Altura",
+                        maxWidth: 0.4,
+                      ),
+                    ], mainAxisAlignment: MainAxisAlignment.center),
+                    SizedBox(height: 0.05 * size.height),
                     ElevatedButton(
                       child: Text(
                         "Confirmar",
@@ -70,6 +95,8 @@ class LoginPage extends StatelessWidget {
                         controller.writeUser(
                           _nameController.text,
                           int.parse(_ageController.text),
+                          int.parse(_weightController.text),
+                          int.parse(_heightController.text),
                           [
                             Medicine(
                               name: "Exemplo",
@@ -93,7 +120,7 @@ class LoginPage extends StatelessWidget {
                             (route) => false);
                       },
                     ),
-                    SizedBox(height: 15),
+                    SizedBox(height: 0.05 * size.height),
                   ],
                 ),
               ),

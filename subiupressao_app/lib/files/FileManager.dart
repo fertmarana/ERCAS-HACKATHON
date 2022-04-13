@@ -47,10 +47,19 @@ class FileManager {
   Future<User> writeJsonFile(
     String name,
     int age,
+    int weight,
+    int height,
     List<Medicine> medicines,
     List<Appointment> appointments,
   ) async {
-    final User user = User(name, age, medicines, appointments);
+    final User user = User(
+      name: name,
+      age: age,
+      weight: weight,
+      height: height,
+      medicines: medicines,
+      appointments: appointments,
+    );
     File file = await _jsonFile;
 
     await file.writeAsString(json.encode(user));

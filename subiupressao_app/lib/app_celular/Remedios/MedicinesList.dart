@@ -16,14 +16,18 @@ class MedicinesList extends StatefulWidget {
 
 class _MedicinesList extends State<MedicinesList> {
   List<Widget> medicineCards = [];
-  DateTime _dateTime;
   User _user;
 
   List<Widget> createMedicineCards() {
     Size size = MediaQueryData.fromWindow(WidgetsBinding.instance.window).size;
     List<Widget> newCards = [];
+    DateTime today = DateTime(
+      widget.controller.dateTime.year,
+      widget.controller.dateTime.month,
+      widget.controller.dateTime.day,
+    );
 
-    _user.medicines.forEach((element) {
+    widget.controller.todayMedicines.forEach((element) {
       newCards.add(
         Column(
           children: [
@@ -58,12 +62,12 @@ class _MedicinesList extends State<MedicinesList> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => EditMedicine(
-                                    dateTime: _dateTime,
-                                    controller: widget.controller,
-                                    deleteButton: true,
-                                    element: element,
-                                  )),
+                            builder: (context) => EditMedicine(
+                              controller: widget.controller,
+                              deleteButton: true,
+                              element: element,
+                            ),
+                          ),
                         );
                       },
                       icon: Icon(Icons.edit)),
@@ -82,12 +86,10 @@ class _MedicinesList extends State<MedicinesList> {
   @override
   void initState() {
     _user = widget.controller.user;
-    _dateTime = widget.controller.dateTime;
 
     widget.controller.addListener(() {
       setState(() {
         _user = widget.controller.user;
-        _dateTime = widget.controller.dateTime;
         medicineCards = createMedicineCards();
       });
     });

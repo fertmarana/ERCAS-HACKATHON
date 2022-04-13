@@ -6,16 +6,27 @@ import 'package:subiupressao_app/files/models/medicine.dart';
 class User {
   String name;
   int age;
+  int weight;
+  int height;
   List<Medicine> medicines;
   List<Appointment> appointments;
 
-  User(this.name, this.age, this.medicines, this.appointments);
+  User({
+    this.name,
+    this.age,
+    this.weight,
+    this.height,
+    this.medicines,
+    this.appointments,
+  });
 
   User.fromJson(Map<String, dynamic> json) {
     dynamic jsonResponse;
 
     name = json['name'];
     age = json['age'];
+    weight = json['weight'];
+    height = json['height'];
 
     jsonResponse = jsonDecode(json['medicines']);
     medicines =
@@ -30,6 +41,8 @@ class User {
   Map<String, dynamic> toJson() => {
         'name': name,
         'age': age,
+        'weight': weight,
+        'height': height,
         'medicines': jsonEncode(medicines),
         'appointments': jsonEncode(appointments),
       };
@@ -40,9 +53,11 @@ class User {
   }
 
   User copyUser() => User(
-        this.name,
-        this.age,
-        this.medicines,
-        this.appointments,
+        name: this.name,
+        age: this.age,
+        weight: this.weight,
+        height: this.height,
+        medicines: this.medicines,
+        appointments: this.appointments,
       );
 }
