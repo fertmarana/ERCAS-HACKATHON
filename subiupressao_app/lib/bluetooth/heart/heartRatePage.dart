@@ -1,5 +1,6 @@
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter/material.dart';
+import 'package:subiupressao_app/bluetooth/blood_pressure/BloodPressurePage.dart';
 
 import 'package:subiupressao_app/globals.dart' as globals;
 import '../connection/connectionPage.dart';
@@ -95,7 +96,8 @@ class _HeartRatePage extends State<HeartRatePage> {
             ProfileSummary(
              heartRate : curheartRate,
             ),
-              ToggleButtons(
+             curheartRate != -1?
+             ToggleButtons(
                 color: Colors.black.withOpacity(0.60),
                 selectedColor: Color(0xFF6200EE),
                 selectedBorderColor: Color(0xFF6200EE),
@@ -123,11 +125,15 @@ class _HeartRatePage extends State<HeartRatePage> {
                   ),
 
                 ],
-              ),
+              ):
+              Text("Nenhum dado ainda")
+            ,
             SizedBox(height: 1),
-            isSelected[0] == true?
-            FrequencyPage()
-            : _Pressao()
+            curheartRate == -1?
+              SizedBox(height: 1,):
+              isSelected[0] == true?
+              FrequencyPage()
+              : _Pressao()
             ,
             ]
           )
@@ -181,7 +187,9 @@ class _HeartRatePage extends State<HeartRatePage> {
                               dataSource: heartData,
                               xValueMapper: (Heart data, _) => data.dateTime,//data.dateTime.minute.toString(),
                               yValueMapper: (Heart data, _) => data.heartRate,
-                            )
+                              
+                      )
+
                           ],
                           // primaryXAxis: NumericAxis(edgeLabelPlacement: EdgeLabelPlacement.shift, numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0)),
                         ),
@@ -233,43 +241,52 @@ class _HeartRatePage extends State<HeartRatePage> {
   }
 
   Widget _Pressao() {
-    return SfRadialGauge(
-        title: GaugeTitle(
-            text: 'Pressão',
-            textStyle:
-            const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
-        axes: <RadialAxis>[
-          RadialAxis(minimum: 0, maximum: 150, ranges: <GaugeRange>[
-            GaugeRange(
-                startValue: 0,
-                endValue: 50,
-                color: Colors.green,
-                startWidth: 10,
-                endWidth: 10),
-            GaugeRange(
-                startValue: 50,
-                endValue: 100,
-                color: Colors.orange,
-                startWidth: 10,
-                endWidth: 10),
-            GaugeRange(
-                startValue: 100,
-                endValue: 150,
-                color: Colors.red,
-                startWidth: 10,
-                endWidth: 10)
-          ], pointers: <GaugePointer>[
-            NeedlePointer(value: 90)
-          ], annotations: <GaugeAnnotation>[
-            GaugeAnnotation(
-                widget: Container(
-                    child: const Text('90.0',
-                        style: TextStyle(
-                            fontSize: 25, fontWeight: FontWeight.bold))),
-                angle: 90,
-                positionFactor: 0.5)
-          ])
-        ]);
+    return Container(
+    padding: EdgeInsets.fromLTRB(10, 90, 10, 0),
+    height: 200,
+
+    child: Column(
+      children: [
+        MaterialButton(
+        minWidth: 100.0,
+        height: 100,
+        padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+
+
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BloodPressurePage(),
+            ),
+          );
+        }, // button pressed
+        child:
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              height: 150,
+              width: 150,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('imagens/blood-pressure.png'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ), // icon
+            Text("Medir Pressão",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 18.0,
+                    color: Color(0xffc80b50),
+                    fontWeight: FontWeight.bold)), // text
+          ],
+        )
+        )
+      ]
+    )
+    );
   }
 
 
