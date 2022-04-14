@@ -54,18 +54,7 @@ class DBProvider {
         [newClient.id,newClient.heartRate]);
     return raw;
   }
-  /*
-  blockOrUnblock(Heart client) async {
-    final db = await database;
-    Heart blocked = Heart{
-     id: client.id,
-    heartRate: client.heartRate,
-    dateTime: client.dateTime,
-    var res = await db.update("Heart", blocked.toMap(),
-    where: "id = ?", whereArgs: [client.id]);
-    return res;
-  }
-  }*/
+
   Future<void> insertHeart(Heart heartr) async {
     // Get a reference to the database.
     final db = await database;
@@ -91,6 +80,29 @@ class DBProvider {
     return res;
   }
 
+  getDataBetweenDateTimes(DateTime start, DateTime end) async{
+    final db = await this.database;
+    int res =  Sqflite.firstIntValue(
+        await db.rawQuery
+          ("SELECT heartRate FROM $Heart WHERE date(dateTime) BETWEEN date('$start') AND date('$end')")
+    );
+
+    return res;
+  }
+
+  getAVGHeartRateBetweenDateTimesDateTime(DateTime start, DateTime end) async{
+    print("Encontrando mediaaaaaaaaa") ;
+    final db = await this.database;
+    var res =
+      await db.rawQuery("SELECT AVG(heartRate) FROM $Heart WHERE date(dateTime) BETWEEN date('$start') AND date('$end')")
+
+    ;
+
+  print("res: ");
+  print(res[0]["AVG(heartRate)"]);
+  return res[0]["AVG(heartRate)"];
+
+  }
 
   updateClient(Heart newClient) async {
     final db = await database;
