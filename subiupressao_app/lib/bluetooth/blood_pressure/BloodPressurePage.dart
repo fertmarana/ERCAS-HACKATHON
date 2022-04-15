@@ -1,12 +1,6 @@
-import 'package:flutter_blue/flutter_blue.dart';
+
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:collection/collection.dart';
-import 'package:subiupressao_app/globals.dart' as globals;
-import '../connection/connectionPage.dart';
-import 'package:subiupressao_app/dataClass.dart';
-import 'package:sqflite/sqflite.dart';
-import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as Path;
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -15,11 +9,7 @@ import 'dart:math';
 import 'package:intl/intl.dart';
 import 'package:subiupressao_app/database/Database.dart';
 import 'package:subiupressao_app/database/MeasuresDataModel.dart';
-import 'package:subiupressao_app/bluetooth/heart/ProfileSummary.dart';
-import 'package:subiupressao_app/bluetooth/blood_pressure/CountDownTimer.dart';
-import 'package:syncfusion_flutter_gauges/gauges.dart';
-import 'package:subiupressao_app/app_celular/Components/Controller.dart';
-
+import 'package:percent_indicator/percent_indicator.dart';
 class BloodPressurePage extends StatefulWidget {
 
   //BloodPressurePage({Key key, @required this.dat}) : super(key: key);
@@ -31,7 +21,7 @@ class BloodPressurePage extends StatefulWidget {
 
 class _BloodPressurePage extends State<BloodPressurePage> {
   int hr;
-  static const maxSeconds= 60*1;
+  static const maxSeconds= 60*2;
   double Q = 4.5;
   double Gen = 1;
   List<int> heartData = [];
@@ -50,14 +40,30 @@ class _BloodPressurePage extends State<BloodPressurePage> {
   int Agg = 24;
   int SP = 0;
   int DP = 0;
+  int percent = 0;
 
   @override
   void initState() {
+
     DBProvider.db.deleteAll();
+
     super.initState();
   }
 
+  void start_loading(){
+    _timer = Timer.periodic(Duration(seconds: (maxSeconds/10).toInt() ),(_){
+      setState(() {
+        percent+=10;
+        if(percent >= 100){
+          isTimerRunning = false;
 
+          _timer.cancel();
+          collectingBeats();
+          // percent=0;
+        }
+      });
+    });
+  }
 
   void getBloodPressure(){
 
@@ -66,7 +72,7 @@ class _BloodPressurePage extends State<BloodPressurePage> {
     }
     Hei = (Hei / 30.48); //convertendo cm em fts
     Wei = (Wei * 2.205); //convertendo kilos to pounds
-
+    print("Beats: $Beats");
     double ROB = 18.5;
     double ET = (364.5 - 1.23 * Beats);
     double BSA = 0.007184 * (pow(Wei, 0.425)) * (pow(Hei, 0.725));
@@ -74,12 +80,23 @@ class _BloodPressurePage extends State<BloodPressurePage> {
     double PP = SV / ((0.013 * Wei - 0.007 * Agg - 0.004 * Beats) + 1.307);
     double MPP = Q * ROB;
 
+    double SPD = (MPP + 3 / 2 * PP);
+    double DPD = (MPP - PP / 3);
+
     SP = (MPP + 3 / 2 * PP).toInt();
-    DP = (MPP - PP / 3).toInt();
-    //DP = (SP - PP - 12.0667).toInt();
+    //DP = (MPP - PP / 3).toInt();
+    DP = (SP - PP - 12.0667).toInt();
+    print("Hei $Hei and Wei $Wei");
+    print("ET: $ET");
+    print("BSA $BSA");
+    print("SV: $SV");
+    print("PP: $PP");
+    print("MPP: $MPP");
     print("Sias: $SP / Dias: $DP");
+    print("SIAS: $SPD AND DIAS: $DPD");
     setState(() {
       isTimerRunning = false;
+      percent = 0;
     });
   }
 
@@ -90,19 +107,20 @@ class _BloodPressurePage extends State<BloodPressurePage> {
     else print("AUX IS NULL");
     setState(() {
       Beats = aux;
-
+      getBloodPressure();
     });
+
     //curheartRate = heartData.last;
     return;
   }
 
   void collectingBeats(){
     //startTimer();
-    Future.delayed( Duration(seconds: maxSeconds), (){
+   // Future.delayed( Duration(seconds: maxSeconds), (){
       _fetchDat();
       isTimerRunning = false;
-      getBloodPressure();
-    });
+      //getBloodPressure();
+    //});
 
   }
 
@@ -117,6 +135,7 @@ class _BloodPressurePage extends State<BloodPressurePage> {
             timer.cancel();
             seconds = maxSeconds;
             isTimerRunning = false;
+            percent = 0;
           });
         } else {
           setState(() {
@@ -147,8 +166,8 @@ class _BloodPressurePage extends State<BloodPressurePage> {
           print("begin: $begin_measuring");
           print("end: $end_measuring");
 
-
-            collectingBeats();
+          start_loading();
+          //collectingBeats();
 
           /*
           Future.delayed(Duration(minutes: 2), () {
@@ -157,17 +176,64 @@ class _BloodPressurePage extends State<BloodPressurePage> {
         },
         child: Text("Medir Pressão"),
       ),
-    isTimerRunning ?
-    CircularProgressIndicator(color: Colors.blue,strokeWidth: 6,)
+    SizedBox(height: 5,),
+    /*
+      isTimerRunning ?
+    Text("")
     :Text("beats: $Beats")
      ,
      SP == 0 && DP ==0?
      Text(""):
      Text("SIS: $SP| DIA: $DP"),
-
+      */
+      isTimerRunning ?
+      CircularPercentIndicator(
+        radius: 150.0,
+        lineWidth: 13.0,
+        animation: false,
+        percent: percent/100,
+        center: Text(
+          percent.toString() + "%",
+          style:
+          TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+        ),
+        circularStrokeCap: CircularStrokeCap.round,
+        progressColor: Colors.purple,
+      ): Pressao_Mostrar(),
     ]
     )
     );
   }
+
+Widget Pressao_Mostrar(){
+  return Container(
+      margin: new EdgeInsets.fromLTRB(10, 0, 10, 0),
+      width: 150.0,
+      height: 100.0,
+      child: Card(
+
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0)),
+        color: Color(0xbcff7474).withOpacity(0.2),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            SizedBox(width: 1,),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+
+                new Text(
+                  'SIS: $SP | DIA: $DP',
+                ),
+              ],
+            ),
+          ],
+        ),
+      ));
+}
+
+
 
 }

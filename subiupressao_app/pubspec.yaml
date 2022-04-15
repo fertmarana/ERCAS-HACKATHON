@@ -60,6 +60,7 @@ dependencies:
   provider: ^6.0.2
   flutter_icons: ^1.1.0
   syncfusion_flutter_gauges: ^19.4.56
+  percent_indicator: ^3.4.0
 
 dev_dependencies:
   flutter_test:
