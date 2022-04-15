@@ -31,7 +31,7 @@ class BloodPressurePage extends StatefulWidget {
 
 class _BloodPressurePage extends State<BloodPressurePage> {
   int hr;
-  static const maxSeconds= 60;
+  static const maxSeconds= 60*1;
   double Q = 4.5;
   double Gen = 1;
   List<int> heartData = [];
@@ -42,12 +42,14 @@ class _BloodPressurePage extends State<BloodPressurePage> {
   bool isTimerRunning = false;
   Timer _timer;
   int seconds = maxSeconds;
-  int Beats= 0;
+  double Beats= 0;
   DateTime begin_measuring;
   DateTime end_measuring;
-  int Wei = 60;
-  int Hei = 160;
-  int Agg = 23;
+  double Wei = 60;
+  double Hei = 160;
+  int Agg = 24;
+  int SP = 0;
+  int DP = 0;
 
   @override
   void initState() {
@@ -62,7 +64,8 @@ class _BloodPressurePage extends State<BloodPressurePage> {
     if(Gen == 1){
       Q = 5;
     }
-
+    Hei = (Hei / 30.48); //convertendo cm em fts
+    Wei = (Wei * 2.205); //convertendo kilos to pounds
 
     double ROB = 18.5;
     double ET = (364.5 - 1.23 * Beats);
@@ -71,8 +74,9 @@ class _BloodPressurePage extends State<BloodPressurePage> {
     double PP = SV / ((0.013 * Wei - 0.007 * Agg - 0.004 * Beats) + 1.307);
     double MPP = Q * ROB;
 
-    int SP = (MPP + 3 / 2 * PP).toInt();
-    int DP = (MPP - PP / 3).toInt();
+    SP = (MPP + 3 / 2 * PP).toInt();
+    DP = (MPP - PP / 3).toInt();
+    //DP = (SP - PP - 12.0667).toInt();
     print("Sias: $SP / Dias: $DP");
     setState(() {
       isTimerRunning = false;
@@ -85,7 +89,7 @@ class _BloodPressurePage extends State<BloodPressurePage> {
     if(aux != null) print("AUX IS $aux");
     else print("AUX IS NULL");
     setState(() {
-      Beats = aux.toInt();
+      Beats = aux;
 
     });
     //curheartRate = heartData.last;
@@ -93,18 +97,13 @@ class _BloodPressurePage extends State<BloodPressurePage> {
   }
 
   void collectingBeats(){
-    Future.delayed( Duration(minutes: 2), (){
+    //startTimer();
+    Future.delayed( Duration(seconds: maxSeconds), (){
       _fetchDat();
       isTimerRunning = false;
       getBloodPressure();
     });
 
-    //print("last value: $heartData.last.heartRate");
-
-
-    //Beats = heartData.map((m) => m).average.toInt();
-   // print("Beats average: $Beats");
-    //getBloodPressure();
   }
 
   void startTimer() {
@@ -142,7 +141,7 @@ class _BloodPressurePage extends State<BloodPressurePage> {
         onPressed: () {
           setState(() {
             begin_measuring = new DateTime.now();
-            end_measuring = begin_measuring.add(new Duration(minutes: 1));
+            end_measuring = begin_measuring.add(new Duration(seconds: maxSeconds));
             isTimerRunning = true;
           });
           print("begin: $begin_measuring");
@@ -161,6 +160,10 @@ class _BloodPressurePage extends State<BloodPressurePage> {
     isTimerRunning ?
     CircularProgressIndicator(color: Colors.blue,strokeWidth: 6,)
     :Text("beats: $Beats")
+     ,
+     SP == 0 && DP ==0?
+     Text(""):
+     Text("SIS: $SP| DIA: $DP"),
 
     ]
     )
