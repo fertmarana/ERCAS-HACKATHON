@@ -115,36 +115,13 @@ class _BloodPressurePage extends State<BloodPressurePage> {
   }
 
   void collectingBeats(){
-    //startTimer();
+
    // Future.delayed( Duration(seconds: maxSeconds), (){
       _fetchDat();
       isTimerRunning = false;
       //getBloodPressure();
     //});
 
-  }
-
-  void startTimer() {
-
-    const oneSec = const Duration(seconds: 1);
-    _timer = new Timer.periodic(
-      oneSec,
-          (Timer timer) {
-        if (seconds == 0) {
-          setState(() {
-            timer.cancel();
-            seconds = maxSeconds;
-            isTimerRunning = false;
-            percent = 0;
-          });
-        } else {
-          setState(() {
-            seconds--;
-            if(!isTimerRunning)  isTimerRunning = true;
-          });
-        }
-      },
-    );
   }
 
 
@@ -156,6 +133,22 @@ class _BloodPressurePage extends State<BloodPressurePage> {
     height: 800,
     child: Column(
     children: [
+      SizedBox(height: 10,),
+      isTimerRunning ?
+        CircularPercentIndicator(
+          radius: 150.0,
+          lineWidth: 13.0,
+          animation: false,
+          percent: percent/100,
+          center: Text(
+            percent.toString() + "%",
+            style:
+            TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+          ),
+          circularStrokeCap: CircularStrokeCap.round,
+          progressColor: Colors.blue,
+        ): Pressao_Mostrar(),
+      SizedBox(height: 5,),
       OutlinedButton(
         onPressed: () {
           setState(() {
@@ -176,30 +169,8 @@ class _BloodPressurePage extends State<BloodPressurePage> {
         },
         child: Text("Medir Pressão"),
       ),
-    SizedBox(height: 5,),
-    /*
-      isTimerRunning ?
-    Text("")
-    :Text("beats: $Beats")
-     ,
-     SP == 0 && DP ==0?
-     Text(""):
-     Text("SIS: $SP| DIA: $DP"),
-      */
-      isTimerRunning ?
-      CircularPercentIndicator(
-        radius: 150.0,
-        lineWidth: 13.0,
-        animation: false,
-        percent: percent/100,
-        center: Text(
-          percent.toString() + "%",
-          style:
-          TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-        ),
-        circularStrokeCap: CircularStrokeCap.round,
-        progressColor: Colors.purple,
-      ): Pressao_Mostrar(),
+
+
     ]
     )
     );
@@ -208,17 +179,17 @@ class _BloodPressurePage extends State<BloodPressurePage> {
 Widget Pressao_Mostrar(){
   return Container(
       margin: new EdgeInsets.fromLTRB(10, 0, 10, 0),
-      width: 150.0,
+      width: 190.0,
       height: 100.0,
       child: Card(
 
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.0)),
-        color: Color(0xbcff7474).withOpacity(0.2),
+        color: Color(0xfffa8989).withOpacity(0.6),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            SizedBox(width: 1,),
+            SizedBox(width: 3,),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
