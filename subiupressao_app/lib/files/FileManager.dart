@@ -68,11 +68,13 @@ class FileManager {
   }
 
   Future<int> deleteJsonFile() async {
+    final File file = await _jsonFile;
+    
     try {
-      final File file = await _jsonFile;
-      await file.delete();
+      if (await file.exists()) {
+        await file.delete();
+      }
     } catch (e) {
-      print(e);
       return -1;
     }
 

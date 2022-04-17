@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'dart:io' as io;
 
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+
 import 'package:subiupressao_app/app.dart';
-import 'package:subiupressao_app/app_celular/Components/ProfilePicture.dart';
 import 'package:subiupressao_app/app_celular/Components/UserDataInput.dart';
 import 'package:subiupressao_app/files/FileController.dart';
 import 'package:subiupressao_app/files/models/appointment.dart';
@@ -30,6 +28,9 @@ class LoginPage extends StatelessWidget {
     });
 
     if (_user == null) {
+      DateTime now = DateTime.now();
+      DateTime today = DateTime(now.year, now.month, now.day);
+
       return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.black,
@@ -101,15 +102,15 @@ class LoginPage extends StatelessWidget {
                             Medicine(
                               name: "Exemplo",
                               quantity: 0,
-                              start: DateTime.now(),
-                              end: DateTime.now(),
+                              start: today,
+                              end: today,
                             ),
                           ],
                           [
                             Appointment(
                               doctor: "Exemplo",
                               speciality: "Exemplo",
-                              date: DateTime.now(),
+                              date: today,
                             ),
                           ],
                         );

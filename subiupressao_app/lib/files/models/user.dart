@@ -1,15 +1,28 @@
 import 'dart:convert';
 
 import 'package:subiupressao_app/files/models/appointment.dart';
+import 'package:subiupressao_app/files/models/bloodPressure.dart';
 import 'package:subiupressao_app/files/models/medicine.dart';
 
 class User {
+  // Vital data
   String name;
   int age;
   int weight;
   int height;
   List<Medicine> medicines;
   List<Appointment> appointments;
+
+  // Non-vital data
+  DateTime birth;
+  String cpf;
+  String healthInsurance;
+  String cardiacSituation;
+
+  // Historical data
+  BloodPressure bloodPressure;
+  List<int> dayHeartRate;
+  List<int> monthHeartRate;
 
   User({
     this.name,
@@ -18,7 +31,16 @@ class User {
     this.height,
     this.medicines,
     this.appointments,
-  });
+    birth,
+    this.cpf = '',
+    this.healthInsurance = '',
+    this.cardiacSituation = '',
+    dayHeartRate,
+    monthHeartRate,
+    dayBloodPressure,
+    monthBloodPressure,
+  })  : this.birth = birth ?? DateTime(0),
+        this.dayHeartRate = dayHeartRate ?? [];
 
   User.fromJson(Map<String, dynamic> json) {
     dynamic jsonResponse;
@@ -28,6 +50,11 @@ class User {
     weight = json['weight'];
     height = json['height'];
 
+    birth = DateTime.parse(json['birth']);
+    cpf = json['cpf'];
+    healthInsurance = json['healthInsurance'];
+    cardiacSituation = json['cardiacSituation'];
+
     jsonResponse = jsonDecode(json['medicines']);
     medicines =
         jsonResponse.map<Medicine>((jR) => Medicine.fromJson(jR)).toList();
@@ -36,6 +63,9 @@ class User {
     appointments = jsonResponse
         .map<Appointment>((jR) => Appointment.fromJson(jR))
         .toList();
+
+    dayHeartRate = json['dayHeartRate'].cast<int>();
+    monthHeartRate = json['monthHeartRate'].cast<int>();
   }
 
   Map<String, dynamic> toJson() => {
@@ -45,12 +75,13 @@ class User {
         'height': height,
         'medicines': jsonEncode(medicines),
         'appointments': jsonEncode(appointments),
+        'birth': birth.toString(),
+        'cpf': cpf,
+        'healthInsurance': healthInsurance,
+        'cardiacSituation': cardiacSituation,
+        'dayHeartRate': dayHeartRate,
+        'monthHeartRate': monthHeartRate,
       };
-
-  @override
-  String toString() {
-    return ("User's name is $name, he/her age is $age and has ${medicines.length} medicines to take!");
-  }
 
   User copyUser() => User(
         name: this.name,
@@ -59,5 +90,11 @@ class User {
         height: this.height,
         medicines: this.medicines,
         appointments: this.appointments,
+        birth: this.birth,
+        cpf: this.cpf,
+        healthInsurance: this.healthInsurance,
+        cardiacSituation: this.cardiacSituation,
+        dayHeartRate: this.dayHeartRate,
+        monthHeartRate: this.monthHeartRate,
       );
 }

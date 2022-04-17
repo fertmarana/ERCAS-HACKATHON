@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 
 import 'package:subiupressao_app/app_celular/Components/Controller.dart';
 import 'package:subiupressao_app/app_celular/Components/Header.dart';
@@ -15,7 +16,6 @@ class Profile extends StatelessWidget {
 
   List<Widget> showUserData(double height) {
     return [
-      SizedBox(height: height * 0.02),
       InfoField(
         controller: controller,
         field: "Nome",
@@ -43,32 +43,32 @@ class Profile extends StatelessWidget {
       InfoField(
         controller: controller,
         field: "Data de nascimento",
-        data: controller.user.birth.toString(),
+        data: DateFormat('dd/MM/yyyy').format(controller.user.birth),
       ),
       SizedBox(height: height * 0.01),
       InfoField(
         controller: controller,
         field: "CPF",
-        data: controller.user.cpf.toString(),
+        data: controller.user.cpf,
       ),
       SizedBox(height: height * 0.01),
       InfoField(
         controller: controller,
         field: "Plano de saúde",
-        data: controller.user.healthInsurance.toString(),
+        data: controller.user.healthInsurance,
       ),
       SizedBox(height: height * 0.01),
       InfoField(
         controller: controller,
         field: "Situação cardíaca",
-        data: controller.user.cardiacSituation.toString(),
+        data: controller.user.cardiacSituation,
       ),
-      SizedBox(height: height * 0.01),
-      InfoField(
-        controller: controller,
-        field: "Pressão média",
-        data: controller.user.ordinaryPressure.toString(),
-      ),
+      // SizedBox(height: height * 0.01),
+      // InfoField(
+      //   controller: controller,
+      //   field: "Pressão média",
+      //   data: controller.user.ordinaryPressure.toString(),
+      // ),
       SizedBox(height: height * 0.02),
     ];
   }
@@ -87,12 +87,21 @@ class Profile extends StatelessWidget {
             controller: controller,
           ),
           ProfileSummary(controller: controller),
-          Column(
-            children: showUserData(size.height),
+          SizedBox(height: size.height * 0.02),
+          Container(
+            child: Center(
+              child: ListView(
+                children: showUserData(size.height),
+              ),
+            ),
+            width: size.width * 0.9,
+            height: size.height * 0.45,
           ),
+          SizedBox(height: size.height * 0.02),
           ElevatedButton(
-              onPressed: report.generateMedicalReport,
-              child: Text("Gerar Relatório Médico"))
+            onPressed: report.generateMedicalReport,
+            child: Text("Gerar Relatório Médico"),
+          )
         ],
       ),
     );
