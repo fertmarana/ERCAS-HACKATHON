@@ -56,14 +56,7 @@ class Controller extends ChangeNotifier {
     var oldUser = _user;
 
     _user = newUser;
-    _controller.writeUser(
-      newUser.name,
-      newUser.age,
-      newUser.weight,
-      newUser.height,
-      newUser.medicines,
-      newUser.appointments,
-    );
+    _controller.writeUser(newUser);
 
     _updateTodayMedicines();
     _updateTodayAppointments();

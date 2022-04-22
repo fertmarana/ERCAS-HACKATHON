@@ -48,6 +48,11 @@ class AppState extends State<App> {
         page: HeartRatePage(),
       ),
       TabItem(
+        tabName: "Perfil",
+        icon: Icons.person,
+        page: Profile(controller: controller),
+      ),
+      TabItem(
         tabName: "Conectar",
         icon: Icons.bluetooth_searching,
         page: connectionPage(),
@@ -57,11 +62,6 @@ class AppState extends State<App> {
         icon: Icons.assignment_ind_rounded,
         page: Appointments(controller: controller),
       ),
-      TabItem(
-        tabName: "Perfil",
-        icon: Icons.person,
-        page: Profile(controller: controller),
-      )
     ];
 
     // indexação é necessária para funcionar bem

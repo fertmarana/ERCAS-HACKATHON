@@ -73,7 +73,8 @@ class _HeartRatePage extends State<HeartRatePage> {
       heartData = aux;
 
     });
-    curheartRate = heartData.last.heartRate;
+      
+    if (heartData.length > 0) curheartRate = heartData.last.heartRate;
     return heartData;
   }
 
