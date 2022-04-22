@@ -30,7 +30,7 @@ class UserDataInput extends StatelessWidget {
     return Column(children: [
       Row(
         children: [
-          SizedBox(width: size.width * this.maxWidth * this.spacerInterval),
+          SizedBox(width: size.width * this.spacerInterval),
           Text(fieldName, style: TextStyle(fontSize: 16)),
         ],
       ),
@@ -53,7 +53,7 @@ class UserDataInput extends StatelessWidget {
         ),
       ),
       SizedBox(
-        height: size.height * spacerInterval / 2,
+        height: size.height * 0.01,
       )
     ]);
   }

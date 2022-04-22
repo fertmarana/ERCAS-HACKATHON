@@ -38,7 +38,7 @@ class _ProfileSummaryState extends State<ProfileSummary> {
         Text("Sua pressão média é", style: TextStyle(fontSize: 16)),
         SizedBox(height: size.height * 0.003),
         Text(
-          "xx/xx (baixa)",
+          "${_user.bloodPressure.toString()} (${_user.cardiacSituation})",
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
       ],

@@ -1,10 +1,7 @@
 import 'dart:io';
 import 'dart:convert';
 
-import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:subiupressao_app/files/models/appointment.dart';
-import 'package:subiupressao_app/files/models/medicine.dart';
 import 'package:subiupressao_app/files/models/user.dart';
 
 class FileManager {
@@ -17,8 +14,10 @@ class FileManager {
   factory FileManager() => _instance ?? FileManager._internal();
 
   Future<String> get _directoryPath async {
-    Directory directory = await getApplicationDocumentsDirectory();
-    // TODO: Check for OS and use other getApplicationDocumentsDirectory if on iOS
+    Directory directory;
+
+    directory = await getApplicationDocumentsDirectory();
+
     return directory.path;
   }
 
@@ -37,39 +36,24 @@ class FileManager {
         fileContent = await file.readAsString();
         return json.decode(fileContent);
       } catch (e) {
-        print("Something went wrong!");
+        // print("Something went wrong!");
       }
     }
 
     return null;
   }
 
-  Future<User> writeJsonFile(
-    String name,
-    int age,
-    int weight,
-    int height,
-    List<Medicine> medicines,
-    List<Appointment> appointments,
-  ) async {
-    final User user = User(
-      name: name,
-      age: age,
-      weight: weight,
-      height: height,
-      medicines: medicines,
-      appointments: appointments,
-    );
+  Future<User> writeJsonFile(User user) async {
     File file = await _jsonFile;
 
-    await file.writeAsString(json.encode(user));
+    await file.writeAsString(jsonEncode(user.copyUser()));
 
     return user;
   }
 
   Future<int> deleteJsonFile() async {
     final File file = await _jsonFile;
-    
+
     try {
       if (await file.exists()) {
         await file.delete();

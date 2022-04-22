@@ -1,7 +1,5 @@
 import 'package:subiupressao_app/app_celular/Components/Controller.dart';
 import 'package:subiupressao_app/app_celular/Profile/pdf.dart';
-import 'package:subiupressao_app/app_celular/Profile/pdfPages/capa_relatorio.dart';
-import 'package:subiupressao_app/app_celular/Profile/pdfPages/user_info.dart';
 import 'package:subiupressao_app/files/models/user.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 
@@ -21,12 +19,18 @@ class MedicalReport {
     PdfDocument document = presetDocument();
 
     document = await addCover(
-      darkMode: true,
       coverImageName: 'SubiuPressao_contorno.png',
+      darkMode: true,
       document: document,
     );
 
     document = await addUserInfoPage(
+      user: _user,
+      darkMode: true,
+      document: document,
+    );
+
+    document = await addBloodPressurePage(
       user: _user,
       darkMode: true,
       document: document,

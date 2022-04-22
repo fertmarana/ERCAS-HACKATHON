@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:subiupressao_app/app_celular/Components/DropdownMenu.dart';
 import 'package:subiupressao_app/app_celular/Components/UserDataInput.dart';
 import 'package:subiupressao_app/app_celular/Components/Controller.dart';
 import 'package:subiupressao_app/files/FileController.dart';
@@ -234,6 +235,7 @@ class _EditMedicineState extends State<EditMedicine> {
         ],
       ),
       buildDropdown(size: size),
+      // DropdownMenu(size: size, values: intervals.keys),
     ];
 
     if (widget.deleteButton == true) {

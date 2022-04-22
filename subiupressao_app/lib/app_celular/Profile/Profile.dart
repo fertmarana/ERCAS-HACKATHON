@@ -30,6 +30,12 @@ class Profile extends StatelessWidget {
       SizedBox(height: height * 0.01),
       InfoField(
         controller: controller,
+        field: "Gênero",
+        data: controller.user.gender.name,
+      ),
+      SizedBox(height: height * 0.01),
+      InfoField(
+        controller: controller,
         field: "Altura",
         data: controller.user.height.toString(),
       ),
@@ -63,12 +69,6 @@ class Profile extends StatelessWidget {
         field: "Situação cardíaca",
         data: controller.user.cardiacSituation,
       ),
-      // SizedBox(height: height * 0.01),
-      // InfoField(
-      //   controller: controller,
-      //   field: "Pressão média",
-      //   data: controller.user.ordinaryPressure.toString(),
-      // ),
       SizedBox(height: height * 0.02),
     ];
   }
