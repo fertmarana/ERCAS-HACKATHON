@@ -9,43 +9,42 @@ import 'package:subiupressao_app/app_celular/Remedios/Medicines.dart';
 import 'package:subiupressao_app/files/FileController.dart';
 import 'package:subiupressao_app/tabItem.dart';
 import 'package:subiupressao_app/app_celular/bottomNavigation.dart';
-import 'package:subiupressao_app/bluetooth/Bluetooth_test.dart';
 import 'package:subiupressao_app/bluetooth/connection/connectionPage.dart';
 import 'package:subiupressao_app/bluetooth/heart/heartRatePage.dart';
-import 'package:subiupressao_app/globals.dart' as globals;
 import 'dataClass.dart';
 
 class App extends StatefulWidget {
   //App({Key key, @required this.Hr}) : super(key: key);
+  Controller controller;
+
+  App({this.controller});
 
   @override
-  State<StatefulWidget> createState() => AppState();
+  State<StatefulWidget> createState() => AppState(controller: controller);
 }
 
 class AppState extends State<App> {
   // this is static property so other widget throughout the app
   // can access it simply by AppState.currentTab
   static int currentTab = 2;
-  final myData dataa = myData(-1);
-  Controller controller = Controller();
+  final myData data = myData(-1);
+  Controller controller;
 
   //  list tabs here
   List<TabItem> tabs;
 
-  AppState() {
+  AppState({this.controller}) {
     tabs = [
       // telas no Navigation Bar
       TabItem(
         tabName: "Remédios",
         icon: MaterialCommunityIcons.pill,
-        // icon: Icons.medication_rounded,
         page: Medicines(controller: controller),
       ),
-      // Menu de configurações: minhaConta_morador()
       TabItem(
         tabName: "Pressão",
         icon: MaterialCommunityIcons.heart_pulse,
-        page: HeartRatePage(),
+        page: HeartRatePage(dat: data),
       ),
       TabItem(
         tabName: "Perfil",
