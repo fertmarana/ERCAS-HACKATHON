@@ -7,7 +7,6 @@ import 'package:subiupressao_app/app_celular/Components/Header.dart';
 import 'package:subiupressao_app/app_celular/Profile/InfoField.dart';
 import 'package:subiupressao_app/app_celular/Profile/MedicalReport.dart';
 import 'package:subiupressao_app/app_celular/Profile/ProfileSummary.dart';
-import 'package:subiupressao_app/files/models/user.dart';
 
 class Profile extends StatelessWidget {
   Controller controller;

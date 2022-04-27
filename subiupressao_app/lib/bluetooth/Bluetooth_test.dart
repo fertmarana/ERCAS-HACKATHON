@@ -35,7 +35,6 @@ class _Bluetooth_testing extends State<Bluetooth_testing> {
 
   @override
   void initState() {
-    // TODO: implement initState
     isConnected = false;
     super.initState();
     initBluetoothScanning();

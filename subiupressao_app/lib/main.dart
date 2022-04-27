@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:subiupressao_app/app_celular/Login/Login.dart';
-import 'package:subiupressao_app/bluetooth/connection/connectionPage.dart';
 import 'package:subiupressao_app/files/FileController.dart';
 
 // Aqui a inicializacao começa e o NavigationBar é setado

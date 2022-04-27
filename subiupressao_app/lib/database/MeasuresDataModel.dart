@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:core';
 
-import 'package:flutter/cupertino.dart';
-
 Heart heartFromJson(String str) {
   final jsonData = json.decode(str);
   return Heart.fromMap(jsonData);

@@ -1,14 +1,10 @@
 
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as Path;
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'dart:core';
 import 'dart:math';
-import 'package:intl/intl.dart';
 import 'package:subiupressao_app/database/Database.dart';
-import 'package:subiupressao_app/database/MeasuresDataModel.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 class BloodPressurePage extends StatefulWidget {
 

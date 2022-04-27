@@ -1,25 +1,13 @@
-import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter/material.dart';
 import 'package:subiupressao_app/bluetooth/blood_pressure/BloodPressurePage.dart';
 
-import 'package:subiupressao_app/globals.dart' as globals;
-import '../connection/connectionPage.dart';
 import 'package:subiupressao_app/dataClass.dart';
-import 'package:sqflite/sqflite.dart';
-import 'dart:io';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as Path;
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'dart:core';
 import 'package:intl/intl.dart';
 import 'package:subiupressao_app/database/Database.dart';
 import 'package:subiupressao_app/database/MeasuresDataModel.dart';
 import 'package:subiupressao_app/bluetooth/heart/ProfileSummary.dart';
-
-
-import 'package:syncfusion_flutter_gauges/gauges.dart';
-
-import 'package:subiupressao_app/app_celular/Components/Controller.dart';
 
 class HeartRatePage extends StatefulWidget {
 
@@ -37,7 +25,6 @@ class HeartRatePage extends StatefulWidget {
 class _HeartRatePage extends State<HeartRatePage> {
   int hr ;
   List<Heart> heartData = [];
-  ZoomPanBehavior _zoomPanBehavior;
   ChartSeriesController _chartSeriesController;
   int curheartRate  = -1;
   final isSelected = <bool>[true, false];

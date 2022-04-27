@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:subiupressao_app/app_celular/Remedios/EditMedicine.dart';
 import 'package:subiupressao_app/app_celular/Components/Controller.dart';
-import 'dart:async';
 
 import 'package:subiupressao_app/files/models/user.dart';
 

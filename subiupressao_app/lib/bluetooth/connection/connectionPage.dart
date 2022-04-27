@@ -1,18 +1,11 @@
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:subiupressao_app/app.dart';
-import 'package:subiupressao_app/app_celular/Consultas/AppointmentsList.dart';
-import 'package:subiupressao_app/database/Database_test.dart';
 import 'package:subiupressao_app/globals.dart' as globals;
 import 'dart:async';
 import 'dart:core';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:subiupressao_app/bluetooth/connection/ProfileSummary.dart';
-import 'package:subiupressao_app/app_celular/Components/Controller.dart';
-import 'package:subiupressao_app/app_celular/Components/Header.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:path/path.dart';
 
 import 'package:subiupressao_app/database/Database.dart';
 import 'package:subiupressao_app/database/MeasuresDataModel.dart';

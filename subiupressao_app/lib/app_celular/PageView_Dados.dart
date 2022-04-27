@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
 
 class PageView_Dados extends StatefulWidget {
   @override
@@ -7,7 +6,6 @@ class PageView_Dados extends StatefulWidget {
 }
 
 class _PageView_Dados extends State<PageView_Dados> {
-  int _currentPage = 0;
   var controller = PageController(
     viewportFraction: 1 ,
     initialPage: 0,
