@@ -9,10 +9,13 @@ import 'package:subiupressao_app/database/Database.dart';
 import 'package:subiupressao_app/database/MeasuresDataModel.dart';
 import 'package:subiupressao_app/bluetooth/heart/ProfileSummary.dart';
 
-class HeartRatePage extends StatefulWidget {
+import 'package:subiupressao_app/app_celular/Components/Controller.dart';
 
- HeartRatePage({Key key, @required this.dat}) : super(key: key);
- final myData dat;
+class HeartRatePage extends StatefulWidget {
+  final myData dat;
+  Controller controller;
+ HeartRatePage({Key key, @required this.dat,this.controller}) : super(key: key);
+
 
   //heartRatePage(this.Heartrate, this.callback);
 
@@ -29,7 +32,7 @@ class _HeartRatePage extends State<HeartRatePage> {
   int curheartRate  = -1;
   final isSelected = <bool>[true, false];
 
-  var controller = PageController(
+  var page_controller = PageController(
     viewportFraction: 1 ,
     initialPage: 0,
   );
@@ -146,7 +149,7 @@ class _HeartRatePage extends State<HeartRatePage> {
                 width: 400,
                 child:
                 PageView(
-                    controller: controller,
+                    controller: page_controller,
                     scrollDirection: Axis.horizontal,
                     children: [
                       Container(
@@ -252,7 +255,7 @@ class _HeartRatePage extends State<HeartRatePage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => BloodPressurePage(),
+              builder: (context) => BloodPressurePage(controller: widget.controller),
             ),
           );
         }, // button pressed

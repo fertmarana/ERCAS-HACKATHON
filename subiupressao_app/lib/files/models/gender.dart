@@ -1,14 +1,14 @@
 enum Gender {
-  Male,
-  Female
+  Masculino,
+  Feminino
 }
 
 extension GenderExtension on Gender {
   String get name {
     switch (this) {
-      case Gender.Male:
+      case Gender.Masculino:
         return 'Masculino';
-      case Gender.Female:
+      case Gender.Feminino:
         return 'Feminino';
       default:
         return null;

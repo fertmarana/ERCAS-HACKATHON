@@ -44,7 +44,7 @@ class AppState extends State<App> {
       TabItem(
         tabName: "Pressão",
         icon: MaterialCommunityIcons.heart_pulse,
-        page: HeartRatePage(dat: data),
+        page: HeartRatePage(controller: controller),
       ),
       TabItem(
         tabName: "Perfil",
