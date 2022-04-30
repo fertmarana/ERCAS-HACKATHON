@@ -96,9 +96,14 @@ class Profile extends StatelessWidget {
             width: size.width * 0.9,
             height: size.height * 0.45,
           ),
+          // SizedBox(height: size.height * 0.02),
+          // ElevatedButton(
+          //   onPressed: report.generateMedicalReport,
+          //   child: Text("Gerar Relatório Médico"),
+          // ),
           SizedBox(height: size.height * 0.02),
           ElevatedButton(
-            onPressed: report.generateMedicalReport,
+            onPressed: report.campusMobileReport,
             child: Text("Gerar Relatório Médico"),
           )
         ],
