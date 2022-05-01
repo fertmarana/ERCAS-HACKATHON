@@ -1,5 +1,7 @@
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter/material.dart';
+import 'package:subiupressao_app/app_celular/Components/Controller.dart';
+import 'package:subiupressao_app/app_celular/Components/Header.dart';
 import 'package:subiupressao_app/globals.dart' as globals;
 import 'dart:async';
 import 'dart:core';
@@ -19,9 +21,9 @@ import 'package:subiupressao_app/database/MeasuresDataModel.dart';
 */
 
 class connectionPage extends StatefulWidget {
- // Controller controller;
+  Controller controller;
 
- // connectionPage({@required this.controller});
+  connectionPage({@required this.controller});
 
   @override
   _connectionPage createState() => _connectionPage();
@@ -85,7 +87,6 @@ class _connectionPage extends State<connectionPage> {
   @override
   void initState() {
     start_aplication = DateTime.now().minute.toDouble();
-    // TODO: implement initState
     isConnected = false;
     _zoomPanBehavior = ZoomPanBehavior(
         // Enables pinch zooming
@@ -273,13 +274,16 @@ class _connectionPage extends State<connectionPage> {
     //testHeart = DBProvider.db.getAllClients();
     return Scaffold(
         body: Container(
-        padding: EdgeInsets.fromLTRB(10, 80, 10, 0),
+        padding: EdgeInsets.fromLTRB(10, 40, 10, 10),
         height: 800,
         child: Column(
         children: [
-
+        Header(
+          controller: widget.controller, 
+          buttonFunction: scan,
+        ),
         ProfileSummary(
-       // controller: widget.controller,
+        controller: widget.controller,
         connected: isConnected,
         ),
         SizedBox(height: 1),

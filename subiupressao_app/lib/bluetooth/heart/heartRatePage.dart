@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:subiupressao_app/app_celular/Components/Header.dart';
 import 'package:subiupressao_app/bluetooth/blood_pressure/BloodPressurePage.dart';
 
 import 'package:subiupressao_app/dataClass.dart';
@@ -82,10 +83,11 @@ class _HeartRatePage extends State<HeartRatePage> {
     return
       Scaffold(
           body: Container(
-          padding: EdgeInsets.fromLTRB(10, 90, 10, 0),
+          padding: EdgeInsets.fromLTRB(10, 40, 10, 0),
           height: 800,
           child: Column(
             children: [
+              Header(controller: widget.controller, buttonFunction: () => true),
             ProfileSummary(
              heartRate : curheartRate,
             ),
