@@ -9,10 +9,13 @@ import 'package:subiupressao_app/database/Database.dart';
 import 'package:subiupressao_app/database/MeasuresDataModel.dart';
 import 'package:subiupressao_app/bluetooth/heart/ProfileSummary.dart';
 
-class HeartRatePage extends StatefulWidget {
+import 'package:subiupressao_app/app_celular/Components/Controller.dart';
 
- HeartRatePage({Key key, @required this.dat}) : super(key: key);
- final myData dat;
+class HeartRatePage extends StatefulWidget {
+  final myData dat;
+  Controller controller;
+  HeartRatePage({Key key, @required this.dat,this.controller}) : super(key: key);
+
 
   //heartRatePage(this.Heartrate, this.callback);
 
@@ -29,7 +32,7 @@ class _HeartRatePage extends State<HeartRatePage> {
   int curheartRate  = -1;
   final isSelected = <bool>[true, false];
 
-  var controller = PageController(
+  var page_controller = PageController(
     viewportFraction: 1 ,
     initialPage: 0,
   );
@@ -51,7 +54,7 @@ class _HeartRatePage extends State<HeartRatePage> {
       print("heart: ${heartData[i].heartRate}");
     }
 
-   // hr = h;
+    // hr = h;
   }
 
   Future<List<Heart>> _fetchDat() async{
@@ -60,7 +63,7 @@ class _HeartRatePage extends State<HeartRatePage> {
       heartData = aux;
 
     });
-      
+
     if (heartData.length > 0) curheartRate = heartData.last.heartRate;
     return heartData;
   }
@@ -79,57 +82,57 @@ class _HeartRatePage extends State<HeartRatePage> {
     return
       Scaffold(
           body: Container(
-          padding: EdgeInsets.fromLTRB(10, 90, 10, 0),
-          height: 800,
-          child: Column(
-            children: [
-            ProfileSummary(
-             heartRate : curheartRate,
-            ),
+              padding: EdgeInsets.fromLTRB(10, 90, 10, 0),
+              height: 800,
+              child: Column(
+                  children: [
+                    ProfileSummary(
+                      heartRate : curheartRate,
+                    ),
 
-             curheartRate != -1?
-             ToggleButtons(
-                color: Colors.black.withOpacity(0.60),
-                selectedColor: Color(0xFF6200EE),
-                selectedBorderColor: Color(0xFF6200EE),
-                fillColor: Color(0xFF6200EE).withOpacity(0.08),
-                splashColor: Color(0xFF6200EE).withOpacity(0.12),
-                hoverColor: Color(0xFF6200EE).withOpacity(0.04),
-                borderRadius: BorderRadius.circular(4.0),
-                constraints: BoxConstraints(minHeight: 36.0),
-                isSelected: isSelected,
-                onPressed: (index) {
-                  // Respond to button selection
-                  setState(() {
-                    isSelected[index] = true;
-                    isSelected[1-index] = false;
-                  });
-                },
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Text('Frequência'),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Text('Pressão'),
-                  ),
+                    curheartRate != -1?
+                    ToggleButtons(
+                      color: Colors.black.withOpacity(0.60),
+                      selectedColor: Color(0xFF6200EE),
+                      selectedBorderColor: Color(0xFF6200EE),
+                      fillColor: Color(0xFF6200EE).withOpacity(0.08),
+                      splashColor: Color(0xFF6200EE).withOpacity(0.12),
+                      hoverColor: Color(0xFF6200EE).withOpacity(0.04),
+                      borderRadius: BorderRadius.circular(4.0),
+                      constraints: BoxConstraints(minHeight: 36.0),
+                      isSelected: isSelected,
+                      onPressed: (index) {
+                        // Respond to button selection
+                        setState(() {
+                          isSelected[index] = true;
+                          isSelected[1-index] = false;
+                        });
+                      },
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Text('Frequência'),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Text('Pressão'),
+                        ),
 
-                ],
+                      ],
 
-              ):
-              Text("Nenhum dado ainda")
-            ,
-            SizedBox(height: 1),
-            curheartRate == -1?
-              SizedBox(height: 1,):
-              isSelected[0] == true?
-              FrequencyPage()
-              : _Pressao()
-              // _Pressao()
-       ,
-            ]
-          )
+                    ):
+                    Text("Nenhum dado ainda")
+                    ,
+                    SizedBox(height: 1),
+                    curheartRate == -1?
+                    SizedBox(height: 1,):
+                    isSelected[0] == true?
+                    FrequencyPage()
+                        : _Pressao()
+                    // _Pressao()
+                    ,
+                  ]
+              )
           )
       );
   }
@@ -146,7 +149,7 @@ class _HeartRatePage extends State<HeartRatePage> {
                 width: 400,
                 child:
                 PageView(
-                    controller: controller,
+                    controller: page_controller,
                     scrollDirection: Axis.horizontal,
                     children: [
                       Container(
@@ -182,7 +185,7 @@ class _HeartRatePage extends State<HeartRatePage> {
                               yValueMapper: (Heart data, _) => data.heartRate,
 
 
-                      )
+                            )
 
                           ],
                           // primaryXAxis: NumericAxis(edgeLabelPlacement: EdgeLabelPlacement.shift, numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0)),
@@ -201,7 +204,7 @@ class _HeartRatePage extends State<HeartRatePage> {
                                     leading: position == 0  ||
                                         ( heartData[position].get_hearetRate() == heartData[position-1].get_hearetRate() ) ?
                                     Icon(Icons.circle_outlined, color: Colors.blue, )
-                                  : heartData[position].get_hearetRate() > heartData[position-1].get_hearetRate()?
+                                        : heartData[position].get_hearetRate() > heartData[position-1].get_hearetRate()?
                                     Icon(Icons.arrow_upward_sharp , color: Colors.green, )
                                         :Icon(Icons.arrow_downward_sharp , color: Colors.red, ),
                                     title: Text(
@@ -237,52 +240,52 @@ class _HeartRatePage extends State<HeartRatePage> {
 
   Widget _Pressao() {
     return Container(
-    padding: EdgeInsets.fromLTRB(10, 90, 10, 0),
-    height: 270,
+        padding: EdgeInsets.fromLTRB(10, 90, 10, 0),
+        height: 270,
 
-    child: Column(
-      children: [
-        MaterialButton(
-        minWidth: 180.0,
-        height: 180,
-        padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+        child: Column(
+            children: [
+              MaterialButton(
+                  minWidth: 180.0,
+                  height: 180,
+                  padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
 
 
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => BloodPressurePage(),
-            ),
-          );
-        }, // button pressed
-        child:
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              height: 100,
-              width: 180,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('imagens/blood-pressure.png'),
-                  //fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            Text("\n"),
-            // icon
-            Text("Medir Pressão",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 18.0,
-                    color: Color(0xffc80b50),
-                    fontWeight: FontWeight.bold)), // text
-          ],
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BloodPressurePage(controller: widget.controller),
+                      ),
+                    );
+                  }, // button pressed
+                  child:
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        height: 100,
+                        width: 180,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('imagens/blood-pressure.png'),
+                            //fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      Text("\n"),
+                      // icon
+                      Text("Medir Pressão",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 18.0,
+                              color: Color(0xffc80b50),
+                              fontWeight: FontWeight.bold)), // text
+                    ],
+                  )
+              )
+            ]
         )
-        )
-      ]
-    )
     );
   }
 
