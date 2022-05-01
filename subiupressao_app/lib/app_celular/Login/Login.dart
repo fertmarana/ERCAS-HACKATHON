@@ -30,7 +30,7 @@ class LoginPage extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
 
     _user = context.select((FileController fileController) {
-      fileController.deleteUser();
+      // fileController.deleteUser();
       fileController.readUser();
       return fileController.user;
     });
@@ -64,7 +64,7 @@ class LoginPage extends StatelessWidget {
                     ),
                     UserDataDropdown(
                       controller: _genderController,
-                      fieldName: "Gênero",
+                      fieldName: "Sexo Biológico",
                       values:
                           Gender.values.map((gender) => gender.name).toList(),
                     ),
